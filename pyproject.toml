@@ -1,0 +1,30 @@
+[build-system]
+requires = [ "poetry-core>=1.0.0",]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "pyaml"
+version = "0.0.0"
+description = "python accelerator middle layer"
+authors = ["..."]
+license = "GPL-3.0"
+# until we have the repoitory
+homepage = "https://github.com/python-accelerator-middle-layer/pyaml"
+documentation = "https://github.com/python-accelerator-middle-layer/pyaml"
+repository = "https://github.com/python-accelerator-middle-layer/pyaml.git"
+keywords = []
+
+[tool.poetry.dependencies]
+python = ">=3.7"
+pydantic = "*"
+jsons = "*"
+# Packages below here are to be revisited if we need to depend on them (they are mostly custom packages
+databroker = "*"
+
+# ophyd async does not specify which transport is to be used
+ophyd-async = "*"
+aioca = "*"
+
+# currently only used for Signal ... need to replace it with
+# equivalent in ophyd-async
+ophyd = ">=1.6"
