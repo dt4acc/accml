@@ -1,7 +1,0 @@
-- id: Q1PTR
-  interface:
-    setpoint: Q1PTR:set
-    readback: Q1PTR:rdbk
-  response:
-    settle_time: 0.5
-    timeout: 2.0
