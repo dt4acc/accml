@@ -1,0 +1,3 @@
+[submodule "src/accml/custom/epics"]
+	path = src/accml/custom/epics
+	url = https://github.com/python-accelerator-middle-layer/epics.git
