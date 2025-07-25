@@ -3,15 +3,15 @@ requires = [ "poetry-core>=1.0.0",]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "pyaml"
+name = "accml"
 version = "0.0.0"
 description = "python accelerator middle layer"
 authors = ["..."]
 license = "GPL-3.0"
 # until we have the repoitory
-homepage = "https://github.com/python-accelerator-middle-layer/pyaml"
-documentation = "https://github.com/python-accelerator-middle-layer/pyaml"
-repository = "https://github.com/python-accelerator-middle-layer/pyaml.git"
+homepage = "https://github.com/python-accelerator-middle-layer/accml"
+documentation = "https://github.com/python-accelerator-middle-layer/accml"
+repository = "https://github.com/python-accelerator-middle-layer/accml.git"
 keywords = []
 
 [tool.poetry.dependencies]

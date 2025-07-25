@@ -8,7 +8,7 @@ accml
 
 __title__ = "accml"
 __description__ = "Python Accelerator Middle Layer"
-__url__ = "https://github.com/python-accelerator-middle-layer/pyaml"
+__url__ = "https://github.com/python-accelerator-middle-layer/accml"
 __version__ = "0.0.0"
 __author__ = "accml collaboration"
 __author_email__ = ""
