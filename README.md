@@ -23,7 +23,7 @@ cd accml
 
 ### 2. Install Dependencies
 ```bash  
-git checkout dev/feature/arch-proposal-draft
+git checkout dev/main
 
 git submodule update --init --recursive
 ```
