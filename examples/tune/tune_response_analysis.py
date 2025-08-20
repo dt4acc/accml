@@ -7,6 +7,7 @@ import yaml
 def main():
     db = catalog["heavy_local"]
     uid = '1955adfd-2f94-4459-8888-4f63cbc839de'
+    uid = '0969b444-7f50-439e-9a64-2751e1678fd0'
     run  = db[uid]
     data = run.primary.read()
 
