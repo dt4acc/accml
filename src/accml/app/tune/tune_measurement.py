@@ -6,20 +6,18 @@ from accml.core.interfaces.measurement_execution_engine import MeasurementExecut
 from accml.core.model.command import Command, BehaviourOnError, CommandSequence
 
 
-def tune(*, quadrupole_names: Sequence[str], measurement_values: Sequence[float],
+def tune(*, quadrupole_pc_names: Sequence[str], measurement_values: Sequence[float],
          mexec: MeasurementExecutionEngine = None,
          info_signals
          ):
-    cmds_on_lattice = []
-    for name in quadrupole_names:
+    cmds_on_machine = []
+    for name in quadrupole_pc_names:
         for val in measurement_values:
-            cmds_on_lattice.append(
-                Command(id=name, property="delta_main_strength", value=val, behaviour_on_error=BehaviourOnError.stop)
+            cmds_on_machine.append(
+                Command(id=name, property="delta_set_current", value=val, behaviour_on_error=BehaviourOnError.stop)
             )
 
-    command_rewritter = set_command_rewriter()
-
-    cmds_on_machine = CommandSequence(commands=[command_rewritter.forward(cmd) for cmd in cmds_on_lattice])
+    cmds_on_machine = CommandSequence(commands=cmds_on_machine)
 
     # extract the device id's that the commands work on
     device_ids = set([cmd.id for cmd in cmds_on_machine.commands])
@@ -37,7 +35,7 @@ def tune(*, quadrupole_names: Sequence[str], measurement_values: Sequence[float]
 
     asyncio.run(connect())
 
-    # TODO: should be handled internally, needs to be overriden ?
+    # TODO: should be handled internally, needs to be overridden ?
     actuators = {name: pc for name, pc in quadrupole_pcs.settable_devices.items()}
     # used so that it is easier to see what is happening
     # could be included in the standard software multiplexer
