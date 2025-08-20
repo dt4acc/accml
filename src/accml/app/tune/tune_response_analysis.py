@@ -10,6 +10,11 @@ from .model import MeasuredTuneResponseItem, MeasuredTuneResponsePerPowerConvert
 
 
 def data_to_model(data: Dict[str, Sequence[float]]) -> MeasuredTuneResponse:
+    """
+
+    Todo:
+        find out how often a measurement was repeated
+    """
     # combine data per magnet
     tmp = defaultdict(list)
     for dev_name, val, tune_x, tune_y in zip_longest(
