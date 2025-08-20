@@ -41,7 +41,7 @@ def fit_line(indep: Sequence[float], dep: Sequence[float]) -> RandomVariableMome
     """
     coeffs, info =  Polynomial.fit(indep, dep, deg=1, full=True)
     residuals, rank, singular_values, rcond = info
-    return RandomVariableMomenta(mean=float(coeffs.coef[1]), std=None)
+    return RandomVariableMomenta(mean=float(coeffs.coef[1]), std=float(np.nan))
 
 
 def fit_one_power_converter(data: MeasuredTuneResponsePerPowerConverter):
