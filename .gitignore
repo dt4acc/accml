@@ -1,7 +1,7 @@
 # emacs backup files
 *~
 
-# intermediate exchange files 
+# intermediate exchange files
 *.yml
 *.yaml
 *.json
@@ -11,7 +11,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensionsgit resotre 
+# C extensionsgit resotre
 *.so
 
 # Distribution / packaging
@@ -59,7 +59,7 @@ coverage.xml
 .pytest_cache/
 cover/
 
-# DS 
+# DS
 **/.DS_Store
 
 # Translations
