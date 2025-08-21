@@ -1,7 +1,11 @@
-from accml.app.tune.tune_response_analysis import tune_response_analysis
 from databroker import catalog
 import jsons
 import yaml
+
+from accml.app.tune.tune_response_analysis import tune_response_analysis
+from accml.app.tune.model_io import install_jsons_io
+
+install_jsons_io()
 
 
 def main():
