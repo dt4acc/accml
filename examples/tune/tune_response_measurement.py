@@ -6,7 +6,7 @@ from ophyd import Signal
 from accml.app.tune.tune_measurement import tune
 from accml.core.bl.liasion_translator_setup import load_managers
 from accml.core.model.identifiers import LatticeElementPropertyID
-from accml.custom.epics.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
+from accml.custom.epics.mexec.bluesky.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
 
 # Todo: execution engine use and setup should be provided by standard measurement execution engine
 #       e.g. depending on Bluesky or Bliss what ever the lab's preference is
