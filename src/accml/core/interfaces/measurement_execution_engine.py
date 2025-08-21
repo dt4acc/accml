@@ -16,6 +16,14 @@ class MeasurementExecutionEngine(metaclass=ABCMeta):
         raise NotImplementedError("use derived class instead")
 
     @abstractmethod
+    def correction_step(self, *, oracle, policy, detectors, actuators, **kwargs) -> str:
+        """
+        Todo:
+            should that be rather on a higher level ?
+            Need to add policy maker
+        """
+
+    @abstractmethod
     def setup(self, *args) -> None:
         """
         Setup the measurement execution engine

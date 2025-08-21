@@ -8,7 +8,8 @@ from accml.core.model.command import Command, BehaviourOnError, CommandSequence
 
 def tune(*, quadrupole_pc_names: Sequence[str], measurement_values: Sequence[float],
          mexec: MeasurementExecutionEngine = None,
-         info_signals
+         info_signals,
+         repeat_readings:int=1,
          ):
     cmds_on_machine = []
     for name in quadrupole_pc_names:
@@ -43,5 +44,7 @@ def tune(*, quadrupole_pc_names: Sequence[str], measurement_values: Sequence[flo
     md = {}
 
     uid = mexec.execute(commands_collection=cmds_on_machine.commands,  # need to add bpms
-                        detectors=[tunes], actuators=actuators, info_signals=info_signals, md=md, )
+                        detectors=[tunes], actuators=actuators, info_signals=info_signals, md=md,
+                        repeat_readings=repeat_readings
+                        )
     print(f"Run created {uid=}")
