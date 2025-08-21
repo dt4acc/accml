@@ -1,3 +1,11 @@
+# emacs backup files
+*~
+
+# intermediate exchange files 
+*.yml
+*.yaml
+*.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
