@@ -8,6 +8,10 @@ from accml.app.tune.model import (
     TuneResponseForFit,
     TuneResponseForFitItem,
 )
+from accml.app.tune.model_io import install_jsons_io
+
+install_jsons_io()
+
 from accml.app.tune.tune_correction_oracle import (
     TuneCorrectionOracle,
     enrich_with_polarity,
@@ -15,8 +19,7 @@ from accml.app.tune.tune_correction_oracle import (
 
 
 def sort_quadrupole_to_plane(data: TuneResponse) -> (str, TuneResponse):
-    """guess to which family or plane the quadrupoles belong to
-    """
+    """guess to which family or plane the quadrupoles belong to"""
     ratio = abs(data.x.mean / data.y.mean)
     # x is not that pronounced
     #    revisit when proper start data is there
