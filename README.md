@@ -39,7 +39,7 @@ Keep this terminal running — it simulates a virtual accelerator backend.
 ### 5. Run the pyAML Client (example)
 ```bash
 cd examples/tune
-python3 tune.py
+python3 tune_response_measurement.py
 
 
     
