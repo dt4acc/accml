@@ -1,4 +1,4 @@
-name: Publish bact-mat-utils to PyPI and TestPyPI
+name: Publish accml to PyPI and TestPyPI
 
 on: push
 
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/bact-math-utils  # Replace <package-name> with your PyPI project name
+      url: https://pypi.org/p/accml  # Replace <package-name> with your PyPI project name
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
 
@@ -92,14 +92,14 @@ jobs:
         --repo '${{ github.repository }}'
 
   publish-to-testpypi:
-    name: Publish bact-math-utils to TestPyPI
+    name: Publish accml to TestPyPI
     needs:
     - build
     runs-on: ubuntu-latest
 
     environment:
       name: testpypi
-      url: https://test.pypi.org/p/bact-math-utils
+      url: https://test.pypi.org/p/accml
 
     permissions:
       id-token: write  # IMPORTANT: mandatory for trusted publishing
