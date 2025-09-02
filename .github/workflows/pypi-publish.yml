@@ -51,7 +51,7 @@ jobs:
 
   github-release:
     name: >-
-      Sign accl with Sigstore and upload them to GitHub Release
+      Sign accml with Sigstore and upload them to GitHub Release
     needs:
     - publish-to-pypi
     runs-on: ubuntu-latest
