@@ -18,5 +18,5 @@ class MagneticObject(BaseModel):
     dev_id: Hashable  # e.g., 'QF1C01A' or 'QF1C01'
     type: str  # e.g., 'quadrupole'
     family_member : Sequence[str]
-    power_converter_id: Hashable  # reference to PowerConverter.id
+    power_converter_id: Hashable  # reference to SimplePowerConverter.id
     conversion: EnergyDependentConversionModel
