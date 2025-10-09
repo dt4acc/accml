@@ -1,18 +1,20 @@
 import functools
 import logging
+from collections import defaultdict
 from pathlib import Path
 
 from accml.facility_specific_constants import ring_parameters
-from ..model.identifiers import LatticeElementPropertyID, DevicePropertyID, ConversionID
-from ..config.utils import full_data_path
-from ..interfaces.translator_service import TranslatorServiceBase
-from ..interfaces.liaison_manager import LiaisonManagerBase
-from ..config.config_service import ConfigService
 from .liaison_manager import LiaisonManager
 from .translator_service import TranslatorService
 from .unit_conversion import EnergyDependentLinearUnitConversion
 from ..bl.yellow_pages import YellowPages
+from ..config.config_service import ConfigService
+from ..config.utils import full_data_path
+from ..interfaces.liaison_manager import LiaisonManagerBase
+from ..interfaces.translator_service import TranslatorServiceBase
 from ..interfaces.yellow_pages import YellowPagesBase
+from ..model.identifiers import LatticeElementPropertyID, DevicePropertyID, ConversionID
+
 logger = logging.getLogger("accml")
 
 
@@ -66,9 +68,22 @@ def build_managers(config_dir: Path) -> (YellowPagesBase, LiaisonManagerBase, Tr
             device_name=magnet.power_converter_id, property="delta_set_current") for magnet in magnets if
         magnet.dev_id in yp.quadrupole_names()})
 
-    inverse_lut = {
-        DevicePropertyID(device_name=m.power_converter_id, property="set_current"): [
-            LatticeElementPropertyID(element_name=m.dev_id, property="main_strength")] for m in magnets}
+    # inverse_lut = {
+    #     DevicePropertyID(device_name=m.power_converter_id, property="set_current"): [
+    #         LatticeElementPropertyID(element_name=m.dev_id, property="main_strength")] for m in magnets}
+
+    inverse_lut_dd = defaultdict(list)
+
+    for m in magnets:
+        if m.dev_id not in yp.quadrupole_names():
+            continue
+
+        dp_main = DevicePropertyID(device_name=m.power_converter_id, property="set_current")
+        lep_main = LatticeElementPropertyID(element_name=m.dev_id, property="main_strength")
+        inverse_lut_dd[dp_main].append(lep_main)
+
+    inverse_lut = dict(inverse_lut_dd)
+
     lm = LiaisonManager(forward_lut=forward_lut, inverse_lut=inverse_lut)
     del forward_lut, inverse_lut
 
