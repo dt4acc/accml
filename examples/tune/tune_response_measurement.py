@@ -5,7 +5,9 @@ from ophyd_async.core import soft_signal_rw
 
 from accml.app.tune.tune_measurement import tune
 from accml.core.model.identifiers import LatticeElementPropertyID
-from accml.custom.epics.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
+# from accml.custom.epics.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
+from accml.custom.tango.mexec.measurement_execution_engine import AsyncMeasurementExecutionEngine
+
 
 from accml.custom.facility_specific.bessyii.liasion_translator_setup import load_managers
 from accml.custom.facility_specific.bessyii.setup import setup
@@ -53,7 +55,7 @@ def main():
        devices=devices,
        quadrupole_pc_names=pc_names,
        measurement_values=[0, 1e0, 0, -1e0, 0],
-       mexec=BlueskyMeasurementExecutionEngine(run_engine=RE),
+       mexec=AsyncMeasurementExecutionEngine(run_engine=RE),
        info_signals=info_sigs
     )
 
