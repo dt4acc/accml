@@ -10,7 +10,7 @@ from ophyd_async.tango.core import  tango_signal_r, tango_signal_rw
 from bluesky.protocols import Movable, Stoppable, SyncOrAsync, Stageable, Reading
 from bluesky import RunEngine
 import bluesky.plans as bpp
-# from databroker import catalog
+from databroker import catalog
 from ophyd_async.tango.core import TangoReadable
 
 from typing import Annotated as A
@@ -21,7 +21,7 @@ from ophyd_async.tango.core import TangoPolling
 
 class Powerconverter(TangoReadable):
     current_setpoint: A[SignalRW[float], Format.HINTED_SIGNAL, TangoPolling(1.0, 0.1, 0.1)]
-    current_readback: A[SignalR[float], Format.CONFIG_SIGNAL, TangoPolling(0.1, 0.1, 0.1)]
+    current_readback: A[SignalR[float], TangoPolling(0.1, 0.1, 0.1)]
 
 
 class Powerconverter2(TangoReadable):
@@ -80,6 +80,7 @@ class Powerconverter2(TangoReadable):
 
 async def run_device():
     pc = Powerconverter(
+        name="pc",
         trl="SimpleTangoServer/test/power_converter_Q3P2T6R",
         # setpoint_suffix="current_setpoint",
         # readback_suffix="current_readback"
@@ -94,7 +95,7 @@ async def run_device():
 
 def main():
 
-    #cat = catalog["heavy_local"]
+    cat = catalog["heavy_local"]
     pc = Powerconverter(
         name="pc",
         trl="SimpleTangoServer/test/power_converter_Q3P2T6R",
@@ -104,16 +105,15 @@ def main():
 
     async def connect():
         await pc.connect()
-        pc.stage()
-        print (await pc.read())
 
+    # Seems that connect needs to demanded explicitly
     asyncio.run(connect())
 
     RE = RunEngine()
-    # RE.subscribe(cat.v1.insert)
+    RE.subscribe(cat.v1.insert)
     uid, = RE(bpp.count([pc], 3))
-    # run = cat[uid]
-    # print(run)
+    run = cat[uid]
+    print(run.primary.read())
      #print(uid)
     # time.sleep(3)
 
