@@ -17,8 +17,8 @@ from ophyd_async.tango.core import TangoPolling
 
 
 class Powerconverter(TangoReadable):
-    current_setpoint: A[SignalRW[float], Format.HINTED_SIGNAL, TangoPolling(1.0, 0.1, 0.1)]
-    current_readback: A[SignalR[float], TangoPolling(0.1, 0.1, 0.1)]
+    current_setpoint: A[SignalRW[float], Format.HINTED_SIGNAL, TangoPolling(1.0, 0.01, 1e-4)]
+    current_readback: A[SignalR[float], TangoPolling(1.0, 0.01, 1e-4)]
 
 
 async def run_device():
@@ -57,5 +57,5 @@ def main():
 
 if __name__ == "__main__":
     # you can only run one at once
-    asyncio.run(run_device())
-    # main()
+    # asyncio.run(run_device())
+    main()
