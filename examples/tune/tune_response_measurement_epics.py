@@ -6,9 +6,7 @@ from ophyd import Signal
 from accml.app.tune.tune_measurement import tune
 from accml.core.bl.liasion_translator_setup import load_managers
 from accml.core.model.identifiers import LatticeElementPropertyID
-# from accml.custom.epics.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
-from accml.custom.tango.mexec.measurement_execution_engine import AsyncMeasurementExecutionEngine
-
+from accml.custom.epics.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
 
 # Todo: execution engine use and setup should be provided by standard measurement execution engine
 #       e.g. depending on Bluesky or Bliss what ever the lab's preference is
@@ -17,7 +15,6 @@ from accml.custom.tango.mexec.measurement_execution_engine import AsyncMeasureme
 
 if __name__ == "__main__":
     # TODO: use the generic (not bluesky dependent) mesaurement execution engine
-
 
     info_sigs = {name: Signal(name=name) for name in ["device_name", "channel_name", "channel_value"]}
     # TODO: should be handled internally, but overridable
@@ -43,10 +40,10 @@ if __name__ == "__main__":
     }
     # Now I add a hack: I only use quadrupoles whoes power converter is unique
     # I should rather work in device space right away
-    pc_names=list(set(pc_names))
+    pc_names = list(set(pc_names))
     tune(
-       quadrupole_pc_names=pc_names,
-       measurement_values=[0, 1e0, 0, -1e0, 0],
-       mexec=AsyncMeasurementExecutionEngine(run_engine=RE),
-       info_signals=info_sigs
+        quadrupole_pc_names=pc_names,
+        measurement_values=[0, 1e0, 0, -1e0, 0],
+        mexec=BlueskyMeasurementExecutionEngine(run_engine=RE),
+        info_signals=info_sigs
     )
