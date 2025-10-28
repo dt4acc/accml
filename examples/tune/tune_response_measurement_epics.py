@@ -5,9 +5,7 @@ from ophyd_async.core import soft_signal_rw
 
 from accml.app.tune.tune_measurement import tune
 from accml.core.model.identifiers import LatticeElementPropertyID
-# from accml.custom.epics.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
-from accml.custom.tango.mexec.measurement_execution_engine import AsyncMeasurementExecutionEngine
-
+from accml.custom.epics.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
 
 from accml.custom.facility_specific.bessyii.liasion_translator_setup import load_managers
 from accml.custom.facility_specific.bessyii.setup import setup
@@ -24,7 +22,7 @@ def main():
     info_sigs = {name: soft_signal_rw(str, name=name) for name in ["device_name", "channel_name"]}
     info_sigs["channel_value"] = soft_signal_rw(float, name= "channel_value", precision=5)
 
-
+    info_sigs = {name: Signal(name=name) for name in ["device_name", "channel_name", "channel_value"]}
     # TODO: should be handled internally, but overridable
     lt = LiveTable([sig.name for _, sig in info_sigs.items()] +
                    ["tune-x-sig", "tune-y-sig"] +
@@ -50,15 +48,10 @@ def main():
     }
     # Now I add a hack: I only use quadrupoles whoes power converter is unique
     # I should rather work in device space right away
-    pc_names=list(set(pc_names))
+    pc_names = list(set(pc_names))
     tune(
-       devices=devices,
-       quadrupole_pc_names=pc_names,
-       measurement_values=[0, 1e0, 0, -1e0, 0],
-       mexec=AsyncMeasurementExecutionEngine(run_engine=RE),
-       info_signals=info_sigs
+        quadrupole_pc_names=pc_names,
+        measurement_values=[0, 1e0, 0, -1e0, 0],
+        mexec=BlueskyMeasurementExecutionEngine(run_engine=RE),
+        info_signals=info_sigs
     )
-
-
-if __name__ == "__main__":
-    main()
