@@ -23,7 +23,7 @@ cd accml
 
 ### 2. Install Dependencies
 ```bash  
-git checkout dev/main
+git checkout epics/main
 
 git submodule update --init --recursive
 ```
@@ -33,7 +33,7 @@ python3 -m pip install -e .
 ```
 ### 4. Run the Virtual Accelerator (Test bench)
 ```bash 
-apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/containers/pyat-softioc-digital-twin:v0-2-5.2314849
+apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/containers/pyat-softioc-digital-twin:v0-1-2-bessy.2475331
 ```
 Keep this terminal running — it simulates a virtual accelerator backend.
 ### 5. Run the pyAML Client (example)
