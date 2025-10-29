@@ -20,17 +20,31 @@ from databroker import catalog
 
 
 class PowerconverterBase(TangoReadable, AsyncStageable):
-    def __init__(self, trl: str | None = "", name="", *, set_signal_name: str):
-        super().__init__(trl, name=name)
-        self._ref_current = None
-        # current tango version: signals are the names of the properties of the
-        # tango device. These have to be set accordingly
+    """
 
-        self._set_signal = getattr(self, set_signal_name)
+    Warning:
+        current tango version: signals are the names of the properties of the
+        tango device. These have to declared in a derived class using
+        Annotation.
+
+        These are renamed to setpoint and readback.
+        Name clashes with the tango device can result in interesting behaviour
+
+    """
+
+    def __init__(
+        self, trl: str | None = "", name="", *, setpoint_name: str, readback_name: str
+    ):
+        super().__init__(trl, name=name)
+        self.setpoint_ = getattr(self, setpoint_name)
+        self.readback_ = getattr(self, readback_name)
+
+        self._ref_current = None
+
         self.diff_current = derived_signal_rw(
             self._to_relative_current,
             self._set_diff_current,
-            current=self._set_signal,
+            current=self.setpoint_,
             derived_precision=5,
         )
         self.add_readables([self.diff_current])
@@ -48,10 +62,10 @@ class PowerconverterBase(TangoReadable, AsyncStageable):
     async def _set_diff_current(self, dv: float):
         current = dv + self._ref_current
         self.log.debug(f"Setting {dv=} -> {current=}")
-        await self._set_signal.set(current)
+        await self.setpoint_.set(current)
         if self.log.getEffectiveLevel() >= logging.DEBUG:
-            rdbk = await self._set_signal._cache.backend.get_value()
-            setp = await self._set_signal._cache.backend.get_setpoint()
+            rdbk = await self.setpoint_._cache.backend.get_value()
+            setp = await self.setpoint_._cache.backend.get_setpoint()
             self.log.debug(f"Setting {dv=} -> {current=}: {setp=}, {rdbk=}")
 
     async def read(self):
@@ -60,7 +74,7 @@ class PowerconverterBase(TangoReadable, AsyncStageable):
             need to find out why I have to call read explicitly
         """
         d = await super().read()
-        entry = d[self._set_signal.name]
+        entry = d[self.setpoint_.name]
         d[self.diff_current.name] = dict(
             value=self._to_relative_current(entry["value"]),
             timestamp=entry["timestamp"],
@@ -71,7 +85,7 @@ class PowerconverterBase(TangoReadable, AsyncStageable):
     async def stage(self) -> None:
         self.log.info("staging")
         r = await super().stage()
-        self._ref_current = await self._set_signal.get_value()
+        self._ref_current = await self.setpoint_.get_value()
         return r
 
     @AsyncStatus.wrap
@@ -98,6 +112,8 @@ async def run_device():
     pc = Powerconverter(
         name="pc",
         trl="SimpleTangoServer/test/power_converter_Q3P2T6R",
+        setpoint_name="current_setpoint",
+        readback_name="current_readback",
     )
     t = await pc.connect()
     t
@@ -114,7 +130,8 @@ def main():
     pc = Powerconverter(
         name="pc",
         trl="SimpleTangoServer/test/power_converter_Q3P2T6R",
-        set_signal_name="current_setpoint",
+        setpoint_name="current_setpoint",
+        readback_name="current_readback",
     )
 
     async def connect():
@@ -135,5 +152,5 @@ def main():
 
 if __name__ == "__main__":
     # you can only run one at once
-    # asyncio.run(run_device())
-    main()
+    asyncio.run(run_device())
+    # main()
