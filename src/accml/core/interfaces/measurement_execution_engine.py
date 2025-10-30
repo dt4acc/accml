@@ -1,8 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from typing import Sequence
 
-from accml.core.model.command import Command
-
+from ..model.command import Command
+from .devices_facade import DevicesFacade
 
 class MeasurementExecutionEngine(metaclass=ABCMeta):
     @abstractmethod
@@ -12,12 +12,5 @@ class MeasurementExecutionEngine(metaclass=ABCMeta):
 
         Measurement engine is responsible to store data
         as appropriate
-        """
-        raise NotImplementedError("use derived class instead")
-
-    @abstractmethod
-    def setup(self, *args) -> None:
-        """
-        Setup the measurement execution engine
         """
         raise NotImplementedError("use derived class instead")
