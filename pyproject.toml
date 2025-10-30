@@ -4,9 +4,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "accml"
-version = "0.0.1"
+version = "0.1.0"
 description = "python accelerator middle layer"
-authors = ["..."]
+authors = [
+    {name="Waheedullah Sulaiman Khail", email="<waheedullah.sulaiman_khail@helmholtz-berlin.de}",
+    {name="Pierre Schnizer", email="<pierre.schnizer@helmholtz-berlin.de}",
+
+]
 license = "GPL-3.0"
 # until we have the repoitory
 homepage = "https://github.com/python-accelerator-middle-layer/accml"
@@ -24,7 +28,3 @@ databroker = "*"
 # ophyd async does not specify which transport is to be used
 ophyd-async = "*"
 aioca = "*"
-
-# currently only used for Signal ... need to replace it with
-# equivalent in ophyd-async
-ophyd = ">=1.6"
