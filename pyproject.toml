@@ -17,6 +17,9 @@ documentation = "https://github.com/python-accelerator-middle-layer/accml"
 repository = "https://github.com/python-accelerator-middle-layer/accml.git"
 keywords = []
 
+[tool.poetry]
+readme = "README.md"
+
 [tool.poetry.dependencies]
 python = ">=3.7"
 pydantic = "*"
