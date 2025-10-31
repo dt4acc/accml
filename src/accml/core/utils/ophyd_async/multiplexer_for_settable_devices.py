@@ -171,7 +171,7 @@ class MultiplexerProxy(StandardReadable, Stageable):
             learn how this is correctly done
         """
         stat = super().connect(*args, **kwargs)
-        asyncio.gather(
+        await asyncio.gather(
             *[pc.connect(*args, **kwargs) for _, pc in self.settable_devices.items()],
             # return_exceptions=True,
         )
