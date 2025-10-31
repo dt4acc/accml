@@ -1,25 +1,32 @@
 from bluesky import RunEngine
 from bluesky.callbacks import LiveTable
 from databroker import catalog
-from ophyd import Signal
+from ophyd_async.core import soft_signal_rw
 
 from accml.app.tune.tune_measurement import tune
-from accml.core.bl.liasion_translator_setup import load_managers
 from accml.core.model.identifiers import LatticeElementPropertyID
 from accml.custom.epics.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
 
-# Todo: execution engine use and setup should be provided by standard measurement execution engine
-#       e.g. depending on Bluesky or Bliss what ever the lab's preference is
-#
+from accml.custom.facility_specific.bessyii.liasion_translator_setup import load_managers
+from accml.custom.facility_specific.bessyii.setup import setup
 
 
-if __name__ == "__main__":
-    # TODO: use the generic (not bluesky dependent) mesaurement execution engine
+def main():
+    """
+    Todo:
+        execution engine use and setup should be provided by standard measurement execution engine
+        e.g. depending on Bluesky or Bliss what ever the lab's preference is
+    """
+    devices = setup()
+    # Setup informational signals (mock metadata)
+    info_sigs = {name: soft_signal_rw(str, name=name) for name in ["device_name", "channel_name"]}
+    info_sigs["channel_value"] = soft_signal_rw(float, name= "channel_value", precision=5)
 
 
-    info_sigs = {name: Signal(name=name) for name in ["device_name", "channel_name", "channel_value"]}
     # TODO: should be handled internally, but overridable
-    lt = LiveTable([sig.name for _, sig in info_sigs.items()] + ["tune-x-sig", "tune-y-sig"],
+    lt = LiveTable([sig.name for _, sig in info_sigs.items()] +
+                   ["tune-x-sig", "tune-y-sig"] +
+                   ["tune-x", "tune-y"],
                    # + list(actuators.values())
                    default_prec=10, )
     RE = RunEngine()
@@ -43,8 +50,13 @@ if __name__ == "__main__":
     # I should rather work in device space right away
     pc_names=list(set(pc_names))
     tune(
+       devices=devices,
        quadrupole_pc_names=pc_names,
        measurement_values=[0, 1e0, 0, -1e0, 0],
        mexec=BlueskyMeasurementExecutionEngine(run_engine=RE),
        info_signals=info_sigs
     )
+
+
+if __name__ == "__main__":
+    main()
