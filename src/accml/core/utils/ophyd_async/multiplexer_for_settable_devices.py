@@ -11,8 +11,7 @@ from typing import Dict, Union, Sequence
 
 from bluesky.protocols import Movable, Stageable, Reading
 from event_model import DataKey
-from ophyd_async.core import StandardReadable, soft_signal_rw, StandardReadableFormat as Format, LazyMock, \
-    DEFAULT_TIMEOUT
+from ophyd_async.core import StandardReadable
 
 logger = logging.getLogger("pyaml")
 
@@ -51,7 +50,6 @@ class _ProxiedDeviceName(StandardReadable, Movable, Stageable):
         super().__init__(name=name)
         assert self.proxied_name is not None
 
-
     async def describe(self) -> dict[str, DataKey]:
         return {
             f"{self.name}-proxied_name": DataKey(source="", dtype="string", shape=[])
@@ -74,7 +72,7 @@ class _ProxiedDeviceName(StandardReadable, Movable, Stageable):
         return self.proxied_name
 
 
-class _MultiplexerItemProxy(StandardReadable, Movable,  Stageable):
+class _MultiplexerItemProxy(StandardReadable, Movable, Stageable):
     def __init__(
         self,
         *args,
@@ -84,7 +82,6 @@ class _MultiplexerItemProxy(StandardReadable, Movable,  Stageable):
     ):
         self.settable_devices = settable_devices
         super().__init__(name=name)
-
 
     @property
     def _proxied_dev_name(self):
@@ -113,12 +110,8 @@ class _MultiplexerItemProxy(StandardReadable, Movable,  Stageable):
         return d
 
     async def read(self):
-        """return data for the proxied device
-        """
-        stat1 = super().read()
-        stat2 =  self._proxied_device.read()
-        d = await stat1
-        proxied_data = await stat2
+        """return data for the proxied device"""
+        _, proxied_data = asyncio.gather(super().read(), self._proxied_device.read())
         return self._rename_keys(proxied_data)
 
     async def set(self, val):
@@ -130,6 +123,7 @@ class _MultiplexerItemProxy(StandardReadable, Movable,  Stageable):
 
     async def stop(self):
         pass
+
 
 class MultiplexerProxy(StandardReadable, Stageable):
     """
@@ -143,6 +137,7 @@ class MultiplexerProxy(StandardReadable, Stageable):
         themselves? Just add them to the list of detectors to the
         RunEngine
     """
+
     def __init__(
         self,
         *args,
@@ -160,7 +155,7 @@ class MultiplexerProxy(StandardReadable, Stageable):
                 acceptable_names=list(settable_devices.keys()),
             )
             self.proxy = ItemProxy(
-                name=f"{name:}-proxy",  settable_devices=settable_devices
+                name=f"{name:}-proxy", settable_devices=settable_devices
             )
             self.settable_devices = settable_devices
         super().__init__(*args, **kwargs)
@@ -175,13 +170,12 @@ class MultiplexerProxy(StandardReadable, Stageable):
             can I return all stats directly?
             learn how this is correctly done
         """
-        stat =  super().connect(*args, **kwargs)
-        stats = asyncio.gather(
+        stat = super().connect(*args, **kwargs)
+        asyncio.gather(
             *[pc.connect(*args, **kwargs) for _, pc in self.settable_devices.items()],
             # return_exceptions=True,
         )
-        rall = await stats
-        r =  await stat
-        return r
+        return await stat
+
 
 __all__ = ["MultiplexerProxy"]
