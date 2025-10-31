@@ -3,9 +3,9 @@ import os
 from ..bessyii.liasion_translator_setup import load_managers
 from accml.core.interfaces.devices_facade import DevicesFacade
 from accml.core.utils.ophyd_async.multiplexer_for_settable_devices import MultiplexerProxy
-from accml.custom.accml_tango.devices.power_converter import PowerConverter
-from accml.custom.accml_tango.devices.master_clock import MasterClock
-from accml.custom.accml_tango.devices.tunes import Tunes
+from accml.custom.tango.devices.power_converter import PowerConverter
+from accml.custom.tango.devices.master_clock import MasterClock
+from accml.custom.tango.devices.tunes import Tunes
 
 from ..bessyii.facility_specific_constants import special_pvs
 

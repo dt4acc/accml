@@ -1,7 +1,7 @@
 import asyncio
 import pprint
 
-from accml.custom.accml_tango.devices.tunes import Tunes
+from accml.custom.tango.devices.tunes import Tunes
 
 async def run_device():
     tune = Tunes(name="tunes", trl="SimpleTangoServer/test/tune_device")

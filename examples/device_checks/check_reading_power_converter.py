@@ -3,7 +3,7 @@ import logging
 
 
 logging.basicConfig(level=logging.WARNING)
-from accml.custom.accml_tango.devices.power_converter import PowerConverter
+from accml.custom.tango.devices.power_converter import PowerConverter
 
 from bluesky import RunEngine
 import bluesky.plans as bpp
