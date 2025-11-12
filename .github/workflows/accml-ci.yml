@@ -1,4 +1,4 @@
-name: PyGSL build
+name: accml build
 
 on:
   push:
@@ -48,7 +48,7 @@ jobs:
           # listing a non existing directory fails ..
           ls -l dist/ || echo 'no dist directory'
           ls -l wheel/
-          python -m pip install wheel/pygsl-*.whl
+          python -m pip install wheel/accml-*.whl
 
       - name: Lint with flake8
         run: |
