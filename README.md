@@ -23,7 +23,7 @@ cd accml
 
 ### 2. Install Dependencies
 ```bash  
-git checkout epics/main
+git checkout dev/main
 
 git submodule update --init --recursive
 ```
@@ -31,7 +31,7 @@ git submodule update --init --recursive
 ```bash
 python3 -m pip install -e .
 ```
-### 4. Run the Virtual Accelerator (Test bench)
+### 4. Run the Virtual Accelerator (Test bench) --EPICS VERSION
 ```bash 
 apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/containers/pyat-softioc-digital-twin:v0-1-2-bessy.2475331
 ```
@@ -40,6 +40,22 @@ Keep this terminal running — it simulates a virtual accelerator backend.
 ```bash
 cd examples/tune
 python3 tune_response_measurement.py
+```
 
+### 4.1 Run the Virtual Accelerator (Test bench) --TANGO VERSION
+```bash
+apptainer provide corrrect container first
+```
+Keep this terminal running — it simulates a virtual accelerator backend.
+### 5.1 Run the pyAML Client (example)
+```bash
+cd examples/tune
+```
+# Comment line 14 and uncomment line 15 in tune_response_measurement.py it should look like this:
+#from accml.custom.facility_specific.bessyii.setup import setup
+from accml.custom.facility_specific.bessyii_on_tango.setup import setup
+execute:
+```bash
+python3 tune_response_measurement.py
 
     
