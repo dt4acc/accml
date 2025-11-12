@@ -9,6 +9,7 @@ class ResponseModel(BaseModel):
     Timeout: whithin this time the device has to answer
     Settle time: after this time the device is expected to be in a stable state
     """
+
     #: seconds
     timeout: float
     # seconds
@@ -26,7 +27,6 @@ class PowerConverter(BaseModel):
     id: Hashable
     interface: PowerConverterInterface
     response: ResponseModel
-
 
     def get_current(self):
         return 0.0

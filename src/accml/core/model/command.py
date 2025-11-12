@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from enum import IntEnum, Enum
-from typing import Sequence, Union
+from enum import IntEnum
+from typing import Sequence
 
 
 class BehaviourOnError(IntEnum):
@@ -15,6 +15,7 @@ class Command:
     Todo:
         how to handle the devices that should be read back?
     """
+
     #: can be the identifier of a lattice element or a device
     id: str
     property: str
@@ -29,10 +30,9 @@ class TransactionalCommand:
 
 @dataclass
 class CommandSequence:
-    """These commands are expected to be executed on by one
-    """
-    commands: Sequence[TransactionalCommand]
+    """These commands are expected to be executed on by one"""
 
+    commands: Sequence[TransactionalCommand]
 
 
 __all__ = ["BehaviourOnError", "Command", "CommandSequence"]

@@ -4,6 +4,7 @@ from abc import ABCMeta, abstractmethod
 from .state_conversion import StateConversion
 from ...core.model.identifiers import ConversionID
 
+
 class TranslatorServiceBase(metaclass=ABCMeta):
     """
 
@@ -15,6 +16,7 @@ class TranslatorServiceBase(metaclass=ABCMeta):
 
     * please give me the translation object that converts between these
     """
+
     @abstractmethod
     def get(self, id_: ConversionID) -> StateConversion:
         pass
