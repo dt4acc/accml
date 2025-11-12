@@ -1,0 +1,65 @@
+name: accml build
+
+on:
+  push:
+    branches: [ "dev/main", "epics/main", "tango/main" ]
+  pull_request:
+    branches: [ "dev/main", "epics/main", "tango/main" ]
+
+jobs:
+  wrap_and_build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ "3.9", "3.10", "3.11" , "3.12" ]
+        numpy-version : [ "numpy<2.0", "numpy>=2.0" ]
+    steps:
+      # Checkout the repository contents
+      - name: Checkout accml code
+        uses: actions/checkout@v5
+      - name: Set up Python ${{ matrix.python-version }} ${{ matrix.numpy-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          # numpy-version: ${{ matrix.numpy-version }}
+          cache: 'pip'
+          cache-dependency-path: |
+           **/pyproject.toml
+           **/requirements*.txt
+
+      # Install Python dependencies
+      - name: Python dependencies
+        run: |
+          python -m pip install --upgrade pip wheel
+          python -m pip install pytest pycodestyle flake8 "${{ matrix.numpy-version }}"
+
+          # So that one can seee in the output which numpy version was run
+          echo "showing numpy"
+          python3 -c 'import numpy; print("numpy version", numpy.__version__)'
+          echo "done"
+
+      - name: wheel
+        run: |
+          python -m pip wheel -w wheel/ ./
+
+      - name: install
+        run: |
+          # listing a non existing directory fails ..
+          ls -l dist/ || echo 'no dist directory'
+          ls -l wheel/
+          python -m pip install wheel/accml-*.whl
+
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+#      - name: test
+#        run: |
+#          # make sure to move out of the source directory
+#          cd /tmp
+#          python -c "from pygsl.testing import sf; print(dir(sf))"
+#          python -m pytest -s /home/runner/work/python-accelerator-middle-layer/accml/tests

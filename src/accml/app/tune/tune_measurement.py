@@ -1,12 +1,12 @@
 import asyncio
 from typing import Sequence
 
-from accml.core.bl.set_command_rewriter import set_command_rewriter
+from accml.core.interfaces.devices_facade import DevicesFacade
 from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
 from accml.core.model.command import Command, BehaviourOnError, CommandSequence
 
 
-def tune(*, quadrupole_pc_names: Sequence[str], measurement_values: Sequence[float],
+def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurement_values: Sequence[float],
          mexec: MeasurementExecutionEngine = None,
          info_signals
          ):
@@ -19,13 +19,9 @@ def tune(*, quadrupole_pc_names: Sequence[str], measurement_values: Sequence[flo
 
     cmds_on_machine = CommandSequence(commands=cmds_on_machine)
 
-    # extract the device id's that the commands work on
-    device_ids = set([cmd.id for cmd in cmds_on_machine.commands])
-
     # inform setup on which devices are actually needed
     # so setup could select only to instantiate those devices
     # before returning it should check that it can handle all mentioned devices
-    devices = mexec.setup()
     tunes = devices["tunes"]
     quadrupole_pcs = devices["quadrupole_pcs"]
 
@@ -42,6 +38,11 @@ def tune(*, quadrupole_pc_names: Sequence[str], measurement_values: Sequence[flo
 
     md = {}
 
-    uid = mexec.execute(commands_collection=cmds_on_machine.commands,  # need to add bpms
-                        detectors=[tunes], actuators=actuators, info_signals=info_signals, md=md, )
+    uid = mexec.execute(
+        commands_collection=cmds_on_machine.commands,  # need to add bpms
+        detectors=[tunes],
+        actuators=actuators,
+        info_signals=info_signals,
+        md=md,
+    )
     print(f"Run created {uid=}")
