@@ -51,7 +51,7 @@ Keep this terminal running — it simulates a virtual accelerator backend.
 ```bash
 cd examples/tune
 ```
-# Comment line 14 and uncomment line 15 in tune_response_measurement.py it should look like this:
+Comment line 14 and uncomment line 15 in tune_response_measurement.py it should look like this:
 #from accml.custom.facility_specific.bessyii.setup import setup
 from accml.custom.facility_specific.bessyii_on_tango.setup import setup
 execute:
