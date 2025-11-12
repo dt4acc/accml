@@ -1,3 +1,6 @@
 [submodule "src/accml/custom/epics"]
 	path = src/accml/custom/epics
 	url = https://github.com/python-accelerator-middle-layer/epics.git
+[submodule "src/accml/custom/tango"]
+	path = src/accml/custom/tango
+	url = https://github.com/python-accelerator-middle-layer/accml_tango.git

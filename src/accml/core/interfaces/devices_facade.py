@@ -11,4 +11,3 @@ class DevicesFacade(metaclass=ABCMeta):
         returns the device needed
         """
         raise NotImplementedError
-

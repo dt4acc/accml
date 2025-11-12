@@ -19,9 +19,6 @@ def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurem
 
     cmds_on_machine = CommandSequence(commands=cmds_on_machine)
 
-    # extract the device id's that the commands work on
-    device_ids = set([cmd.id for cmd in cmds_on_machine.commands])
-
     # inform setup on which devices are actually needed
     # so setup could select only to instantiate those devices
     # before returning it should check that it can handle all mentioned devices

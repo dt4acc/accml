@@ -16,7 +16,7 @@ class DevicePropertyID:
     property: str
 
     def known(self) -> bool:
-        return self.property is not None and self.element_name is not None
+        return self.property is not None and self.device_name is not None
 
 
 @dataclass(frozen=True, eq=True)
