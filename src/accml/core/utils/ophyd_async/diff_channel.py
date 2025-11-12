@@ -31,10 +31,8 @@ class DiffChannel(StandardReadable, Movable):
 
     @AsyncStatus.wrap
     async def set(self, diff_value) -> Status:
-        assert (
-            self.reference_value is not None,
-            NotInitalisedReferenceValue("Power converter diff value was not set"),
+        assert self.reference_value is not None, NotInitalisedReferenceValue(
+            "Power converter diff value was not set"
         )
         value = diff_value + self.reference_value
         return self.parent.set(value)
-

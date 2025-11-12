@@ -18,8 +18,12 @@ class LiaisonManager(LiaisonManagerBase):
               user when searching for it
 
     """
-    def __init__(self, forward_lut: Mapping[LatticeElementPropertyID, DevicePropertyID],
-            inverse_lut: Mapping[DevicePropertyID, LatticeElementPropertyID], ):
+
+    def __init__(
+        self,
+        forward_lut: Mapping[LatticeElementPropertyID, DevicePropertyID],
+        inverse_lut: Mapping[DevicePropertyID, LatticeElementPropertyID],
+    ):
         self.forward_lut = forward_lut
         self.inverse_lut = inverse_lut
 
@@ -27,7 +31,9 @@ class LiaisonManager(LiaisonManagerBase):
         try:
             return self.forward_lut[id_]
         except KeyError as ke:
-            logger.error(f"{self.__class__.__name__} id {id_} not found in lookup table: {ke}")
+            logger.error(
+                f"{self.__class__.__name__} id {id_} not found in lookup table: {ke}"
+            )
             raise ke
 
     def inverse(self, id_: DevicePropertyID) -> LatticeElementPropertyID:
@@ -35,5 +41,7 @@ class LiaisonManager(LiaisonManagerBase):
             return self.inverse_lut[id_]
         except KeyError as ke:
             # Todo: give the user a hint what we know and what is close to what we know
-            logger.error(f"{self.__class__.__name__} id {id_} not found in lookup table: {ke}")
+            logger.error(
+                f"{self.__class__.__name__} id {id_} not found in lookup table: {ke}"
+            )
             raise ke

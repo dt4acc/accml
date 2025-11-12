@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 from typing import Sequence
 
 from ..model.command import Command
-from .devices_facade import DevicesFacade
+
 
 class MeasurementExecutionEngine(metaclass=ABCMeta):
     @abstractmethod

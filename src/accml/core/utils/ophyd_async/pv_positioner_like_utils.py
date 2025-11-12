@@ -79,7 +79,6 @@ class _ResettingDevice(_SettableControllingDifference):
 
     async def set_to_stored_value(self):
         if self.set_back and self.reference_value is not None:
-            val = self.reference_value
             return await self.setpoint.set(self.reference_value)
 
     async def stage(self):
@@ -98,6 +97,3 @@ class _ResettingDevice(_SettableControllingDifference):
 
     async def stop(self, success=False):
         return self.set_to_stored_value()
-
-
-
