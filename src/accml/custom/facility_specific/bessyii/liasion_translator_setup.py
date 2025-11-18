@@ -25,7 +25,7 @@ def load_managers() -> (YellowPagesBase, LiaisonManagerBase, TranslatorServiceBa
     Todo:
         appropriate to separate caching from loading?
     """
-    return build_managers("custom/epics/facility_specific/config_data")
+    return build_managers("custom/facility_specific/config_data")
 
 
 def build_managers(config_dir: Path) -> (YellowPagesBase, LiaisonManagerBase, TranslatorServiceBase):
