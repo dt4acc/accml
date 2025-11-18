@@ -16,10 +16,9 @@ import functools
 from dataclasses import asdict
 from typing import Sequence, Dict
 
-import bluesky.preprocessors as bpp
 import bluesky.plan_stubs as bps
+import bluesky.preprocessors as bpp
 from bluesky import RunEngine
-
 from ophyd_async.core import Device, Signal
 
 from ...core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
@@ -27,10 +26,10 @@ from ...core.model.command import Command
 
 
 def commands_plan(
-    commands: Sequence[Command],
-    detectors: Sequence[Device],
-    actuators: Dict[str, Device],
-    info_signals: Dict[str, Signal],
+        commands: Sequence[Command],
+        detectors: Sequence[Device],
+        actuators: Dict[str, Device],
+        info_signals: Dict[str, Signal],
 ):
     """
 
@@ -63,16 +62,18 @@ def commands_plan(
         # TODO: revisit how to address reading detectors
         #       also in the command language
         # read all devices
-        # yield from bps.sleep(2.0)
+        yield from bps.wait()  # << required
+        # optional: give hardware / twin time
+        yield from bps.sleep(1)
         yield from bps.repeat(functools.partial(bps.trigger_and_read, all_dev), num=1)
 
 
 def commands_execution_plan(
-    commands: Sequence[Command],
-    detectors: Sequence[Device],
-    actuators: Dict[str, Device],
-    info_signals: Dict[str, Signal],
-    md: None,
+        commands: Sequence[Command],
+        detectors: Sequence[Device],
+        actuators: Dict[str, Device],
+        info_signals: Dict[str, Signal],
+        md: None,
 ):
     """Translate commands to bluesky run-engine messages"""
     _md = md or dict()
@@ -106,12 +107,12 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
         self.run_engine = run_engine
 
     def execute(
-        self,
-        commands_collection: Sequence[Sequence[Command]],
-        detectors: Sequence[Device],
-        actuators: Dict[str, Device],
-        info_signals: Dict[str, Signal],
-        md: Dict[str, object],
+            self,
+            commands_collection: Sequence[Sequence[Command]],
+            detectors: Sequence[Device],
+            actuators: Dict[str, Device],
+            info_signals: Dict[str, Signal],
+            md: Dict[str, object],
     ) -> str:
         plan = commands_execution_plan(
             commands=commands_collection,
