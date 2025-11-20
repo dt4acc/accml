@@ -17,7 +17,7 @@ print(tango.__version__)
 async def run_device():
     pc = PowerConverter(
         name="pc",
-        trl="SimpleTangoServer/test/power_converter_Q3P2T6R",
+        trl="R1/MAG/PSIB-12",
         setpoint_name="current_setpoint",
         readback_name="current_readback",
     )
@@ -32,10 +32,10 @@ async def run_device():
 
 def main():
     # need some catalog so that I can read back the data
-    cat = catalog["heavy_local"]
+    # cat = catalog["heavy_local"]
     pc = PowerConverter(
         name="pc",
-        trl="SimpleTangoServer/test/power_converter_Q3P2T6R",
+        trl="R1/MAG/PSIB-12",
         setpoint_name="current_setpoint",
         readback_name="current_readback",
     )
@@ -47,13 +47,13 @@ def main():
     asyncio.run(connect())
 
     RE = RunEngine()
-    RE.subscribe(cat.v1.insert)
+    # RE.subscribe(cat.v1.insert)
     (uid,) = RE(bpp.count([pc], 3))
-    run = cat[uid]
-    print(run.primary.read())
+    # run = cat[uid]
+    # print(run.primary.read())
     (uid,) = RE(bpp.list_scan([pc], pc.delta_set_current, [0, 1, -1, 0]))
-    run = cat[uid]
-    print(run.primary.read())
+    # run = cat[uid]
+    # print(run.primary.read())
 
 
 if __name__ == "__main__":
