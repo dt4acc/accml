@@ -1,0 +1,91 @@
+- id: PSIB-01
+  interface:
+    setpoint: PSIB-01:set
+    readback: PSIB-01:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-05
+  interface:
+    setpoint: PSIB-05:set
+    readback: PSIB-05:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-02
+  interface:
+    setpoint: PSIB-02:set
+    readback: PSIB-02:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-07
+  interface:
+    setpoint: PSIB-07:set
+    readback: PSIB-07:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-11
+  interface:
+    setpoint: PSIB-11:set
+    readback: PSIB-11:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-08
+  interface:
+    setpoint: PSIB-08:set
+    readback: PSIB-08:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-03
+  interface:
+    setpoint: PSIB-03:set
+    readback: PSIB-03:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-06
+  interface:
+    setpoint: PSIB-06:set
+    readback: PSIB-06:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-04
+  interface:
+    setpoint: PSIB-04:set
+    readback: PSIB-04:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-09
+  interface:
+    setpoint: PSIB-09:set
+    readback: PSIB-09:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-12
+  interface:
+    setpoint: PSIB-12:set
+    readback: PSIB-12:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSIB-10
+  interface:
+    setpoint: PSIB-10:set
+    readback: PSIB-10:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0
+- id: PSDH-01
+  interface:
+    setpoint: PSDH-01:set
+    readback: PSDH-01:rdbk
+  response:
+    settle_time: 0.5
+    timeout: 2.0

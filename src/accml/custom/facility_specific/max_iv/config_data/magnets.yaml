@@ -1,0 +1,1536 @@
+- elem_id: sqfi73
+  dev_id: sqfi73
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi74
+  dev_id: sqfi74
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi76
+  dev_id: sqfi76
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi77
+  dev_id: sqfi77
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi214
+  dev_id: sqfi214
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi215
+  dev_id: sqfi215
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi217
+  dev_id: sqfi217
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi218
+  dev_id: sqfi218
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi360
+  dev_id: sqfi360
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi361
+  dev_id: sqfi361
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi363
+  dev_id: sqfi363
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi364
+  dev_id: sqfi364
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi501
+  dev_id: sqfi501
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi502
+  dev_id: sqfi502
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi504
+  dev_id: sqfi504
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi505
+  dev_id: sqfi505
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi644
+  dev_id: sqfi644
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi645
+  dev_id: sqfi645
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi647
+  dev_id: sqfi647
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi648
+  dev_id: sqfi648
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi785
+  dev_id: sqfi785
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi786
+  dev_id: sqfi786
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi788
+  dev_id: sqfi788
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi789
+  dev_id: sqfi789
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi926
+  dev_id: sqfi926
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi927
+  dev_id: sqfi927
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi929
+  dev_id: sqfi929
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi930
+  dev_id: sqfi930
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1070
+  dev_id: sqfi1070
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1071
+  dev_id: sqfi1071
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1073
+  dev_id: sqfi1073
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1074
+  dev_id: sqfi1074
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1211
+  dev_id: sqfi1211
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1212
+  dev_id: sqfi1212
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1214
+  dev_id: sqfi1214
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1215
+  dev_id: sqfi1215
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1355
+  dev_id: sqfi1355
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1356
+  dev_id: sqfi1356
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1358
+  dev_id: sqfi1358
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1359
+  dev_id: sqfi1359
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1496
+  dev_id: sqfi1496
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1497
+  dev_id: sqfi1497
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1499
+  dev_id: sqfi1499
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1500
+  dev_id: sqfi1500
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1640
+  dev_id: sqfi1640
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1641
+  dev_id: sqfi1641
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1643
+  dev_id: sqfi1643
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+- elem_id: sqfi1644
+  dev_id: sqfi1644
+  type: quadrupole
+  power_converter_id: PSDH-01
+  forward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
+  backward_curve:
+    curve:
+    - indep: 513.696725
+      dep: -27.630869913499996
+    - indep: 467.0124916667
+      dep: -25.343432835
+    - indep: 350.2990416667
+      dep: -19.0493868975
+    - indep: 233.5168916667
+      dep: -12.707522989749998
+    - indep: 116.7971333333
+      dep: -6.364506241999999
+    - indep: 0.0
+      dep: -0.018955449
