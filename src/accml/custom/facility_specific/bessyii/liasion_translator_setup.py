@@ -112,7 +112,7 @@ def build_managers(config_dir: Path) -> (YellowPagesBase, LiaisonManagerBase, Tr
 
 
 if __name__ == "__main__":
-    yp, lm, tm = build_managers("custom/facility_specific/config_data")
+    yp, lm, tm = build_managers("R1/MAG/")
     # lat_prop_id = LatticeElementPropertyID(element_name="QF1C01A", property="set_current")
     # r, = lm.forward(lat_prop_id)
     # dev_prop_id = DevicePropertyID(device_name="PC_QF1C01A", property="set_current")

@@ -1,5 +1,9 @@
+from dataclasses import dataclass
+
 from pydantic import BaseModel
 from typing import Hashable, Sequence
+
+from .curve import CurveBasedConversionInfo
 
 
 class EnergyDependentConversionModel(BaseModel):
@@ -14,10 +18,14 @@ class EnergyDependentConversionModel(BaseModel):
     conversion_type: str  # e.g., 'linear'
 
 
-class MagneticObject(BaseModel):
-    elem_id: Hashable  # e.g., 'QF1C01A'
-    dev_id: Hashable  # e.g., 'QF1C01A' or 'QF1C01'
-    type: str  # e.g., 'quadrupole'
-    family_member: Sequence[str]
-    power_converter_id: Hashable  # reference to PowerConverter.id
-    conversion: EnergyDependentConversionModel
+@dataclass
+class Magnet:
+    elem_id: str
+    dev_id: str
+    power_converter_id: str
+    type: str
+#    subtype: str
+#    name: str
+    forward_curve: CurveBasedConversionInfo = None
+    backward_curve: CurveBasedConversionInfo = None
+    pc: str = ""

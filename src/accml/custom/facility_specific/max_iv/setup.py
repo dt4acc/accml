@@ -1,9 +1,14 @@
-from accml.core.config.model.power_converter import PowerConverter
+import os
+
+
+from accml.custom.tango.devices.power_converter import PowerConverter
+from accml.custom.tango.devices.master_clock import MasterClock
+from accml.custom.tango.devices.tunes import Tunes
 from accml.core.interfaces.devices_facade import DevicesFacade
 from accml.core.utils.ophyd_async.multiplexer_for_settable_devices import MultiplexerProxy
-from accml.custom.epics.devices.master_clock import MasterClock
-from accml.custom.epics.devices.tunes import Tunes
 from .liasion_translator_setup import load_managers
+
+
 
 def setup() -> DevicesFacade:
     prefix = os.environ.get("USER", "Anonym") + ":"
@@ -11,7 +16,7 @@ def setup() -> DevicesFacade:
 
     quad_pcs = {
         name: PowerConverter(
-            trl="SimpleTangoServer/test/power_converter_Q3P2T6R",
+            trl="R1/MAG/PSDH-01",
             name=name,
             readback_name="current_readback",
             setpoint_name="current_setpoint",
@@ -23,9 +28,9 @@ def setup() -> DevicesFacade:
         name="quad_col", settable_devices=quad_pcs, default_name=list(quad_pcs)[0]
     )
 
-    # master_clock = MasterClock(f'{prefix}{special_pvs["master_clock"]}', name="mc")
-    tunes = Tunes("SimpleTangoServer/test/tune_device", name="tune")
-    # return dict(quadrupole_pcs=quadrupoles, master_clock=master_clock, tunes=tunes)
+    master_clock = MasterClock("R1/MAG/master_clock", name="mc")
+    tunes = Tunes("R1/MAG/tune_device", name="tune")
+    return dict(quadrupole_pcs=quadrupoles, master_clock=master_clock, tunes=tunes)
 
 
 if __name__ == "__main__":

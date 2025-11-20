@@ -1,4 +1,4 @@
-from .model.magnet import MagneticObject
+from .model.magnet import Magnet
 from .model.power_converter import PowerConverter
 from .repository.file_repository import FileRepository
 
@@ -9,7 +9,7 @@ class ConfigService:
     """
 
     def __init__(self, magnet_path: str, pc_path: str):
-        self.magnet_repo = FileRepository(MagneticObject, magnet_path)
+        self.magnet_repo = FileRepository(Magnet, magnet_path)
         self.pc_repo = FileRepository(PowerConverter, pc_path)
         self._magnets = None
         self._power_converters = None
@@ -21,7 +21,7 @@ class ConfigService:
     def get_magnets(self):
         return self._magnets
 
-    def get_quadrupoles(self) -> list[MagneticObject]:
+    def get_quadrupoles(self) -> list[Magnet]:
         if self._magnets is None:
             raise RuntimeError("Configuration not loaded.")
         return [quad for quad in self._magnets if quad.type == "quadrupole"]
