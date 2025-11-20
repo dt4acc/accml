@@ -1,0 +1,192 @@
+import functools
+import logging
+from collections import defaultdict
+from pathlib import Path
+
+from accml.core.bl.yellow_pages import YellowPages
+
+# from .facility_specific_constants import ring_parameters
+from accml.core.bl.liaison_manager import LiaisonManager
+from accml.core.bl.translator_service import TranslatorService
+from accml.core.bl.unit_conversion import EnergyDependentLinearUnitConversion
+from accml.core.config.config_service import ConfigService
+from accml.core.config.model.curve import CurveBasedConversionInfo
+from accml.core.config.utils import full_data_path
+from accml.core.interfaces.liaison_manager import LiaisonManagerBase
+from accml.core.interfaces.translator_service import TranslatorServiceBase
+from accml.core.interfaces.yellow_pages import YellowPagesBase
+
+from accml.core.model.identifiers import (
+    LatticeElementPropertyID,
+    DevicePropertyID,
+    ConversionID,
+)
+
+from bact_twin_architecture.utils.unit_conversion import (
+    EnergyIndependentCurveUnitConversion
+)
+
+logger = logging.getLogger("accml")
+
+
+@functools.lru_cache(maxsize=1)
+def load_managers() -> (YellowPagesBase, LiaisonManagerBase, TranslatorServiceBase):
+    """
+
+    Todo:
+        appropriate to separate caching from loading?
+    """
+    return build_managers("custom/facility_specific/max_iv/config_data")
+
+
+def build_managers(
+    config_dir: Path,
+) -> (YellowPagesBase, LiaisonManagerBase, TranslatorServiceBase):
+    """A first poor mans implementation of liasion manager and Translation service for facility_specific
+
+    Todo:
+        Which info is already in database and better obtained from database?
+
+    """
+
+    # Load data from YAML config files
+    config_service = ConfigService(
+        magnet_path=full_data_path(Path(config_dir) / "magnets.yaml"),
+        pc_path=full_data_path(Path(config_dir) / "power_converters.yaml"),
+    )
+    config_service.load()
+    # magnets = magnet_infos_from_db()
+    magnets = config_service.get_magnets()
+    # Make sure that names are unique ... everything down the list depends on it
+    magnet_names = set([magnet.dev_id for magnet in magnets])
+    if len(list(magnet_names)) != len(magnets):
+        raise AssertionError(
+            "Magnet names seem not to be unique, but is assumption of all further processing"
+        )
+
+    # TODO: identify a generic way based on data from different labs to build YP
+    # at the moment just a hardcoded list of families
+    quad_names = [elem.dev_id for elem in magnets if elem.type == "quadrupole"]
+    yp = YellowPages(
+        dict(
+            quadrupoles=quad_names,
+            tune_correction_quadrupoles=quad_names,
+            master_clock="master_clock",  # TODO: should power converter sources be a separate part here
+            quadrupole_pcs=tuple(
+                set(
+                    [
+                        elem.power_converter_id
+                        for elem in magnets
+                        if elem.type == "quadrupole"
+                    ]
+                )
+            ),
+        )
+    )
+    # TODO: check if property must be different for the different magnets ...
+
+    forward_lut = {
+        LatticeElementPropertyID(
+            element_name=magnet.dev_id, property="main_strength"
+        ): DevicePropertyID(
+            device_name=magnet.power_converter_id, property="set_current"
+        )
+        for magnet in magnets
+        if magnet.dev_id in yp.quadrupole_names()
+    }
+    forward_lut.update(
+        {
+            LatticeElementPropertyID(
+                element_name=magnet.dev_id, property="delta_main_strength"
+            ): DevicePropertyID(
+                device_name=magnet.power_converter_id, property="delta_set_current"
+            )
+            for magnet in magnets
+            if magnet.dev_id in yp.quadrupole_names()
+        }
+    )
+
+    # inverse_lut = {
+    #     DevicePropertyID(device_name=m.power_converter_id, property="set_current"): [
+    #         LatticeElementPropertyID(element_name=m.dev_id, property="main_strength")] for m in magnets}
+
+    inverse_lut_dd = defaultdict(list)
+
+    for m in magnets:
+        if m.dev_id not in yp.quadrupole_names():
+            continue
+
+        dp_main = DevicePropertyID(
+            device_name=m.power_converter_id, property="set_current"
+        )
+        lep_main = LatticeElementPropertyID(
+            element_name=m.dev_id, property="main_strength"
+        )
+        inverse_lut_dd[dp_main].append(lep_main)
+
+    inverse_lut = dict(inverse_lut_dd)
+
+    lm = LiaisonManager(forward_lut=forward_lut, inverse_lut=inverse_lut)
+    del forward_lut, inverse_lut
+
+    translator_lut = {
+        ConversionID(
+            lattice_property_id=LatticeElementPropertyID(
+                element_name=m.dev_id, property="main_strength"
+            ),
+            device_property_id=DevicePropertyID(
+                device_name=m.power_converter_id, property="set_current"
+            ),
+        ):
+        construct_energy_independent_curve_conversion(fwd=m.forward_curve, bwd=m.backward_curve)
+        for m in magnets
+    }
+
+    # as its only a liner interpolation, its simple to do the delta interpolation
+    # for complex curves this interpolation will fail ...
+    # there the measurement execution engine has to peek into the machine state
+    # and apply it
+    translator_lut.update(
+        {
+            ConversionID(
+                lattice_property_id=LatticeElementPropertyID(
+                    element_name=m.dev_id, property="delta_main_strength"
+                ),
+                device_property_id=DevicePropertyID(
+                    device_name=m.power_converter_id, property="delta_set_current"
+                ),
+            ):
+                construct_energy_independent_curve_conversion(fwd=m.forward_curve, bwd=m.backward_curve)
+            for m in magnets
+        }
+    )
+
+    tm = TranslatorService(translator_lut)
+    return yp, lm, tm
+
+def construct_energy_independent_curve_conversion(
+    *,
+        fwd: CurveBasedConversionInfo,
+        bwd: CurveBasedConversionInfo,
+) -> EnergyIndependentCurveUnitConversion:
+
+    try:
+        fwd["curve"]
+    except TypeError:
+        raise AssertionError("Forward curve points missing for curve based conversion")
+
+    return EnergyIndependentCurveUnitConversion(
+        fwd_points=fwd["curve"],
+        bwd_points=bwd["curve"],
+        # Todo: find out if brho needs to be added her
+        # I assume that it is part of the curves
+        brho=1.0
+    )
+
+if __name__ == "__main__":
+    yp, lm, tm = load_managers()
+    # lat_prop_id = LatticeElementPropertyID(element_name="QF1C01A", property="set_current")
+    # r, = lm.forward(lat_prop_id)
+    # dev_prop_id = DevicePropertyID(device_name="PC_QF1C01A", property="set_current")
+    # r, = lm.inverse(dev_prop_id)
+    # to = tm.get(ConversionID(lattice_property_id=r, device_property_id=dev_prop_id))  # pprint.pprint(to)
