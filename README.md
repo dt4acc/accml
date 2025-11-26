@@ -8,7 +8,7 @@ These tools typically address:
 * commissioning of an accelerator
 * forecasting the performance of an accelerator, which is currently under design.
 
-For details of its concept see concept.
+For details of its concept see [design.md](https://github.com/python-accelerator-middle-layer/accml/design.md).
 
 ## 🚀 Installation and Running Instructions
 
