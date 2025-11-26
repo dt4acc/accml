@@ -180,8 +180,8 @@ Further Reading
 
 [1] D. Gelernter, *Mirror Worlds: Or the Day Software Puts the Universe in a Shoebox… How It Will Happen and What It Will Mean*. Oxford University Press, 1991.
 
-[2] W. S. Khail and P. Schnizer, “Accelerator Commissioning Tools: Architectural Proposals and Design Patterns,” in *Proc. ICALEPCS2025*, Chicago, Sep. 2025, pp. 49–55. doi:10.18429/JACoW-ICALEPCS2025-MOBR002.
+[2] W. Sulaiman Khail and P. Schnizer, “Accelerator Commissioning Tools: Architectural Proposals and Design Patterns,” in *Proc. ICALEPCS2025*, Chicago, Sep. 2025, pp. 49–55. doi:10.18429/JACoW-ICALEPCS2025-MOBR002.
 
-[3] W. S. Khail and P. Schnizer, “Patterns in Digital Twin Development,” in *Proc. EuroPLoP’24*, New York, NY, USA, 2024. doi:10.1145/3698322.3698325.
+[3] W. Sulaiman Khail and P. Schnizer, “Patterns in Digital Twin Development,” in *Proc. EuroPLoP’24*, New York, NY, USA, 2024. doi:10.1145/3698322.3698325.
 
-[4] W. S. Khail and P. Schnizer, “Patterns for Operating and Interacting with Digital Twins,” *Lecture Notes in Computer Science*, to be published.
+[4] W. Sulaiman Khail and P. Schnizer, “Patterns for Operating and Interacting with Digital Twins,” *Lecture Notes in Computer Science*, to be published.
