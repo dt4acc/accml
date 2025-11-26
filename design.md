@@ -1,113 +1,178 @@
 # Design choices of accml
 
-## General design choices
+When people think about particle accelerators, they often imagine
+huge machines flinging particles around at incredible speeds. But
+if you look at one from the point of view of the control system
+— the place where software and physics shake hands — you find
+something much simpler and much more universal: a lot of devices,
+each with a handful of numbers you can poke, prod, and read back.
 
-The design of `accml` is based on specific software design 
-patterns next to the concept of a *tuple space*  or the 
-outlines given by David Gelernter's *Mirror Worlds* [1].
+The **accelerator middle layer**, or **accml**, is built around this idea.
+It looks at an accelerator — or one of its digital twins — as
+nothing more mysterious than a collection of devices whose state
+you can update and observe. The trick is to structure the
+interaction so that every tool, whether it's a commissioning
+script or a simulation engine, can work with the same simple
+vocabulary.
 
-`accml` focuses on interacting with an *accelerator* or an 
-*accelerator* complex, its equivalent twins or simulation
-complex. Furthermore, its interacts with this complex based
-on *simple structured messages* (for further details see [2]) 
+This design leans heavily on classic software patterns, on the
+idea of *tuple spaces*, and on themes that David Gelernter championed
+in *Mirror Worlds*, where he describes systems built by passing small,
+structured messages around. It turns out accelerators are a good
+fit for that worldview.
 
-These choices were made  based on the  analysis of available
-requirements. These showed that all different tools actually 
-need:
+## What All These Tools Really Need
 
-* update the accelerator with a transactional style update
-* have a set of actuators that need to be driven to a sequence
-  of values step by step: this is often referred to as 
-  response matrix measurement
-* or combine these two steps
+When we looked across the existing accelerator tools and workflows,
+something interesting became clear: although the tools looked
+different on the surface, they all wanted to do more or less the
+same three things. Every tool needed to:
 
-Typically, the state of the accelerator is recorded after each step.
-Often  a subset of this state is sufficient.
+* *send transactional-style messages that update the accelerator*,
+* *drive sets of actuators through step-by-step sequences* — what
+  accelerator physicists usually call a response matrix measurement,
+* *or combine both actions*: update some state, measure something,
+  update again, and so on.
 
-Furthermore, it was noted that these steps are executed on the 
-accelerator itself, its virtual representation or on simulation tools.
-Therefore, the same command needs to be sent to different destinations. 
-Sometimes it is necessary to build up and test a set of commands
-on e.g. a simulator or twin and then to replay these commands 
-to the real machine.
+After each step, the *state* of the accelerator — in the
+control-theory sense: a bundle of values describing the system at
+that moment — is usually recorded. Often you only need a subset.
+Sometimes you want the full picture.
 
-  
-The second major point is that simulation tools use a 
-largely different coordinate system or state space than 
-simulation tools. We call these different states or 
-coordinate systems *different views* of the 
-same system.
+And here’s the important point:
+These operations happen not only on the real hardware but also on
+*virtual accelerators*, *digital twins*, or full-blown *simulation codes*.
+It must be possible to develop and test a sequence of actions on
+a simulator and later replay exactly the same sequence on the
+real machine. Same script, different destination.
 
-These design choices are different to other tools: `accml` sees
-an accelerator as a *complex* that consists of a set of *devices*. 
-Its focus is on the accelerator itself. It provides an interface
-using the *device names* as these are typically known to the user.
-These are valid within their view.
+## Why Views Matter
 
-The last pillar are concepts of *work instructions*. As will be 
-shown later, the patterns allow representing the interaction with
-the real machine, it digital twin or simulation tools in a manner 
-which separates *what* shall be done nicely from *which components 
-need to execute it*.
+Now, simulation codes don’t think like hardware. They live in a
+different coordinate system, a different state space, a different
+world entirely. The numbers the hardware deals with might be magnet
+currents, RF phases, or vacuum readbacks. The simulation might speak
+in terms of lattice functions, normalized coordinates, or
+Courant–Snyder parameters.
 
+To keep both worlds straight, accml introduces **views**. The two most
+important are:
 
-## Patterns used 
+* the **device view**, which reflects the state the actual hardware
+  understands, and
+* the **design view**, which reflects the state that simulation tools
+  use when computing beam dynamics in the virtual accelerator.
 
-### update pattern
+The framework is not limited to these two views — these are simply the
+ones the current tools care about most.
 
-Core interface is the update pattern provided by 
-*todo* xxx facade. Its interface is 
+## The Update Pattern: Small Messages With Big Consequences
+
+The core interface in accml is built around a simple update
+pattern. A command looks like:
 
 ```python3
-
-f.update(dev_id: str, prop_id: str, value: object, on_error)
+Cmd(dev_id, prop_id, value, behaviour_on_failure)
 ```
+That’s it. One device, one property, one value, and one rule about
+what to do if things go wrong. It’s a tiny message, but it has
+side effects: it changes the state of the real accelerator, or the
+digital twin, or the simulation object it’s applied to.
 
-We call these parameters a command. This command is only valid
-within its associated *view*. This pattern is described in detail in [3].
+The beauty of simple messages is that you can send a lot of them,
+combine them, replay them, and analyze them. Gelernter would smile
+at that.
 
-This command is with side effects: it changes the state of the 
-accelerator or its digital twin or its simulation object. 
+The details of this pattern — how to represent commands, how to
+treat them transactionally, and how they integrate with
+digital-twin architectures — are discussed extensively
+elsewhere (Khail & Schnizer, 2024; Khail & Schnizer, forthcoming).
+Here we focus on how accml uses this pattern in practice.
 
-### Combining the views
+## Reconciling the Views: Liaison, Translation, and Rewriting
 
-Currently, two views are considered: the device view which represents the 
-state that the accelerator devices use and the design view which represents
-the state that the simulation tools use that perform the calculations for the 
-virtual accelerator or its twin.
+To make device view and design view coexist peacefully, accml
+relies on three supporting pillars:
 
-As the simulation codes use a very different state than the real world devices,
-it is necessary to convert between these two. This is based on the following 
-aspects:
+### 1. Liaison management
 
-* liaison management: which *(elem_id, prop_id)* of the design view match 
-  which *(dev_id, prop_id)* of the device view. Please note that dev_id 
-  is named elem_id in the design view, as one refers to the simulations 
-  building blocks as elements.
+This is essentially the dictionary that tells us which
+`(elem_id, prop_id)` in the design view corresponds to which
+`(dev_id, prop_id)` in the device view.
 
-* translation service: provides calculation objects that convert the value
+In the usual case this is a one-to-one mapping. But the real world
+is never that kind: sometimes a simulated element corresponds to
+several physical devices (one-to-many), or several design elements
+combine into a single hardware actuator (many-to-one).
+Occasionally the matching is many-to-many.
 
-* command rewriter: uses liaison managerment and translation service to 
-  rewrite commands valid in one view to the other.
+We treat any hidden states the system may have as irrelevant for
+this purpose — the same simplifying assumption that underlies a
+Markov process without hidden variables.
 
-The split up of the patterns 
-These patterns and their advantages are discussed in detail in [4]. 
-Liasion managment and translation service split between:
+### 2. Translation service
 
-* who needs to communicate to whom
-* how does their input be changed so that the other side can understand them.
+Once you know which things correspond, you still need to know how
+to convert the values. If the design view expresses something in
+one coordinate system and the device view in another, the
+translation service handles the mathematics. That may mean
+converting units, applying coordinate transforms, or computing
+derived quantities.
 
-  
-## Implementing computer understandable *work instructions*
+### 3. Command rewriter
 
-The description above described how state is changed inside the 
-accelerator next on how the views are combined.
+Finally, the command rewriter takes a command written in one view
+and produces the corresponding command in the other. It rewrites
+both the identifiers and the values. This allows exactly the same
+high-level work instruction to run on a simulator, a digital twin,
+or the real hardware — the system simply rewrites the commands on
+the fly.
 
-It was shown that the communcation to the underlaying system happens
-using small simple commands. These commands can be combined in a
-sequence. This set of commands then form a work instruction.
-A *measurement execution engine* then takes care executing these 
-commands. Further details are given in [4].
+## Work Instructions: Structured Recipes for the Accelerator
+
+Because commands are small and simple, they can be collected into
+sequences — step-by-step recipes. These sequences are what accml
+calls *work instructions*.
+
+They are machine-executable yet still human-digestible. A physicist
+can read them and understand what the accelerator will do; an
+execution engine can run them deterministically.
+
+Khail and Schnizer describe this pattern more fully in their work
+on operating digital twins. The key idea is to separate what should
+be done from which component actually performs it. The instruction
+says what needs to happen; the views and rewriting machinery decide
+how to deliver it to the right destination.
+
+## Execution Engines: Orchestrating the Sequence
+
+In architectural terms, a measurement execution engine is the
+conductor. It reads the work instructions, dispatches each command
+to the appropriate view, rewrites it if necessary, and records the
+accelerator state at each step. It doesn’t need to know whether
+the underlying system is real hardware, a twin, or a simulation —
+the patterns take care of that.
+
+This separation keeps the orchestration logic simple, robust, and
+uniform across all destinations.
+
+Further Reading
+
+* David Gelernter’s Mirror Worlds (1991) introduces many of the ideas
+  behind message-based architectures and simple state representations.
+* For architectural analysis in the accelerator commissioning world,
+  see Khail and Schnizer’s work presented at ICALEPCS 2025.
+  doi: [10.18429/JACoW-ICALEPCS2025-MOBR002](https://doi.org/10.18429/JACoW-ICALEPCS2025-MOBR002)
+* The foundational patterns used in digital twin development are
+  detailed in Khail & Schnizer (2024)
+   doi: [10.1145/3698322.3698325](https://doi.org/10.1145/3698322.3698325)
+  and expanded in their
+  forthcoming work on interacting with digital twins
+  (W. Sulaiman Khail and P. Schnizer, “Patterns for operating
+  and interacting with digital twins”, Lect. Notes Comput. Sci.,
+  to be published.).
+
+
 
 
 
@@ -120,5 +185,3 @@ commands. Further details are given in [4].
 [3] W. S. Khail and P. Schnizer, “Patterns in Digital Twin Development,” in *Proc. EuroPLoP’24*, New York, NY, USA, 2024. doi:10.1145/3698322.3698325.
 
 [4] W. S. Khail and P. Schnizer, “Patterns for Operating and Interacting with Digital Twins,” *Lecture Notes in Computer Science*, to be published.
-
-
