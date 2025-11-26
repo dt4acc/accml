@@ -1,17 +1,14 @@
-[![Documentation Status](https://readthedocs.org/projects/pyaml/badge/?version=latest)](https://pyaml.readthedocs.io/en/latest/?badge=latest)
+# accml: Accelerator middle layer
 
-# pyAML: python accelerator middle layer
+`accml` is a software stack designed to facilitate implementing tools 
+ characterising (high) energy charged accelerator.
 
-disclaimer: the pyAML software is still under conception and development
+These tools typically address:
+* characterising an accelerator
+* commissioning of an accelerator
+* forecasting the performance of an accelerator, which is currently under design.
 
-pyAML is a sofware meant to operate and develop new tools for high energy charged particle accelerators. 
-pyAML it will be control agnostics and can be used by any facility
-pyAML it will allow easy scripting as for MML
-
-The pyAML documentation can be fund [here](https://pyaml.readthedocs.io/en/latest/) [and here](https://python-accelerator-middle-layer.github.io/pyaml/)
-
-
-This repository contains the Python Accelerator Middle Layer (pyAML).
+For details of its concept see concept.
 
 ## 🚀 Installation and Running Instructions
 
@@ -56,17 +53,18 @@ Keep this terminal running — it simulates a virtual accelerator backend.
 ```bash
 cd examples/tune
 ```
-Comment line 14 and uncomment line 15 in tune_response_measurement.py it should look like this:
+Comment line 14 and uncomment line 15 in tune_response_measurement.py. Then  it should look like this:
 
+```python3
 
-#from accml.custom.facility_specific.bessyii.setup import setup
-
-
+# from accml.custom.facility_specific.bessyii.setup import setup
 from accml.custom.facility_specific.bessyii_on_tango.setup import setup
 
+```
+Now you can execute on the command line:
 
 execute:
 ```bash
 python3 tune_response_measurement.py
-
+```
     
