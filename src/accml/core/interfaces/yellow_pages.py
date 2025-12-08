@@ -21,5 +21,10 @@ class YellowPagesBase(metaclass=ABCMeta):
 
     @abstractmethod
     def get(self, family_name: str) -> Sequence[str]:
-        """Return a sequence with all identifiers belonging to base class"""
+        """Return a sequence with all identifiers belonging to the family"""
+        raise NotImplementedError("use derived class instead")
+
+    @abstractmethod
+    def get_family_names(self) -> Sequence[str]:
+        """Return all family names"""
         raise NotImplementedError("use derived class instead")

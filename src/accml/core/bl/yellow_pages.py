@@ -25,6 +25,9 @@ class YellowPages(YellowPagesBase):
         # key = str(FamilyName(family_name))
         return self._d[family_name]
 
+    def get_family_names(self) -> Sequence[str]:
+        return list(self._d.keys())
+
     def quadrupole_names(self) -> Sequence[str]:
         return self.get("quadrupoles")
 

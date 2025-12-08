@@ -1,5 +1,5 @@
 import logging
-from typing import Mapping
+from typing import Mapping, Sequence
 
 from accml.core.interfaces.liaison_manager import LiaisonManagerBase
 from accml.core.model.identifiers import LatticeElementPropertyID, DevicePropertyID
@@ -45,3 +45,15 @@ class LiaisonManager(LiaisonManagerBase):
                 f"{self.__class__.__name__} id {id_} not found in lookup table: {ke}"
             )
             raise ke
+
+    def get_element_ids(self) -> Sequence[str]:
+        return [k.element_name for k in  self.forward_lut.keys()]
+
+    def get_element_properties(self, id_: str)  -> Sequence[str]:
+        return [k.property for k in self.forward_lut.keys() if k.element_name == id_]
+
+    def get_device_ids(self)  -> Sequence[str]:
+        return [k.device_name for k in  self.inverse_lut.keys()]
+
+    def get_device_properties(self, id_: str) -> Sequence[str]:
+        return [k.property for k in self.inverse_lut.keys() if k.device_name == id_]
