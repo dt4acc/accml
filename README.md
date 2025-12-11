@@ -57,8 +57,8 @@ Comment line 14 and uncomment line 15 in tune_response_measurement.py. Then  it 
 
 ```python3
 
-# from accml.custom.facility_specific.bessyii.setup import setup
-from accml.custom.facility_specific.bessyii_on_tango.setup import setup
+# from accml.custom.accml_lib.bessyii.setup import setup
+from accml.custom.accml_lib.bessyii_on_tango.setup import setup
 
 ```
 Now you can execute on the command line:

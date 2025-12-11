@@ -25,11 +25,11 @@ def load_managers() -> (YellowPagesBase, LiaisonManagerBase, TranslatorServiceBa
     Todo:
         appropriate to separate caching from loading?
     """
-    return build_managers("custom/facility_specific/config_data")
+    return build_managers("custom/accml_lib/config_data")
 
 
 def build_managers(config_dir: Path) -> (YellowPagesBase, LiaisonManagerBase, TranslatorServiceBase):
-    """A first poor mans implementation of liasion manager and Translation service for facility_specific
+    """A first poor mans implementation of liasion manager and Translation service for accml_lib
 
     Todo:
         Which info is already in database and better obtained from database?
@@ -112,7 +112,7 @@ def build_managers(config_dir: Path) -> (YellowPagesBase, LiaisonManagerBase, Tr
 
 
 if __name__ == "__main__":
-    yp, lm, tm = build_managers("custom/facility_specific/config_data")
+    yp, lm, tm = build_managers("custom/accml_lib/config_data")
     # lat_prop_id = LatticeElementPropertyID(element_name="QF1C01A", property="set_current")
     # r, = lm.forward(lat_prop_id)
     # dev_prop_id = DevicePropertyID(device_name="PC_QF1C01A", property="set_current")

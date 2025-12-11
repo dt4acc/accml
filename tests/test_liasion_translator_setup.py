@@ -18,7 +18,7 @@ def config_dir(tmp_path_factory):
         / "accml"
         / "custom"
         / "epics"
-        / "facility_specific"
+        / "accml_lib"
         / "config_data"
     )
 

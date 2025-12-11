@@ -10,9 +10,9 @@ from accml.app.tune.tune_measurement import tune
 from accml.core.model.identifiers import LatticeElementPropertyID
 from accml.custom.bluesky.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
 
-from accml.custom.facility_specific.bessyii.liasion_translator_setup import load_managers
-from accml.custom.facility_specific.bessyii.setup import setup
-# from accml.custom.facility_specific.bessyii_on_tango.setup import setup
+from accml.custom.accml_lib.bessyii.liasion_translator_setup import load_managers
+from accml.custom.accml_lib.bessyii.setup import setup
+# from accml.custom.accml_lib.bessyii_on_tango.setup import setup
 
 
 def main():
