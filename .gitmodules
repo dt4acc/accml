@@ -4,3 +4,6 @@
 [submodule "src/accml/custom/tango"]
 	path = src/accml/custom/tango
 	url = https://github.com/python-accelerator-middle-layer/accml_tango.git
+[submodule "src/accml/custom/accml_lib"]
+	path = src/accml/custom/accml_lib
+	url = https://github.com/python-accelerator-middle-layer/accml_lib.git
