@@ -52,3 +52,12 @@ class TuneResponseCollection:
     @cached_property
     def _dict(self) -> Dict[str, TuneResponse]:
         return {item.pc_name: item for item in self.col}
+
+
+@dataclass
+class Tune:
+    x: float
+    y: float
+
+    def __sub__(self, other):
+        return Tune(self.x - other.x, self.y - other.y)
