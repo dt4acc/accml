@@ -30,6 +30,8 @@ def commands_plan(
         detectors: Sequence[Device],
         actuators: Dict[str, Device],
         info_signals: Dict[str, Signal],
+        *,
+        num_readings: int
 ):
     """
 
@@ -65,7 +67,7 @@ def commands_plan(
         yield from bps.wait()  # << required
         # optional: give hardware / twin time
         yield from bps.sleep(1)
-        yield from bps.repeat(functools.partial(bps.trigger_and_read, all_dev), num=1)
+        yield from bps.repeat(functools.partial(bps.trigger_and_read, all_dev), num=num_readings)
 
 
 def commands_execution_plan(
@@ -74,6 +76,7 @@ def commands_execution_plan(
         actuators: Dict[str, Device],
         info_signals: Dict[str, Signal],
         md: None,
+        **kwargs,
 ):
     """Translate commands to bluesky run-engine messages"""
     _md = md or dict()
@@ -88,6 +91,7 @@ def commands_execution_plan(
             detectors=detectors,
             actuators=actuators,
             info_signals=info_signals,
+            **kwargs
         )
         return r
 
@@ -113,6 +117,7 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
             actuators: Dict[str, Device],
             info_signals: Dict[str, Signal],
             md: Dict[str, object],
+            **kwargs
     ) -> str:
         plan = commands_execution_plan(
             commands=commands_collection,
@@ -120,6 +125,7 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
             actuators=actuators,
             info_signals=info_signals,
             md=md,
+            **kwargs
         )
         (uid,) = self.run_engine(plan)
         return uid
