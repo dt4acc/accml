@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Dict, Sequence
+from typing import Dict, Sequence, Optional
 
 
 @dataclass
@@ -8,6 +8,7 @@ class MeasuredTuneResponseItem:
     value: float
     x: float
     y: float
+    repetition: Optional[int] = -1
 
 
 @dataclass
