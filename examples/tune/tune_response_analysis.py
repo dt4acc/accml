@@ -1,3 +1,5 @@
+from dataclasses import asdict
+
 from accml.app.tune.tune_response_analysis import tune_response_analysis
 from databroker import catalog
 import jsons
@@ -7,6 +9,8 @@ import yaml
 def main():
     db = catalog["heavy_local"]
     uid = '1955adfd-2f94-4459-8888-4f63cbc839de'
+    uid = '2f7c28d8-f0b2-4b5f-ac9f-cc5be4acaf86'
+    uid = '1e782ab8-ebd7-4bcb-bffb-ed68c1b1b011'
     run  = db[uid]
     data = run.primary.read()
 
@@ -19,9 +23,8 @@ def main():
     }
 
     result = tune_response_analysis(d)
-    tmp = jsons.dump(result)
+    tmp = jsons.dump(asdict(result))
     # Todo: currently a hack ... need to foresee appropriate methods at the data class
-    del tmp["_dict"]
     with open("tune_result.yml", "wt") as fp:
         yaml.dump(tmp, fp)
 

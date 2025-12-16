@@ -44,5 +44,6 @@ def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurem
         actuators=actuators,
         info_signals=info_signals,
         md=md,
+        num_readings=2,
     )
     print(f"Run created {uid=}")
