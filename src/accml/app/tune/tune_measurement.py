@@ -4,6 +4,7 @@ from typing import Sequence
 from accml.core.interfaces.devices_facade import DevicesFacade
 from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
 from accml.core.model.command import Command, BehaviourOnError, CommandSequence
+from accml.custom.bluesky.bluesky_measurement_execution_engine import simple_command_sequence_execution_plan
 
 
 def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurement_values: Sequence[float],
@@ -17,7 +18,6 @@ def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurem
                 Command(id=name, property="delta_set_current", value=val, behaviour_on_error=BehaviourOnError.stop)
             )
 
-    cmds_on_machine = CommandSequence(commands=cmds_on_machine)
 
     # inform setup on which devices are actually needed
     # so setup could select only to instantiate those devices
@@ -39,11 +39,14 @@ def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurem
     md = {}
 
     uid = mexec.execute(
-        commands_collection=cmds_on_machine.commands,  # need to add bpms
-        detectors=[tunes],
-        actuators=actuators,
-        info_signals=info_signals,
-        md=md,
-        num_readings=2,
+        simple_command_sequence_execution_plan(
+            commands=cmds_on_machine,
+            detectors=[tunes],
+            actuators=actuators,
+            info_signals=info_signals,
+            num_readings=2,
+            # wait_before_read=0.1,
+            md=md,
+        ),
     )
     print(f"Run created {uid=}")

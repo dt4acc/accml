@@ -5,7 +5,8 @@ from accml.app.tune.oracle import TuneOracle
 from accml.app.tune.policy import TunePolicy
 from accml.core.interfaces.devices_facade import DevicesFacade
 from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
-from accml.core.model.command import Command, BehaviourOnError
+from accml.core.model.command import Command, BehaviourOnError, TransactionalCommand
+from accml.custom.bluesky.bluesky_measurement_execution_engine import transactional_commands_sequence_execution_plan
 
 from .model import TuneResponseCollection, Tune
 
@@ -40,13 +41,13 @@ def tune_correction(dm: TuneResponseCollection, devices: DevicesFacade, mexec: M
 
     asyncio.run(connect())
 
-
     uid = mexec.execute(
-        # This command should be executed in one shot
-        commands_collection=[commands],  # need to add bpms
-        detectors=[devices.get("tunes")],
-        actuators=actuators,
-        info_signals=None,
-        md={},
-        num_readings=2,
+        transactional_commands_sequence_execution_plan(
+            transactional_commands=[TransactionalCommand(transaction=commands)],
+            detectors=[devices.get("tunes")],
+            actuators=actuators,
+            md={},
+            num_readings=2,
+            wait_before_read=0.1,
+        )
     )
