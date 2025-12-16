@@ -3,7 +3,7 @@ logger = logging.basicConfig(level=logging.WARNING)
 
 from bluesky import RunEngine
 from bluesky.callbacks import LiveTable
-from databroker import catalog
+from databroker import catalog, catalog_search_path
 from ophyd_async.core import soft_signal_rw
 
 from accml.app.tune.tune_measurement import tune
@@ -36,8 +36,9 @@ def main():
     RE = RunEngine()
     [RE.subscribe(consumer) for consumer in [lt]]
     # TODO: if you need to save the results, you need mongo and then uncomment the below two lines.
-    # db = catalog["heavy_local"]
-    # RE.subscribe(db.v1.insert)
+    print(f"{catalog_search_path()=}")
+    db = catalog["heavy_local"]
+    RE.subscribe(db.v1.insert)
     # TODO: need to address live plots
     #   here a databroker should be added so that data can be accessed
     #   later on
