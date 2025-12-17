@@ -85,13 +85,7 @@ def fit_one_power_converter(data: MeasuredTuneResponsePerPowerConverter):
 
 
 def fit_line(indep: Sequence[float], dep: Sequence[float]) -> RandomVariableMomenta:
-    """
-    Todo:
-        need to compute the standard deviation
-        find out which algorithm to be used
-
-        orbit response profits from leastsquare `lstsg` so perhaps also to use it here
-    """
+    """ """
     X = np.vstack([np.ones(len(indep)), indep]).T
     p, res, rnk, s = lstsq(X, dep)
     dp = cov_to_std(x_to_cov(X, res, N=len(indep), p=2))

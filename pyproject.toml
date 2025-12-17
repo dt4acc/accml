@@ -30,4 +30,5 @@ databroker = "<2.0"
 # ophyd async does not specify which transport is to be used
 ophyd-async = "*"
 aioca = "*"
+# move support routines for fit error calculation here
 bact_math_utils = ">=0.1.1"
