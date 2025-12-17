@@ -4,34 +4,43 @@ from typing import Dict
 from accml.app.tune.oracle import TuneOracle
 from accml.app.tune.policy import TunePolicy
 from accml.core.interfaces.devices_facade import DevicesFacade
-from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from accml.core.interfaces.measurement_execution_engine import (
+    MeasurementExecutionEngine,
+)
 from accml.core.model.command import Command, BehaviourOnError, TransactionalCommand
-from accml.custom.bluesky.bluesky_measurement_execution_engine import transactional_commands_sequence_execution_plan
+from accml.custom.bluesky.plans import transactional_commands_sequence_execution_plan
+from accml.custom.bluesky.run_correction import (
+    run_corrections_commands_plan,
+    corrections_plan,
+)
 
 from .model import TuneResponseCollection, Tune
 
 
-def tune_correction(dm: TuneResponseCollection, devices: DevicesFacade, mexec: MeasurementExecutionEngine):
+def tune_correction(
+    dm: TuneResponseCollection,
+    devices: DevicesFacade,
+    mexec: MeasurementExecutionEngine,
+    info_signals,
+):
     """
 
+    Todo:
+
+      * reference / target tune from caller
+      * consider to provide fine tuning from the outside
+      * only connect to the actuators actually required
+
     """
 
-    oracle = TuneOracle(
-        x=TuneResponseCollection(col=[item for item in dm.col if item.pc_name[:2] == "Q4"]),
-        y=TuneResponseCollection(col=[item for item in dm.col if item.pc_name[:2] == "Q3"]),
-        reference=Tune(x=1060, y=907)
-    )
-    policy = TunePolicy()
+    oracle = TuneOracle(col=dm, target=Tune(x=1055, y=902))
+    policy = TunePolicy(scale=1.0)
 
-    # measure the current state
-    current_state = Tune(x=1065, y=905)
-    diff_tune, r = oracle.ask(current_state)
-    r = policy.step(current_state, diff_tune, r)
-
-
-    commands = [Command(id=pc_name, property="delta_set_current", value=dI, behaviour_on_error=BehaviourOnError.stop) for pc_name, dI in r.items()]
-    actuators = {cmd.id : devices.get("quadrupole_pcs").settable_devices.get(cmd.id) for cmd in commands}
-
+    actuators = {
+        name: devices.get("quadrupole_pcs").settable_devices.get(name)
+        for name in oracle.pc_names
+    }
+    print(" ".join([f"mfp:{pc_name}:set" for pc_name in oracle.pc_names]))
     tunes = devices["tunes"]
     quadrupole_pcs = devices["quadrupole_pcs"]
 
@@ -42,12 +51,16 @@ def tune_correction(dm: TuneResponseCollection, devices: DevicesFacade, mexec: M
     asyncio.run(connect())
 
     uid = mexec.execute(
-        transactional_commands_sequence_execution_plan(
-            transactional_commands=[TransactionalCommand(transaction=commands)],
+        corrections_plan(
+            oracle=oracle,
+            policy=policy,
             detectors=[devices.get("tunes")],
             actuators=actuators,
-            md={},
+            info_signals=info_signals,
             num_readings=2,
             wait_before_read=0.1,
+            delay=0.1,
+            md={},
         )
     )
+    return uid

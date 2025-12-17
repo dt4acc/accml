@@ -35,4 +35,4 @@ class CommandSequence:
     commands: Sequence[TransactionalCommand]
 
 
-__all__ = ["BehaviourOnError", "Command", "CommandSequence"]
+__all__ = ["BehaviourOnError", "Command", "CommandSequence", "TransactionalCommand"]
