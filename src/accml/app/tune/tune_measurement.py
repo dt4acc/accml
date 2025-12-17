@@ -2,22 +2,33 @@ import asyncio
 from typing import Sequence
 
 from accml.core.interfaces.devices_facade import DevicesFacade
-from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from accml.core.interfaces.measurement_execution_engine import (
+    MeasurementExecutionEngine,
+)
 from accml.core.model.command import Command, BehaviourOnError, CommandSequence
-from accml.custom.bluesky.bluesky_measurement_execution_engine import simple_command_sequence_execution_plan
+from accml.custom.bluesky.plans import simple_command_sequence_execution_plan
 
 
-def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurement_values: Sequence[float],
-         mexec: MeasurementExecutionEngine = None,
-         info_signals
-         ):
+def tune(
+    *,
+    devices: DevicesFacade,
+    quadrupole_pc_names: Sequence[str],
+    measurement_values: Sequence[float],
+    mexec: MeasurementExecutionEngine = None,
+    info_signals,
+):
+    """measure the tune response of the provided quadrupole names"""
     cmds_on_machine = []
     for name in quadrupole_pc_names:
         for val in measurement_values:
             cmds_on_machine.append(
-                Command(id=name, property="delta_set_current", value=val, behaviour_on_error=BehaviourOnError.stop)
+                Command(
+                    id=name,
+                    property="delta_set_current",
+                    value=val,
+                    behaviour_on_error=BehaviourOnError.stop,
+                )
             )
-
 
     # inform setup on which devices are actually needed
     # so setup could select only to instantiate those devices
@@ -44,9 +55,9 @@ def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurem
             detectors=[tunes],
             actuators=actuators,
             info_signals=info_signals,
-            num_readings=2,
+            num_readings=3,
             # wait_before_read=0.1,
             md=md,
         ),
     )
-    print(f"Run created {uid=}")
+    print(f"Tune response measured stored at  {uid=}")
