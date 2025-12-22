@@ -5,8 +5,18 @@ from typing import Dict, Sequence
 
 @dataclass
 class MeasuredTuneResponseItem:
-    value: float
+    """
+
+    Todo:
+        Compare it to tune result model
+        Which should stary
+    """
+
+    #: todo: what is this value?
+    # value: float
+    #: horizontal plane
     x: float
+    #: vertical plane
     y: float
 
 

@@ -1,12 +1,14 @@
 from abc import ABCMeta, abstractmethod
 from typing import Sequence
 
-from ..model.command import Command
+from ..model.command import TransactionCommand
 
 
 class MeasurementExecutionEngine(metaclass=ABCMeta):
     @abstractmethod
-    def execute(self, commands: Sequence[Command], *args) -> str:
+    def execute(
+        self, commands_collection: Sequence[TransactionCommand], *args, **kwargs
+    ) -> str:
         """
         :return: identifier to the data
 

@@ -30,3 +30,8 @@ databroker = "*"
 # ophyd async does not specify which transport is to be used
 ophyd-async = "*"
 aioca = "*"
+
+# any state machine implementation would do
+# currently it is only used to track if new calculations
+# are required
+transitions = "*"
