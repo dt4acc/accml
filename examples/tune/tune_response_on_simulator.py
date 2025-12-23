@@ -15,17 +15,10 @@ from accml.custom.accml_lib.bessyii.liasion_translator_setup import load_manager
 from accml.custom.simulators.pyat.accelerator_simulator import PyATAcceleratorSimulator
 from accml.custom.simulators.pyat.simulator_backend import SimulatorBackend
 
-logger = logging.basicConfig(level=logging.WARNING)
 
-
-def dataclass_delegate_to_jsons_method(obj, **kwargs):
-    r2 = {f.name: jsons.dump(getattr(obj, f.name), **kwargs) for f in fields(obj)}
-    r =  jsons.dump(obj.to_jsons(), **kwargs)
-    return r
 
 
 fork = jsons.fork()
-jsons.set_serializer(dataclass_delegate_to_jsons_method, ReadTogether, high_prio=True, fork_inst=fork)
 
 
 

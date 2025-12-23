@@ -3,16 +3,11 @@ import json
 import jsons
 import yaml
 
-from accml.core.model.result import Result, SingleReading
+from accml.core.model.result import Result, register_deserializers_to_json_fork
 
 jsons_fork = jsons.fork()
+register_deserializers_to_json_fork(jsons_fork)
 
-def single_reading_deserializer(obj: dict, cls, **kwargs):
-    name = obj["name"]
-    payload = obj["payload"]
-    return cls(name=name, payload=payload)
-
-jsons.set_deserializer(single_reading_deserializer, SingleReading, fork_inst=jsons_fork)
 
 def main():
     with open("data_storage.json") as fp:
