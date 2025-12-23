@@ -13,7 +13,7 @@ class MeasuredTuneResponseItem:
     """
 
     #: todo: what is this value?
-    # value: float
+    setpoint: float
     #: horizontal plane
     x: float
     #: vertical plane

@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import itertools
+from distutils.command.install import value
 from itertools import zip_longest
 from typing import Sequence, Mapping
 from uuid import uuid4
@@ -11,50 +12,7 @@ from accml.core.interfaces.measurement_execution_engine import (
     MeasurementExecutionEngine,
 )
 from accml.core.model.command import Command, ReadCommand, TransactionCommand, BehaviourOnError
-from accml.core.model.result import SingleReading, Result, ReadTogether
-
-
-async def execute_step(
-    backend: BackendRW,
-    devices: Sequence[ReadCommand],
-    transactional_commands: Sequence[Command],
-):
-    """Handle transactional commands"""
-    # for simulator this is not necessary but just in case
-    # set all in parallel
-    await asyncio.gather(
-        *[
-            backend.set(dev_id=cmd.id, prop_id=cmd.property, value=cmd.value)
-            for cmd in transactional_commands
-        ]
-    )
-    await asyncio.gather(
-        *[backend.trigger(dev_id=dev.id, prop_id=dev.property) for dev in devices]
-    )
-    # read in parallel
-    data = await asyncio.gather(
-        *[backend.read(dev_id=dev.id, prop_id=dev.property) for dev in devices]
-    )
-
-    return {f"{dev.id}-{dev.property}": datum for dev, datum in zip(devices, data)}
-
-
-async def execute(
-    backend: BackendRW,
-    devices: Sequence[ReadCommand],
-    commands: Sequence[TransactionCommand],
-):
-    start = datetime.datetime.now()
-    d = dict(
-        start=start,
-        commands=commands,
-        # execute one step after the other
-        data=[
-            await execute_step(backend, devices, cmd.transaction) for cmd in commands
-        ],
-    )
-    d["end"] = datetime.datetime.now()
-    return d
+from accml.core.model.result import SingleReading, Result, ReadTogether, SingleFloat
 
 
 class SimpleDataStorage:
@@ -117,44 +75,105 @@ class SimulatorExecutionEngine(MeasurementExecutionEngine):
 
         loop = asyncio.get_event_loop()
         data = loop.run_until_complete(execute(self.backend, devices, cmd_design_ctxt))
-        # Todo: need to convert data to expected
 
-        def convert_data(data: Sequence[Mapping[str, object]]) -> Sequence[ReadTogether]:
-            """
+        converted_data = convert_data(self.cmd_rewritter, devices, data["data"])
+        #: Todo ... how to properly enrich the data ... analysis needs to know which
+        #           device and which value
+        def extract_single(t_cmd: TransactionCommand) -> SingleReading:
+            # Only work is only one was set
+            cmd, = t_cmd.transaction
+            return SingleReading(name="setpoint", payload=SingleFloat(value=cmd.value), cmd=ReadCommand(id=cmd.id, property=cmd.property))
 
-            Here only command rewritter is used. As always the same command is used
-            one could just look up the translation object once and then do batch
-            processing.
-
-            Early optimisation ...
-            """
-
-            def convert_single(cmd, datum):
-                cmd.value = datum
-                ncmd = self.cmd_rewritter.forward(cmd)
-                return ncmd.value
-
-            cmds = [
-                Command(id=rcmd.id, property=rcmd.property, value=None, behaviour_on_error=BehaviourOnError.ignore)
-                for rcmd in devices
-            ]
-            # Todo: use key for checking ...
-            return [
-                ReadTogether(
-                    data=[SingleReading(name=datum[0], payload=convert_single(cmd, datum[1])) for cmd, datum in zip_longest(cmds, epoch.items())]
-                )
-                for epoch in data
-            ]
-
+        enriched = [
+            ReadTogether(data=single.data + [extract_single(transaction)])
+            for single, transaction in zip_longest(converted_data, commands_collection)
+        ]
         converted = Result(
             start=data["start"],
             end=data["end"],
-            data=convert_data(data["data"]),
+            data=enriched,
             orig_data=[
-                ReadTogether(data=[SingleReading(name=k, payload=v) for k, v in single.items()])
+                ReadTogether(data=[
+                    SingleReading(name=tmp[0], cmd=rcmd, payload=tmp[1])
+                    for tmp, rcmd in zip(single.items(), devices)
+                ])
                 for single in data["data"]
-            ]
+            ],
+            # md=dict(commands=cmd_design_ctxt)
         )
         del data
         uuid = self.storage.add(converted)
         return uuid
+
+
+async def execute(
+    backend: BackendRW,
+    devices: Sequence[ReadCommand],
+    commands: Sequence[TransactionCommand],
+):
+    start = datetime.datetime.now()
+    d = dict(
+        start=start,
+        commands=commands,
+        # execute one step after the other
+        data=[
+            await execute_step(backend, devices, cmd.transaction) for cmd in commands
+        ],
+    )
+    d["end"] = datetime.datetime.now()
+    return d
+
+
+async def execute_step(
+    backend: BackendRW,
+    devices: Sequence[ReadCommand],
+    transactional_commands: Sequence[Command],
+):
+    """Handle transactional commands"""
+    # for simulator this is not necessary but just in case
+    # set all in parallel
+    await asyncio.gather(
+        *[
+            backend.set(dev_id=cmd.id, prop_id=cmd.property, value=cmd.value)
+            for cmd in transactional_commands
+        ]
+    )
+    await asyncio.gather(
+        *[backend.trigger(dev_id=dev.id, prop_id=dev.property) for dev in devices]
+    )
+    # read in parallel
+    data = await asyncio.gather(
+        *[backend.read(dev_id=dev.id, prop_id=dev.property) for dev in devices]
+    )
+
+    return {f"{dev.id}-{dev.property}": datum for dev, datum in zip(devices, data)}
+
+
+def convert_data(cmd_rewritter: CommandRewriterBase, devices: Sequence[ReadCommand], data: Sequence[Mapping[str, object]]) -> Sequence[ReadTogether]:
+    """
+
+    Here only command rewritter is used. As always the same command is used
+    one could just look up the translation object once and then do batch
+    processing.
+
+    Early optimisation ...
+    """
+
+    def convert_single(cmd, datum):
+        cmd.value = datum
+        ncmd = cmd_rewritter.forward(cmd)
+        return ncmd.value
+
+    cmds = [
+        Command(id=rcmd.id, property=rcmd.property, value=None, behaviour_on_error=BehaviourOnError.ignore)
+        for rcmd in devices
+    ]
+    # Todo: use key for checking ...
+    return [
+        ReadTogether(
+            data=[
+                SingleReading(name=datum[0], cmd=ReadCommand(id=cmd.id, property=cmd.property), payload=convert_single(cmd, datum[1]))
+                for cmd, datum in zip_longest(cmds, epoch.items())]
+        )
+        for epoch in data
+    ]

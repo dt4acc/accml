@@ -3,6 +3,12 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import Sequence
 
+from accml.core.model.command import ReadCommand, Command
+
+@dataclass
+class SingleFloat:
+    value : float
+
 
 @dataclass
 class SingleReading:
@@ -12,9 +18,14 @@ class SingleReading:
     """
     name: str
     payload: object
+    cmd: ReadCommand
 
-    def from_jsons(self, obj):
-        pass
+    @classmethod
+    def from_jsons(cls, obj):
+        name = obj["name"]
+        payload = obj["payload"]
+        cmd = obj["cmd"]
+        return cls(name=name, payload=payload, cmd=cmd)
 
 
 @dataclass
@@ -48,9 +59,7 @@ class Result:
 
 def single_reading_deserializer(obj: dict, cls, **kwargs):
     assert cls == SingleReading, "only prepared to handle single reading"
-    name = obj["name"]
-    payload = obj["payload"]
-    return cls(name=name, payload=payload)
+    return cls.from_jsons(obj)
 
 
 def dataclass_delegate_to_jsons_method(obj, **kwargs):

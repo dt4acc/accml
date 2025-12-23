@@ -16,6 +16,9 @@ from .model import (
 
 
 def data_to_model(data: Dict[str, Sequence[float]]) -> MeasuredTuneResponse:
+    """
+    For data as stored by bluesky / databroker
+    """
     # combine data per magnet
     tmp = defaultdict(list)
     for dev_name, val, tune_x, tune_y in zip_longest(
@@ -52,14 +55,14 @@ def fit_line(indep: Sequence[float], dep: Sequence[float]) -> RandomVariableMome
 
 
 def fit_one_power_converter(data: MeasuredTuneResponsePerPowerConverter):
-    vals = [item.value for item in data.col]
+    vals = [item.setpoint for item in data.col]
     xrm = fit_line(vals, [item.x for item in data.col])
     yrm = fit_line(vals, [item.y for item in data.col])
     return TuneResponse(pc_name=data.pc_name, x=xrm, y=yrm)
 
 
-def tune_response_analysis(data: Dict[str, Sequence[float]]):
-    prep_data = data_to_model(data)
+def tune_response_analysis(prep_data: MeasuredTuneResponse):
+    # prep_data = data_to_model(data)
     return TuneResponseCollection(
         col=[fit_one_power_converter(data) for data in prep_data.col]
     )

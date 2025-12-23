@@ -1,6 +1,5 @@
 import json
-import logging
-from dataclasses import fields
+
 
 import jsons
 
@@ -8,19 +7,15 @@ from accml.app.tune.tune_measurement import tune
 from accml.core.bl.command_rewritter import CommandRewriter
 from accml.core.model.command import Command, ReadCommand
 from accml.core.model.identifiers import LatticeElementPropertyID
-from accml.core.model.result import Result, ReadTogether
+from accml.core.model.result import register_serializers_to_json_fork
 from accml.core.simulator.simulator_execution_engine import SimulatorExecutionEngine, SimpleDataStorage
 from accml.custom.accml_lib.bessyii.bessyii_pyat_lattice import bessyii_pyat_lattice
 from accml.custom.accml_lib.bessyii.liasion_translator_setup import load_managers
 from accml.custom.simulators.pyat.accelerator_simulator import PyATAcceleratorSimulator
 from accml.custom.simulators.pyat.simulator_backend import SimulatorBackend
 
-
-
-
-fork = jsons.fork()
-
-
+jsons_fork = jsons.fork()
+register_serializers_to_json_fork(jsons_fork)
 
 
 def main():
@@ -48,17 +43,16 @@ def main():
        devices=[
            ReadCommand("tune", "transversal"),
        ],
-       quadrupole_pc_names=pc_names[:2],
+       quadrupole_pc_names=pc_names,
        measurement_values=[0, 1e0, 0, -1e0, 0],
        mexec=mexec,
        info_signals=None
     )
     data = storage.get(uuid)
-    data = jsons.dump(data, fork_inst=fork)
+    data = jsons.dump(data, fork_inst=jsons_fork)
 
     with open("data_storage.json", "wt") as fp:
         json.dump(data, fp, indent=4)
-
 
 
 if __name__  == "__main__":
