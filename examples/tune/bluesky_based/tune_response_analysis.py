@@ -1,25 +1,15 @@
 from accml.app.tune.tune_response_analysis import tune_response_analysis
-import json
+from databroker import catalog
 import jsons
 import yaml
 
-from accml.core.model.result import Result, SingleReading
-
-jsons_fork = jsons.fork()
-
-def single_reading_deserializer(obj: dict, cls, **kwargs):
-    name = obj["name"]
-    payload = obj["payload"]
-    return cls(name=name, payload=payload)
-
-jsons.set_deserializer(single_reading_deserializer, SingleReading, fork_inst=jsons_fork)
 
 def main():
-    with open("data_storage.json") as fp:
-        data = json.load(fp)
+    db = catalog["heavy_local"]
+    uid = '1955adfd-2f94-4459-8888-4f63cbc839de'
+    run  = db[uid]
+    data = run.primary.read()
 
-    data = jsons.load(data, Result, fork_inst=jsons_fork)
-    data
     # just strip off all the extra information an xarray would provide
     d = {
         "device_name": data["device_name"].data,
@@ -29,7 +19,7 @@ def main():
     }
 
     result = tune_response_analysis(d)
-    tmp = jsons.dump(result, Result)
+    tmp = jsons.dump(result)
     # Todo: currently a hack ... need to foresee appropriate methods at the data class
     del tmp["_dict"]
     with open("tune_result.yml", "wt") as fp:
