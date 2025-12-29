@@ -3,13 +3,23 @@ from typing import Sequence
 
 from accml.core.interfaces.devices_facade import DevicesFacade
 from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
-from accml.core.model.command import Command, BehaviourOnError, CommandSequence, TransactionCommand
+from accml.core.model.command import Command, BehaviourOnError, CommandSequence, TransactionCommand, ReadCommand
 
 
-def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurement_values: Sequence[float],
-         mexec: MeasurementExecutionEngine = None,
-         info_signals
-         ):
+def tune(
+    *,
+    detectors: Sequence[ReadCommand],
+    quadrupole_pc_names: Sequence[str],
+    measurement_values: Sequence[float],
+    mexec: MeasurementExecutionEngine = None,
+    **kwargs
+    ):
+    """
+
+    Todo:
+        rename detectors to read_detectors? These are rather commands than
+        real detectors
+    """
     cmds_on_machine = []
     for name in quadrupole_pc_names:
         for val in measurement_values:
@@ -26,11 +36,7 @@ def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurem
     # tunes = devices["tunes"]
     #  quadrupole_pcs = devices["quadrupole_pcs"]
 
-    # async def connect():
-    #    await tunes.connect(timeout=2.0)
-    #    await quadrupole_pcs.connect(timeout=2.0)
 
-    # asyncio.run(connect())
 
     # TODO: should be handled internally, needs to be overridden ?
     # actuators = {name: pc for name, pc in quadrupole_pcs.settable_devices.items()}
@@ -40,8 +46,9 @@ def tune(*, devices: DevicesFacade, quadrupole_pc_names: Sequence[str], measurem
     md = {}
 
     uid = mexec.execute(
-        devices=devices,
+        detectors=detectors,
         commands_collection=cmds_on_machine.commands,  # need to add bpms
+        **kwargs,
         # detectors=[tunes],
         # actuators=actuators,
         # info_signals=info_signals,

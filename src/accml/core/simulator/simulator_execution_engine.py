@@ -1,7 +1,6 @@
 import asyncio
 import datetime
 import itertools
-from distutils.command.install import value
 from itertools import zip_longest
 from typing import Sequence, Mapping
 from uuid import uuid4
@@ -52,7 +51,7 @@ class SimulatorExecutionEngine(MeasurementExecutionEngine):
     def execute(
         self,
         commands_collection: Sequence[TransactionCommand],
-        devices: Sequence[ReadCommand],
+        detectors: Sequence[ReadCommand],
         *,
         md,
         **kwargs,
@@ -74,9 +73,9 @@ class SimulatorExecutionEngine(MeasurementExecutionEngine):
         ]
 
         loop = asyncio.get_event_loop()
-        data = loop.run_until_complete(execute(self.backend, devices, cmd_design_ctxt))
+        data = loop.run_until_complete(execute(self.backend, detectors, cmd_design_ctxt))
 
-        converted_data = convert_data(self.cmd_rewritter, devices, data["data"])
+        converted_data = convert_data(self.cmd_rewritter, detectors, data["data"])
         #: Todo ... how to properly enrich the data ... analysis needs to know which
         #           device and which value
         def extract_single(t_cmd: TransactionCommand) -> SingleReading:
@@ -95,7 +94,7 @@ class SimulatorExecutionEngine(MeasurementExecutionEngine):
             orig_data=[
                 ReadTogether(data=[
                     SingleReading(name=tmp[0], cmd=rcmd, payload=tmp[1])
-                    for tmp, rcmd in zip(single.items(), devices)
+                    for tmp, rcmd in zip(single.items(), detectors)
                 ])
                 for single in data["data"]
             ],
@@ -108,7 +107,7 @@ class SimulatorExecutionEngine(MeasurementExecutionEngine):
 
 async def execute(
     backend: BackendRW,
-    devices: Sequence[ReadCommand],
+    detectors: Sequence[ReadCommand],
     commands: Sequence[TransactionCommand],
 ):
     start = datetime.datetime.now()
@@ -117,7 +116,7 @@ async def execute(
         commands=commands,
         # execute one step after the other
         data=[
-            await execute_step(backend, devices, cmd.transaction) for cmd in commands
+            await execute_step(backend, detectors, cmd.transaction) for cmd in commands
         ],
     )
     d["end"] = datetime.datetime.now()
@@ -126,7 +125,7 @@ async def execute(
 
 async def execute_step(
     backend: BackendRW,
-    devices: Sequence[ReadCommand],
+    detectors: Sequence[ReadCommand],
     transactional_commands: Sequence[Command],
 ):
     """Handle transactional commands"""
@@ -139,17 +138,17 @@ async def execute_step(
         ]
     )
     await asyncio.gather(
-        *[backend.trigger(dev_id=dev.id, prop_id=dev.property) for dev in devices]
+        *[backend.trigger(dev_id=dev.id, prop_id=dev.property) for dev in detectors]
     )
     # read in parallel
     data = await asyncio.gather(
-        *[backend.read(dev_id=dev.id, prop_id=dev.property) for dev in devices]
+        *[backend.read(dev_id=dev.id, prop_id=dev.property) for dev in detectors]
     )
 
-    return {f"{dev.id}-{dev.property}": datum for dev, datum in zip(devices, data)}
+    return {f"{dev.id}-{dev.property}": datum for dev, datum in zip(detectors, data)}
 
 
-def convert_data(cmd_rewritter: CommandRewriterBase, devices: Sequence[ReadCommand], data: Sequence[Mapping[str, object]]) -> Sequence[ReadTogether]:
+def convert_data(cmd_rewritter: CommandRewriterBase, detectors: Sequence[ReadCommand], data: Sequence[Mapping[str, object]]) -> Sequence[ReadTogether]:
     """
 
     Here only command rewritter is used. As always the same command is used
@@ -166,7 +165,7 @@ def convert_data(cmd_rewritter: CommandRewriterBase, devices: Sequence[ReadComma
 
     cmds = [
         Command(id=rcmd.id, property=rcmd.property, value=None, behaviour_on_error=BehaviourOnError.ignore)
-        for rcmd in devices
+        for rcmd in detectors
     ]
     # Todo: use key for checking ...
     return [

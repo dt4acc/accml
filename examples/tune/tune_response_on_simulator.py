@@ -40,7 +40,7 @@ def main():
         storage=storage
     )
     uuid = tune(
-       devices=[
+       detectors=[
            ReadCommand("tune", "transversal"),
        ],
        quadrupole_pc_names=pc_names,

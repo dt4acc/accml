@@ -1,4 +1,7 @@
 import logging
+
+from accml.core.model.command import ReadCommand
+
 logger = logging.basicConfig(level=logging.WARNING)
 
 from bluesky import RunEngine
@@ -21,7 +24,6 @@ def main():
         execution engine use and setup should be provided by standard measurement execution engine
         e.g. depending on Bluesky or Bliss what ever the lab's preference is
     """
-    devices = setup()
     # Setup informational signals (mock metadata)
     info_sigs = {name: soft_signal_rw(str, name=name) for name in ["device_name", "channel_name"]}
     info_sigs["channel_value"] = soft_signal_rw(float, name= "channel_value", precision=5)
@@ -54,11 +56,12 @@ def main():
     # I should rather work in device space right away
     pc_names=list(set(pc_names))
     tune(
-       devices=devices,
+       detectors=[ReadCommand(id="tune", property="transversal")],
        quadrupole_pc_names=pc_names,
        measurement_values=[0, 1e0, 0, -1e0, 0],
-       mexec=BlueskyMeasurementExecutionEngine(run_engine=RE),
-       info_signals=info_sigs
+       mexec=BlueskyMeasurementExecutionEngine(run_engine=RE, devices=setup()),
+       info_signals=info_sigs,
+       n_readings=3
     )
 
 
