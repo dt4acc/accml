@@ -2,14 +2,14 @@ import functools
 from dataclasses import asdict
 from typing import Sequence, Dict
 
-from accml.core.model.command import TransactionalCommand, Command
+from accml.core.model.command import Command, TransactionCommand
 from bluesky import plan_stubs as bps, preprocessors as bpp
 from ophyd_async.core import Device, Signal
 
 
 def transactional_commands_sequence_execution_plan(
     *,
-    transactional_commands: Sequence[TransactionalCommand],
+    transaction_commands: Sequence[TransactionCommand],
     detectors: Sequence[Device],
     actuators: Dict[str, Device],
     md: Dict,
@@ -18,13 +18,13 @@ def transactional_commands_sequence_execution_plan(
     """Excute transactional commands using bluesky plan stubs"""
     _md = md or dict()
     # CommandSequence nor Commands is json seriazable ....
-    _md.update(dict(commands=[asdict(cmd) for cmd in transactional_commands]))
+    _md.update(dict(commands=[asdict(cmd) for cmd in transaction_commands]))
 
     @bpp.stage_decorator(list(detectors) + list(actuators.values()))
     @bpp.run_decorator(md=_md)
     def inner():
         r = yield from transactional_actuator_commands_plan(
-            transactional_commands=transactional_commands,
+            transaction_commands=transaction_commands,
             detectors=detectors,
             actuators=actuators,
             **kwargs,
@@ -37,7 +37,7 @@ def transactional_commands_sequence_execution_plan(
 
 def transactional_actuator_commands_plan(
     *,
-    transactional_commands: Sequence[TransactionalCommand],
+    transaction_commands: Sequence[TransactionCommand],
     detectors: Sequence[Device],
     actuators: Dict[str, Device],
     num_readings: int,
@@ -66,7 +66,7 @@ def transactional_actuator_commands_plan(
             r.extend([channel, cmd.value])
         return r
 
-    for t_cmds in transactional_commands:
+    for t_cmds in transaction_commands:
         # first select the device
         # then apply it to all
         yield from bps.mv(*prepare_transactional_move(t_cmds.transaction))

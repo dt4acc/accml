@@ -3,7 +3,8 @@ from typing import Sequence
 
 from accml.core.interfaces.devices_facade import DevicesFacade
 from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
-from accml.core.model.command import Command, BehaviourOnError, CommandSequence
+from accml.core.model.command import Command, BehaviourOnError, CommandSequence, ReadCommand, TransactionCommand
+from accml.custom.bluesky.plans import simple_command_sequence_execution_plan
 
 
 def tune(
@@ -48,9 +49,9 @@ def tune(
     uid = mexec.execute(
         simple_command_sequence_execution_plan(
             commands=cmds_on_machine,
-            detectors=[tunes],
-            actuators=actuators,
-            info_signals=info_signals,
+            detectors=detectors,
+            # actuators=actuators,
+            # info_signals=info_signals,
             num_readings=3,
             # wait_before_read=0.1,
             md=md,

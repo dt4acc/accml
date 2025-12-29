@@ -141,7 +141,7 @@ def run_corrections_commands_plan(
         )
 
         yield from transactional_actuator_commands_plan(
-            transactional_commands=[t_cmd],
+            transaction_commands=[t_cmd],
             detectors=detectors,
             actuators=actuators,
             num_readings=0,
