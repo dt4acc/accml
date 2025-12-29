@@ -3,7 +3,7 @@ from typing import Sequence
 
 from accml.core.interfaces.devices_facade import DevicesFacade
 from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
-from accml.core.model.command import Command, BehaviourOnError, CommandSequence, TransactionCommand, ReadCommand
+from accml.core.model.command import Command, BehaviourOnError, CommandSequence
 
 
 def tune(
@@ -46,13 +46,16 @@ def tune(
     md = {}
 
     uid = mexec.execute(
-        detectors=detectors,
-        commands_collection=cmds_on_machine.commands,  # need to add bpms
-        **kwargs,
-        # detectors=[tunes],
-        # actuators=actuators,
-        # info_signals=info_signals,
-        md=md,
+        simple_command_sequence_execution_plan(
+            commands=cmds_on_machine,
+            detectors=[tunes],
+            actuators=actuators,
+            info_signals=info_signals,
+            num_readings=3,
+            # wait_before_read=0.1,
+            md=md,
+        ),
     )
-    print(f"Run created {uid=}")
+    print(f"Tune response measured stored at  {uid=}")
     return uid
+

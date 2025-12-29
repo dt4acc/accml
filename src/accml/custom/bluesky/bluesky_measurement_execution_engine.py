@@ -102,7 +102,7 @@ def commands_execution_plan(
 
 
 class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
-    """Demonstrator of a measurement engine as a bluesky runengine"""
+    """Demonstrator of a measurement engine as a bluesky run engine"""
 
     def __init__(self, devices: DevicesFacade,  run_engine: RunEngine):
         """
@@ -139,6 +139,7 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
             md=md,
             **kwargs,
         )
+    def execute(self, plan) -> str:
         (uid,) = self.run_engine(plan)
         return uid
 

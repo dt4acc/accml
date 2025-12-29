@@ -25,7 +25,7 @@ python = ">=3.7"
 pydantic = "*"
 jsons = "*"
 # Packages below here are to be revisited if we need to depend on them (they are mostly custom packages
-databroker = "*"
+databroker = "<2.0"
 
 # ophyd async does not specify which transport is to be used
 ophyd-async = "*"
@@ -35,3 +35,5 @@ aioca = "*"
 # currently it is only used to track if new calculations
 # are required
 transitions = "*"
+# move support routines for fit error calculation here
+bact_math_utils = ">=0.1.1"

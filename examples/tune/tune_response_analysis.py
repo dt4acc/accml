@@ -1,3 +1,10 @@
+from dataclasses import asdict
+
+from accml.app.tune.tune_response_analysis import (
+    tune_response_analysis,
+    quality_factor_as_txt,
+)
+from databroker import catalog
 from collections import defaultdict
 
 from accml.app.tune.model import MeasuredTuneResponse, MeasuredTuneResponseItem, MeasuredTuneResponsePerPowerConverter
@@ -48,9 +55,18 @@ def main():
     prep_data  = data_to_model(data)
 
     result = tune_response_analysis(prep_data)
-    tmp = jsons.dump(result, Result)
-    # Todo: currently a hack ... need to foresee appropriate methods at the data class
-    del tmp["_dict"]
+    txt = "\n".join(quality_factor_as_txt(result))
+    print(
+        f"""Tune quality factors for uid {uid}
+
+    {txt}
+
+    ratio: tune in family versus other plane
+    dr:    estimate of ratio error based on fit of tune shift (covar -> std)
+    """
+    )
+
+    tmp = jsons.dump(asdict(result))
     with open("tune_result.yml", "wt") as fp:
         yaml.dump(tmp, fp)
 
