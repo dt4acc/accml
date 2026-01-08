@@ -9,7 +9,7 @@ class BehaviourOnError(IntEnum):
     roll_back = 3
 
 
-@dataclass
+@dataclass(frozen=True)
 class ReadCommand:
     """Use for retrieving data"""
 
