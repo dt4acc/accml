@@ -9,6 +9,7 @@ Todo:
 
 from typing import Sequence
 
+from ..model.command import ReadCommand
 from ...core.interfaces.command_rewritter import CommandRewriterBase
 from ...core.interfaces.liaison_manager import LiaisonManagerBase
 from ...core.interfaces.translator_service import TranslatorServiceBase
@@ -51,7 +52,8 @@ class CommandRewriter(CommandRewriterBase):
         dev_prop_id = DevicePropertyID(
             device_name=cmd.id, property=cmd.property
         )
-        lat_prop_ids = self.liaison_manager.inverse(dev_prop_id)
+        rcmd = self.inverse_read_command(cmd)
+        lat_prop_ids = [LatticeElementPropertyID(element_name=r.id, property=r.property) for r in rcmd]
 
         return [self.inverse_translate_one(cmd, dev_prop_id, lat_prop_id) for lat_prop_id in lat_prop_ids]
 
@@ -85,10 +87,12 @@ class CommandRewriter(CommandRewriterBase):
         return ncmd
 
     def forward(self, cmd: Command) -> Command:
+        rcmd = self.forward_read_command(cmd)
         lat_prop_id = LatticeElementPropertyID(
             element_name=cmd.id, property=cmd.property
         )
-        dev_prop_id = self.liaison_manager.forward(lat_prop_id)
+        dev_prop_id = DevicePropertyID(device_name=rcmd.id, property=rcmd.property)
+
         translation_object = self.translator_service.get(
             ConversionID(lattice_property_id=lat_prop_id, device_property_id=dev_prop_id)
         )
@@ -99,3 +103,17 @@ class CommandRewriter(CommandRewriterBase):
             behaviour_on_error=cmd.behaviour_on_error,
         )
         return ncmd
+
+    def forward_read_command(self, command: ReadCommand) -> ReadCommand:
+        lat_prop_id = LatticeElementPropertyID(
+            element_name=command.id, property=command.property
+        )
+        dev_prop_id = self.liaison_manager.forward(lat_prop_id)
+        return ReadCommand(id=dev_prop_id.device_name, property=dev_prop_id.property)
+
+    def inverse_read_command(self, command: ReadCommand) -> ReadCommand:
+        dev_prop_id = DevicePropertyID(
+            device_name=command.id, property=command.property
+        )
+        lat_prop_ids = self.liaison_manager.inverse(dev_prop_id)
+        return [ReadCommand(id=lp.element_name, property=lp.property) for lp in lat_prop_ids]
