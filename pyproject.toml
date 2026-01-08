@@ -35,3 +35,8 @@ aioca = "*"
 # currently it is only used to track if new calculations
 # are required
 transitions = "*"
+
+# for simulation engine backend ... currently only using pyat
+accelerator_toolbox = "*"
+# lat2db ... for readling lattice
+lat2db = ">=0.1"
