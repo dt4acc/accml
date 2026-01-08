@@ -113,6 +113,17 @@ class ElementProxy(ElementInterface):
         pass
 
     async def _delta_update(self, property_id: str, value: object):
+        """
+        Todo:
+            This implementation is incorrect! Remove me!
+
+            The delta is relative to some state of object ...
+            Needs to be reviewed if it should be handled within this
+            proxy
+
+            Should that be rather handled at the backend layer?
+        """
+        raise AssertionError("delta update should not be handled by simulation backend or mexec!")
         ref = self.peek(property_id)
         t_val = value + ref
         logger.info("delta update %s.%s: ref %s, val %s -> %s",
@@ -131,14 +142,18 @@ class ElementProxy(ElementInterface):
         Raises:
             ValueError: If an unknown property is specified.
 
-        Todo: is that Liasion management?
+        Todo: is that Liaison management?
               the inverse way
         """
+        assert property_id[:6] != "delta_", (
+            f"properties like {property_id}"
+            " starting with delta should not end up here"
+        )
+
         if value is not None:
             assert np.isfinite(value), "Value must be finite"
 
-        if property_id[:6] == "delta_":
-            return await self._delta_update(property_id[6:], value)
+        return await self._update(property_id, value)
 
     async def _update(self, property_id: str, value: object):
 
@@ -182,6 +197,11 @@ class ElementProxy(ElementInterface):
             await method(value)
 
     def peek(self, property_id: str) -> float:
+        assert property_id[:6] != "delta_", (
+            f"properties like {property_id}"
+            " starting with delta should not end up here"
+        )
+
         if property_id in ["K", "H", "main_strength"]:
             return self.peek_main_strength(property_id)
         elif property_id in ["x_kick", "y_kick"]:
@@ -223,47 +243,6 @@ class ElementProxy(ElementInterface):
             raise AssertionError(f"Did not expect kick {property_id}")
         return element.KickAngle[idx]
 
-    def peek(self, property_id: str) -> float:
-        if property_id in ["K", "H", "main_strength"]:
-            return self.peek_main_strength(property_id)
-        elif property_id in ["x_kick", "y_kick"]:
-            return self.peek_kick(property_id)
-        elif property_id in ["frequency"]:
-            return self.peek_frequency()
-        else:
-            raise NotImplementedError(
-                f"handling property {property_id} not (yet) implemented"
-            )
-
-    def peek_frequency(self):
-        (element,) = self._obj
-        return element.Frequency
-
-    def peek_main_strength(self, property_id: str):
-        (element,) = self._obj
-        element_type = element.__class__.__name__
-        if element_type == "Quadrupole":
-            assert property_id in ["K", "main_strength"]
-            return element.K
-        elif element_type == "Sextupole":
-            if property_id not in ["H", "main_strength"]:
-                raise AssertionError(
-                    f"Not handling {property_id} for element {element_type}"
-                )
-            return element.H
-        else:
-            raise NotImplementedError(
-                f"main strength not implemented for element {element_type}"
-            )
-
-    def peek_kick(self, property_id: str):
-        (element,) = self._obj
-        lut = dict(x_kick=0, y_kick=1)
-        try:
-            idx = lut[property_id]
-        except KeyError as ke:
-            raise AssertionError(f"Did not expect kick {property_id}")
-        return element.KickAngle[idx]
 
 
 class AddOnElementProxy(ElementProxy):
@@ -333,6 +312,11 @@ class KickAngleCorrectorProxy(AddOnElementProxy):
         Raises:
             ValueError: If an unknown property is specified.
         """
+        assert property_id[:6] != "delta_", (
+            f"properties like {property_id}"
+            " starting with delta should not end up here"
+        )
+
         if property_id != "im":
             raise ValueError(f"Unexpected property {property_id} for kick corrector")
 
@@ -342,6 +326,8 @@ class KickAngleCorrectorProxy(AddOnElementProxy):
             await self.update_kick(kick_y=value, element_data=element_data)
 
     def peek(self, property_id: str) -> float:
+        assert property_id[:6] != "delta_", f"properties like {property_id} starting with delta should not end up here"
+
         element = self._obj
         if self.correction_planes == "horizontal":
             return element.KickAngle[0]

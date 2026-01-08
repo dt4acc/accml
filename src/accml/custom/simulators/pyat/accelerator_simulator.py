@@ -13,8 +13,8 @@ class PyATAcceleratorSimulator(AcceleratorSimulatorInterface):
     from a given lattice structure.
 
     Warning:
-        Currently, this implementation uses an `at_lattice` directly, which should be
-        revised when a proper lattice model becomes available.
+        Currently, this implementation uses an `at_lattice` directly,
+        which should be revised when a proper lattice model becomes available.
 
     Todo:
         Revisit name: still a proxy? The element proxy currently not necessary`?
@@ -96,7 +96,7 @@ class PyATAcceleratorSimulator(AcceleratorSimulatorInterface):
         if element_id.startswith("H") or element_id.startswith("V"):
             return element_id[1:]
 
-        raise ValueError(f"Unknown element ID format: {element_id}")
+        raise ValueError(f"Unknown element id: {element_id}")
 
     def instantiate_addon_proxy(self, sub_lattice, *, element_id, host_element_id):
         """
