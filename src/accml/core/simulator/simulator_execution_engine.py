@@ -2,7 +2,7 @@ import asyncio
 import datetime
 import itertools
 from itertools import zip_longest
-from typing import Sequence, Mapping
+from typing import Sequence, Mapping, Any
 from uuid import uuid4
 
 from accml.core.interfaces.backend.backend import BackendRW
@@ -34,6 +34,7 @@ class SimpleDataStorage:
 
 
 class SimulatorExecutionEngine(MeasurementExecutionEngine):
+
     def __init__(
         self,
         *,
@@ -60,6 +61,11 @@ class SimulatorExecutionEngine(MeasurementExecutionEngine):
 
         The commands collections is missing Context i.e. in which view it is
         operating.
+
+
+        Todo:
+            evaluate if a set / read method should be provided as separate
+            methods
         """
 
         def convert(transaction: Sequence[Command]) -> Sequence[Command]:
@@ -67,7 +73,10 @@ class SimulatorExecutionEngine(MeasurementExecutionEngine):
             r = list(itertools.chain(*tmp))
             return r
 
-        cmd_design_ctxt = [
+        if commands_collection is None:
+            cmd_design_ctxt = None
+        else:
+            cmd_design_ctxt = [
             TransactionCommand(transaction=convert(transaction.transaction))
             for transaction in commands_collection
         ]
@@ -104,6 +113,35 @@ class SimulatorExecutionEngine(MeasurementExecutionEngine):
         uuid = self.storage.add(converted)
         return uuid
 
+    async def trigger(self, cmds: Sequence[ReadCommand]):
+        return await trigger(self.backend, cmds)
+
+    async def read(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
+        """
+        Todo:
+            review handling context or view:
+                * design / device
+
+            Can commands be only converted once?
+
+            command rewritter: separate function for
+            read commands? i.e. a delegation to
+            liasion manager
+        """
+        tmp =  [self.cmd_rewritter.inverse_read_command(r) for r in cmds]
+        rcmds_design_ctxt = list(itertools.chain(*tmp))
+        data = await read(self.backend, rcmds_design_ctxt)
+        # Todo: how to convert data back ... I think
+        #       that gets difficult as soon as there is no 1-to-1 mapping any more
+        #       how to handle delta_ ... I need to be able to access reference storage
+        converted_data = convert_data_seq(self.cmd_rewritter, rcmds_design_ctxt, data)
+        return converted_data
+
+    async def set(self, cmds: Sequence[Command]):
+        tmp = [self.cmd_rewritter.inverse(cmd) for cmd in cmds]
+        cmds_design_ctxt = itertools.chain(*tmp)
+        return await set_(self.backend, cmds_design_ctxt)
+
 
 async def execute(
     backend: BackendRW,
@@ -126,26 +164,61 @@ async def execute(
 async def execute_step(
     backend: BackendRW,
     detectors: Sequence[ReadCommand],
-    transactional_commands: Sequence[Command],
+    transaction_commands: Sequence[Command],
 ):
     """Handle transactional commands"""
     # for simulator this is not necessary but just in case
     # set all in parallel
+    await set_(backend=backend, transaction_commands=transaction_commands)
+    await trigger(backend=backend, detectors=detectors)
+    data = await read(backend=backend, detectors=detectors)
+    return {f"{dev.id}-{dev.property}": datum for dev, datum in zip(detectors, data)}
+
+
+async def set_(backend: BackendRW, transaction_commands: Sequence[Command]) -> None:
     await asyncio.gather(
         *[
             backend.set(dev_id=cmd.id, prop_id=cmd.property, value=cmd.value)
-            for cmd in transactional_commands
+            for cmd in transaction_commands
         ]
     )
+
+async def trigger(backend: BackendRW, detectors: Sequence[ReadCommand]) -> None:
+    # read in parallel
     await asyncio.gather(
         *[backend.trigger(dev_id=dev.id, prop_id=dev.property) for dev in detectors]
     )
+
+
+async def read(backend: BackendRW, detectors: Sequence[ReadCommand]) -> Sequence[Any]:
     # read in parallel
     data = await asyncio.gather(
         *[backend.read(dev_id=dev.id, prop_id=dev.property) for dev in detectors]
     )
+    return data
 
-    return {f"{dev.id}-{dev.property}": datum for dev, datum in zip(detectors, data)}
+
+def convert_data_seq(cmd_rewritter: CommandRewriterBase, detectors: Sequence[ReadCommand], data: Sequence[object]) -> ReadTogether:
+    """
+    Todo:
+        merge with convert_data
+
+    """
+
+    def convert_single(rcmd: ReadCommand, datum):
+        if rcmd is None:
+            pass
+        cmd = Command(id=rcmd.id, property=rcmd.property, value=datum, behaviour_on_error=None)
+        ncmd = cmd_rewritter.forward(cmd)
+        return ncmd.value
+
+    detectors
+    # Todo: use key for checking ...
+    r = ReadTogether(
+        data=[SingleReading(name=f"{cmd.id}-{cmd.property}", cmd=cmd, payload=convert_single(cmd, datum))
+                for cmd, datum in zip_longest(detectors, data)]
+        )
+    return r
 
 
 def convert_data(cmd_rewritter: CommandRewriterBase, detectors: Sequence[ReadCommand], data: Sequence[Mapping[str, object]]) -> Sequence[ReadTogether]:
@@ -159,12 +232,11 @@ def convert_data(cmd_rewritter: CommandRewriterBase, detectors: Sequence[ReadCom
     """
 
     def convert_single(cmd, datum):
-        cmd.value = datum
-        ncmd = cmd_rewritter.forward(cmd)
+        ncmd = cmd_rewritter.forward(Command(id=cmd.id, property=cmd.property, value=datum, behaviour_on_error=None))
         return ncmd.value
 
     cmds = [
-        Command(id=rcmd.id, property=rcmd.property, value=None, behaviour_on_error=BehaviourOnError.ignore)
+        ReadCommand(id=rcmd.id, property=rcmd.property)
         for rcmd in detectors
     ]
     # Todo: use key for checking ...
@@ -176,3 +248,4 @@ def convert_data(cmd_rewritter: CommandRewriterBase, detectors: Sequence[ReadCom
         )
         for epoch in data
     ]
+

@@ -1,7 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from typing import Sequence
 
-from ..model.command import TransactionCommand
+from ..model.command import TransactionCommand, ReadCommand, Command
+from ..model.result import SingleReading, ReadTogether
 
 
 class MeasurementExecutionEngine(metaclass=ABCMeta):
@@ -15,4 +16,24 @@ class MeasurementExecutionEngine(metaclass=ABCMeta):
         Measurement engine is responsible to store data
         as appropriate
         """
+        raise NotImplementedError("use derived class instead")
+
+    @abstractmethod
+    async def trigger(self, cmds: Sequence[ReadCommand]):
+        """Following ophyd-async / ophyd design
+
+        Todo:
+            Is this a good idea?
+        """
+        raise NotImplementedError("use derived class instead")
+
+    @abstractmethod
+    async def read(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
+        """read these commands together"""
+        raise NotImplementedError("use derived class instead")
+
+
+    @abstractmethod
+    async def set(self, cmds: Sequence[Command]):
+        """execute these commands together"""
         raise NotImplementedError("use derived class instead")
