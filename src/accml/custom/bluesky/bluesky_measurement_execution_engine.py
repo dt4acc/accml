@@ -26,6 +26,7 @@ from ophyd_async.core import Device, Signal
 from ...core.interfaces.devices_facade import DevicesFacade
 from ...core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
 from ...core.model.command import Command, TransactionCommand, ReadCommand
+from ...core.model.result import ReadTogether
 
 
 def commands_plan(
@@ -33,7 +34,7 @@ def commands_plan(
         detectors: Sequence[Device],
         actuators: Dict[str, Device],
         info_signals: Dict[str, Signal],
-        num_readings: int
+        n_readings: int
 ):
     """
 
@@ -68,10 +69,10 @@ def commands_plan(
         # TODO: revisit how to address reading detectors
         #       also in the command language
         # read all devices
-        yield from bps.wait()  # << required
+        yield from bps.wait()
         # optional: give hardware / twin time
         yield from bps.sleep(1)
-        yield from bps.repeat(functools.partial(bps.trigger_and_read, all_dev), num=1)
+        yield from bps.repeat(functools.partial(bps.trigger_and_read, all_dev), num=n_readings)
 
 
 def commands_execution_plan(
@@ -79,6 +80,7 @@ def commands_execution_plan(
         detectors: Sequence[Device],
         actuators: Dict[str, Device],
         info_signals: Dict[str, Signal],
+        n_readings: int,
         md: None,
 ):
     """Translate commands to bluesky run-engine messages"""
@@ -94,6 +96,7 @@ def commands_execution_plan(
             detectors=detectors,
             actuators=actuators,
             info_signals=info_signals,
+            n_readings=n_readings,
         )
         return r
 
@@ -141,6 +144,16 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
         )
         (uid,) = self.run_engine(plan)
         return uid
+
+    async def set(self, cmds: Sequence[Command]):
+        raise NotImplementedError("needs to be implemented")
+
+    async def read(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
+        raise NotImplementedError("needs to be implemented")
+
+    async def trigger(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
+        raise NotImplementedError("needs to be implemented")
+
 
 
 def extract_device_identifiers(commands_collection: Sequence[TransactionCommand]) -> Sequence[str]:

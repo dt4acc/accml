@@ -38,8 +38,8 @@ def main():
     RE = RunEngine()
     [RE.subscribe(consumer) for consumer in [lt]]
     # TODO: if you need to save the results, you need mongo and then uncomment the below two lines.
-    # db = catalog["heavy_local"]
-    # RE.subscribe(db.v1.insert)
+    db = catalog["heavy_local"]
+    RE.subscribe(db.v1.insert)
     # TODO: need to address live plots
     #   here a databroker should be added so that data can be accessed
     #   later on
