@@ -7,7 +7,7 @@ from accml.core.interfaces.backend.backend import BackendRW
 from ..interface.accelerator_simulator import AcceleratorSimulatorInterface
 from ..interface.result_element import ResultElement
 from ..model.calculation_states import CalculationStates as States
-from ..model.tune import Tune
+from accml.app.tune.model import Tune
 
 logger = logging.getLogger()
 

@@ -6,7 +6,7 @@ the same interface
 """
 from abc import ABCMeta, abstractmethod
 
-from ..model.tune import Tune as TuneModel
+from accml.app.tune.model import Tune as TuneModel
 
 
 class Tune(metaclass=ABCMeta):

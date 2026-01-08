@@ -7,13 +7,12 @@ logging.basicConfig(level=logging.WARNING)
 import yaml
 import jsons
 
-from accml.app.tune.model import TuneResponseCollection
+from accml.app.tune.model import TuneResponseCollection, Tune
 from accml.app.tune.tune_correction import tune_correction
 from accml.core.bl.command_rewritter import CommandRewriter
 from accml.core.simulator.simulator_execution_engine import SimpleDataStorage, SimulatorExecutionEngine
 from accml.custom.accml_lib.bessyii.bessyii_pyat_lattice import bessyii_pyat_lattice
 from accml.custom.accml_lib.bessyii.liasion_translator_setup import load_managers
-from accml.custom.simulators.model.tune import Tune
 from accml.custom.simulators.pyat.accelerator_simulator import PyATAcceleratorSimulator
 from accml.custom.simulators.pyat.simulator_backend import SimulatorBackend
 

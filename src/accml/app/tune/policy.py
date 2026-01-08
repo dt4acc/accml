@@ -4,7 +4,7 @@ from typing import Dict
 from accml.core.model.command import TransactionCommand, Command, BehaviourOnError
 
 from ...core.interfaces.solver.policy import PolicyBase
-from ...custom.simulators.model.tune import Tune
+from .model import Tune
 
 
 class TunePolicy(PolicyBase):
