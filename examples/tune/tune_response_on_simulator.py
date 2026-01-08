@@ -5,7 +5,7 @@ import jsons
 
 from accml.app.tune.tune_measurement import tune
 from accml.core.bl.command_rewritter import CommandRewriter
-from accml.core.interfaces.delta_backend import DeltaBackendRWProxy, StateCache
+from accml.core.bl.delta_backend import DeltaBackendRWProxy, StateCache
 from accml.core.model.command import Command, ReadCommand
 from accml.core.model.identifiers import LatticeElementPropertyID
 from accml.core.model.result import register_serializers_to_json_fork
@@ -32,10 +32,13 @@ def main():
     # I should rather work in device space right away
     pc_names=list(set(pc_names))
 
-    acc = PyATAcceleratorSimulator(at_lattice=bessyii_pyat_lattice(filename="bessy2_storage_ring_reflat.json"))
-    backend = SimulatorBackend(name="BESSY_on_PyAT", acc=acc)
     backend = DeltaBackendRWProxy(
-        backend=SimulatorBackend(name="BESSY_on_PyAT", acc=acc),
+        backend=SimulatorBackend(
+            name="BESSY_on_PyAT",
+            acc=PyATAcceleratorSimulator(
+                at_lattice=bessyii_pyat_lattice(filename="bessy2_storage_ring_reflat.json")
+            )
+        ),
         cache=StateCache(name="BESSY_on_PyAT_delta_state_cache")
     )
     storage = SimpleDataStorage()
