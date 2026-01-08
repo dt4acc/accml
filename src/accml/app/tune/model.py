@@ -61,3 +61,29 @@ class TuneResponseCollection:
     @cached_property
     def _dict(self) -> Dict[str, TuneResponse]:
         return {item.pc_name: item for item in self.col}
+
+
+@dataclass
+class CorrectionStat:
+    mean: float
+    std: float
+    min: float
+    max: float
+
+    def __str__(self):
+        return (
+            f"{self.__class__.__name__}("
+            "mean={self.mean:.3f},"
+            " std={self.std:.3f},"
+            " min={self.min:.3f},"
+            " max={self.max:.3f}"
+            ")"
+        )
+
+    def __mul__(self, other: float):
+        return CorrectionStat(
+            mean=self.mean * other,
+            std=self.std * other,
+            max=self.max * other,
+            min=self.min * other,
+        )
