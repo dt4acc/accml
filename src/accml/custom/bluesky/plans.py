@@ -168,4 +168,5 @@ def single_actuator_commands_plan(
 __all__ = [
     "simple_command_sequence_execution_plan",
     "transactional_commands_sequence_execution_plan",
+    "transactional_actuator_commands_plan",
 ]

@@ -1,13 +1,13 @@
 import asyncio
 import logging
 
-from .model import TuneResponseCollection
-from .oracle import TuneOracle
-from .policy import TunePolicy
-from .tune_correction_controller import TuneCorrectionController
-from ...core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
-from ...core.model.command import ReadCommand
-from ...custom.simulators.interface.calculation_output import Tune
+from .tune_correction_controller import BlueskyTuneCorrectionController
+from ..model import TuneResponseCollection
+from ..oracle import TuneOracle
+from ..policy import TunePolicy
+from ....core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from ....core.model.command import ReadCommand
+from ....custom.simulators.interface.calculation_output import Tune
 
 logger = logging.getLogger("accml")
 
@@ -16,21 +16,12 @@ def tune_correction(
     dm: TuneResponseCollection,
     tune_target: Tune,
     mexec: MeasurementExecutionEngine,
+    **kwargs
 ):
-    """
-
-    Todo:
-
-      * reference / target tune from caller
-      * consider to provide fine tuning from the outside
-      * only connect to the actuators actually required
-
-    """
-
     oracle = TuneOracle(col=dm, target=tune_target)
     policy = TunePolicy(scale=1.0)
     logger.info("correction start")
-    controller = TuneCorrectionController(
+    controller = BlueskyTuneCorrectionController(
         oracle=oracle,
         policy=policy,
         mexec=mexec,

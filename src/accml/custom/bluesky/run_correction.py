@@ -9,13 +9,16 @@ import logging
 import itertools
 from typing import Sequence, Dict
 
-import numpy as np
 from ophyd_async.core import Device, SignalRW
 import bluesky.preprocessors as bpp
 import bluesky.plan_stubs as bps
 
-from accml.app.tune.model import Tune, CorrectionStat
-from accml.core.model.command import TransactionCommand
+from accml.app.tune.model import Tune
+from accml.app.tune.tune_correction_controller import (
+    compute_stat_for_transactional_command,
+    correction_action_to_commands,
+)
+from accml.core.model.command import Command
 from accml.custom.bluesky.plans import transactional_actuator_commands_plan
 from accml.core.interfaces.solver.oracle import Oracle
 from accml.core.interfaces.solver.policy import PolicyBase
@@ -29,6 +32,7 @@ def corrections_plan(
     policy: PolicyBase,
     detectors: Sequence[Device],
     actuators: Dict[str, Device],
+    set_commands: Dict[str, Command],
     info_signals: Dict[str, SignalRW],
     md: Dict,
     **kwargs,
@@ -49,6 +53,7 @@ def corrections_plan(
             oracle=oracle,
             policy=policy,
             detectors=detectors,
+            set_commands=set_commands,
             actuators=actuators,
             info_signals=info_signals,
             **kwargs,
@@ -65,6 +70,7 @@ def run_corrections_commands_plan(
     policy: PolicyBase,
     detectors: Sequence[Device],
     actuators: Dict[str, Device],
+    set_commands: Dict[str, Command],
     n_readings: int,
     info_signals: Dict[str, SignalRW],
     wait_before_read: float = 0,
@@ -78,13 +84,15 @@ def run_corrections_commands_plan(
         Implement stop, ignore, rollback etc
         Device replace by ophyd_async.Settable
         info_signals as dataclass?
+
+        combine set_commands and actuators in a structure?
     """
 
     assert (
         wait_before_read >= 0e0
     ), f"wait before read must be >=0 but was {wait_before_read}"
     assert (
-            n_readings >= 1
+        n_readings >= 1
     ), f"detectors must be read at least once per turn, but was {n_readings}"
     all_detectors = [sig for _, sig in info_signals.items()] + list(detectors)
 
@@ -101,27 +109,17 @@ def run_corrections_commands_plan(
             current_state = yield from bps.trigger_and_read(all_detectors)
 
         # Todo: the device should return already a data model ...
-        t_tune = current_state["tune-transversal"]["value"]
+        t_tune = Tune(**current_state["tune-transversal"]["value"])
         diff, correction_action = oracle.ask(t_tune)
-        stat_oracle = compute_stat_for_oracle(correction_action)
-        yield from bps.mv(
-            info_signals["tune-x-delta"],
-            diff.x,
-            info_signals["tune-y-delta"],
-            diff.y,
-            info_signals["oracle-mean"],
-            stat_oracle.mean,
-            info_signals["oracle-std"],
-            stat_oracle.std,
-            info_signals["oracle-min"],
-            stat_oracle.min,
-            info_signals["oracle-max"],
-            stat_oracle.max,
+        pca = policy.step(
+            current_state=current_state, diff=diff, step=correction_action
         )
-
-        t_cmd = policy.step(current_state, diff, correction_action)
+        t_cmd = correction_action_to_commands(pca, set_commands)
         stat_cmd = compute_stat_for_transactional_command(t_cmd)
-        logger.info(f"tune diff %s,  oracle: %s, cmd %s")
+        logger.info(
+            "tune diff %s, cmd %s",
+            diff,
+        )
         yield from bps.mv(
             info_signals["tune-x-delta"],
             diff.x,
@@ -143,20 +141,6 @@ def run_corrections_commands_plan(
             actuators=actuators,
             num_readings=0,
         )
-
-
-def compute_stat_for_oracle(inp: Dict[str, float]) -> CorrectionStat:
-    data = np.array([v for _, v in inp.items()])
-    return CorrectionStat(
-        mean=data.mean(), std=data.std(), min=data.min(), max=data.max()
-    )
-
-
-def compute_stat_for_transactional_command(inp: TransactionCommand) -> CorrectionStat:
-    data = np.array([item.value for item in inp.transaction])
-    return CorrectionStat(
-        mean=data.mean(), std=data.std(), min=data.min(), max=data.max()
-    )
 
 
 __all__ = ["corrections_plan"]

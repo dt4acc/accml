@@ -1,8 +1,5 @@
 from typing import Dict
 
-
-from accml.core.model.command import TransactionCommand, Command, BehaviourOnError
-
 from ...core.interfaces.solver.policy import PolicyBase
 from .model import Tune
 
@@ -13,7 +10,7 @@ class TunePolicy(PolicyBase):
 
     def step(
         self, current_state: Tune, diff: Tune, step: Dict[str, float]
-    ) -> TransactionCommand:
+    ) -> Dict[str, float]:
         """
         Here one could adjustments to the forecast
 
@@ -21,17 +18,7 @@ class TunePolicy(PolicyBase):
           as there are not too many non linarities in the model
         * for low alpha mode, one could step more cautiously then in normal mode
         """
-        return TransactionCommand(
-            transaction=[
-                Command(
-                    id=pc_name,
-                    property="delta_set_current",
-                    value=value * self.scale,
-                    behaviour_on_error=BehaviourOnError.stop,
-                )
-                for pc_name, value in step.items()
-            ]
-        )
+        return {pc_name: value * self.scale for pc_name, value in step.items()}
 
 
 __all__ = ["TunePolicy"]
