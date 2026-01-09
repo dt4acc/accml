@@ -43,6 +43,6 @@ def tune_correction(
     rcmds += [ReadCommand(id=elm.pc_name, property="delta_set_current") for elm in dm.col]
 
     async def run_continously():
-        await controller.continous(read_commands=rcmds)
+        await controller.continuous(read_commands=rcmds)
 
     asyncio.get_event_loop().run_until_complete(run_continously())

@@ -34,37 +34,37 @@ class TuneCorrectionController:
         self.delay = delay
         self.logger = logger
 
-    async def one_step(self):
-        pass
-
-    async def continous(self, *, n_steps=None, read_commands: Sequence[ReadCommand]):
+    async def continuous(self, *, read_commands: Sequence[ReadCommand], n_steps=None, ):
         counter = itertools.count()
         for cnt in counter:
-            current_state = None
             if n_steps is not None and cnt >= n_steps:
                 self.logger.info("Terminating control loop at step %s", cnt)
                 return
-            if self.wait_before_read > 0e0:
-                await asyncio.sleep(self.wait_before_read)
-            for i in range(self.num_readings):
-                if i > 0 and self.delay > 0:
-                    await asyncio.sleep(self.delay)
-                await self.mexec.trigger(read_commands)
-                current_state = await self.mexec.read(read_commands)
+            await self.one_step(read_commands)
 
-            assert current_state is not None, "No current_state were read, can't prcess further"
-            # Todo: need to be more flexible here
-            t_tune = current_state.get("tune-transversal").payload
-            diff, correction_action = self.oracle.ask(t_tune)
-            logger.warning("Read tune (from mexec) %s, diff %s", t_tune, diff)
-            stat_oracle = compute_stat_for_oracle(correction_action)
-            logger.warning("Oracle correction action %s +/- %s range: %s - %s",
-                           stat_oracle.mean, stat_oracle.std, stat_oracle.min, stat_oracle.max)
-            t_cmd = self.policy.step(current_state, diff, correction_action)
-            stat_cmd = compute_stat_for_transactional_command(t_cmd)
-            logger.warning("Applying action %s +/- %s range %s-%s",
-                           stat_cmd.mean, stat_cmd.std, stat_cmd.min, stat_cmd.max)
-            await self.mexec.set(t_cmd.transaction)
+    async def one_step(self, read_commands: Sequence[ReadCommand]):
+        current_state = None
+
+        if self.wait_before_read > 0e0:
+            await asyncio.sleep(self.wait_before_read)
+        for i in range(self.num_readings):
+            if i > 0 and self.delay > 0:
+                await asyncio.sleep(self.delay)
+            current_state = await self.mexec.trigger_read(read_commands)
+
+        assert current_state is not None, "No current_state were read, can't prcess further"
+        # Todo: need to be more flexible here
+        t_tune = current_state.get("tune-transversal").payload
+        diff, correction_action = self.oracle.ask(t_tune)
+        logger.warning("Read tune (from mexec) %s, diff %s", t_tune, diff)
+        stat_oracle = compute_stat_for_oracle(correction_action)
+        logger.warning("Oracle correction action %s +/- %s range: %s - %s",
+                       stat_oracle.mean, stat_oracle.std, stat_oracle.min, stat_oracle.max)
+        t_cmd = self.policy.step(current_state, diff, correction_action)
+        stat_cmd = compute_stat_for_transactional_command(t_cmd)
+        logger.warning("Applying action %s +/- %s range %s-%s",
+                       stat_cmd.mean, stat_cmd.std, stat_cmd.min, stat_cmd.max)
+        await self.mexec.set(t_cmd.transaction)
 
 
 def compute_stat_for_oracle(inp: Dict[str, float]) -> CorrectionStat:
