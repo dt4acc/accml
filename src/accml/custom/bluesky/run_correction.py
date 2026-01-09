@@ -39,7 +39,7 @@ def corrections_plan(
 ):
     """Translate commands to bluesky run-engine messages"""
     _md = md or dict()
-    # CommandSequence nor Commands is json seriazable ....
+    # CommandSequence nor Commands is json serializable ....
     _md.update(dict(oracle=repr(oracle), policy=repr(policy)))
 
     @bpp.stage_decorator(
