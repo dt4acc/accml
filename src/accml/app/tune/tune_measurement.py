@@ -6,7 +6,7 @@ from accml.core.interfaces.measurement_execution_engine import MeasurementExecut
 from accml.core.model.command import Command, BehaviourOnError, CommandSequence, TransactionCommand, ReadCommand
 
 
-def tune(
+def measure_tune_response(
     *,
     detectors: Sequence[ReadCommand],
     quadrupole_pc_names: Sequence[str],
