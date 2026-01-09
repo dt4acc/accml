@@ -3,6 +3,7 @@ import logging
 from typing import Sequence
 
 from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from accml.core.interfaces.solver.controller import ControllerInterface
 from accml.core.interfaces.solver.oracle import Oracle
 from accml.core.interfaces.solver.policy import PolicyBase
 from accml.core.model.command import ReadCommand, Command
@@ -11,7 +12,7 @@ from accml.custom.bluesky.run_correction import corrections_plan
 logger = logging.getLogger("accml")
 
 
-class BlueskyTuneCorrectionController:
+class BlueskyTuneCorrectionController(ControllerInterface):
     def __init__(
             self,
             *,
