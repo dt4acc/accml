@@ -1,4 +1,5 @@
-from accml.app.tune.preprocess_simple_storage_data import data_to_model
+from accml.app.tune.bluesky.preprocess_databroker_data import select_repetitions
+from accml.app.tune.model import Tune
 from accml.app.tune.tune_response_analysis import tune_response_analysis
 import json
 import jsons
@@ -10,20 +11,47 @@ jsons_fork = jsons.fork()
 register_deserializers_to_json_fork(jsons_fork)
 
 
-def main():
-    with open("data_storage.json") as fp:
+def data_from_simple_storage(filename: str):
+    from accml.app.tune.preprocess_simple_storage_data import data_to_model
+    with open(filename) as fp:
         data = json.load(fp)
 
-    data = jsons.load(data, Result, fork_inst=jsons_fork)
-    prep_data  = data_to_model(data)
+    return data_to_model(jsons.load(data, Result, fork_inst=jsons_fork))
+
+def data_from_data_broker(catalog_name:str, uid: str):
+    """rework data
+
+    """
+    from databroker import catalog
+    from accml.app.tune.bluesky.preprocess_databroker_data import data_to_model
+
+    db = catalog["heavy_local"]
+    run  = db[uid]
+    data = run.primary.read()
+
+    # just strip off all the extra information an xarray would provide
+    d = {
+        "device_name": data["device_name"].data,
+        "channel_value": data["channel_value"].data,
+        "tunes" : [jsons.load(obj, Tune) for obj in data["tune-transversal"].data]
+    }
+    data_ = data_to_model(d)
+    data = select_repetitions(data_, acceptable_repetition=(1,2,3,4,5))
+    return data
+
+def main():
+    simulation = False
+    if simulation:
+        prep_data = data_from_simple_storage("tune_response_data_from_simulator.json")
+        save_file = "tune_response_from_simulation.yml"
+    else:
+        prep_data = data_from_data_broker("heavy_local", uid="a8bb94fb")
+        save_file = "tune_response_from_twin.yml"
 
     result = tune_response_analysis(prep_data)
     tmp = jsons.dump(result, Result)
-    # Todo: currently a hack ... need to foresee appropriate methods at the data class
-    del tmp["_dict"]
-    with open("tune_result.yml", "wt") as fp:
+    with open(save_file, "wt") as fp:
         yaml.dump(tmp, fp)
-
 
 
 if __name__ == "__main__":

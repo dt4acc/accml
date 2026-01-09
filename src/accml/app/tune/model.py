@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Dict, Sequence
+from typing import Dict, Sequence, Optional
 
 
 @dataclass
@@ -18,7 +18,10 @@ class MeasuredTuneResponseItem:
     x: float
     #: vertical plane
     y: float
-
+    #: which repetition of this value it was measured
+    #: useful when data are collected from "free running"
+    #: devices. The first one needs to be ignored then
+    repetition: Optional[int] = -1
 
 @dataclass
 class MeasuredTuneResponsePerPowerConverter:
