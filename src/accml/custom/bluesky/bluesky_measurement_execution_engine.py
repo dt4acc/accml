@@ -107,7 +107,7 @@ def commands_execution_plan(
 class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
     """Demonstrator of a measurement engine as a bluesky runengine"""
 
-    def __init__(self, devices: DevicesFacade,  run_engine: RunEngine):
+    def __init__(self, devices: DevicesFacade,  run_engine: RunEngine, info_signals: Sequence[Signal]):
         """
 
         Todo:
@@ -115,13 +115,13 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
         """
         self.run_engine = run_engine
         self.devices = devices
+        self.info_signals = info_signals
 
     def execute(
             self,
             commands_collection: Sequence[TransactionCommand],
             detectors: Sequence[ReadCommand],
             # actuators: Dict[str, Device],
-            info_signals: Dict[str, Signal],
             md: Dict[str, object],
             **kwargs,
     ) -> str:
@@ -138,7 +138,7 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
             commands=commands_collection,
             detectors=dets,
             actuators=actuators,
-            info_signals=info_signals,
+            info_signals=self.info_signals,
             md=md,
             **kwargs,
         )
@@ -148,12 +148,10 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
     async def set(self, cmds: Sequence[Command]):
         raise NotImplementedError("needs to be implemented")
 
-    async def read(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
+    async def trigger_read(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
+        # signals = [getattr(self.devices.get(cmd.id), cmd.property) for cmd in cmds]
+        # devices = [self.devices.get(cmd.id) for cmd in cmds]
         raise NotImplementedError("needs to be implemented")
-
-    async def trigger(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
-        raise NotImplementedError("needs to be implemented")
-
 
 
 def extract_device_identifiers(commands_collection: Sequence[TransactionCommand]) -> Sequence[str]:

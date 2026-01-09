@@ -31,8 +31,8 @@ def main():
 
     # TODO: should be handled internally, but overridable
     lt = LiveTable([sig.name for _, sig in info_sigs.items()] +
-                   ["tune-x-sig", "tune-y-sig"] +
-                   ["tune-x", "tune-y"],
+                   ["tune-transversal-x-sig", "tune-transversal-y-sig"] +
+                      ["tune-x", "tune-y"],
                    # + list(actuators.values())
                    default_prec=10, )
     RE = RunEngine()
@@ -59,8 +59,11 @@ def main():
        detectors=[ReadCommand(id="tune", property="transversal")],
        quadrupole_pc_names=pc_names,
        measurement_values=[0, 1e0, 0, -1e0, 0],
-       mexec=BlueskyMeasurementExecutionEngine(run_engine=RE, devices=setup()),
-       info_signals=info_sigs,
+       mexec=BlueskyMeasurementExecutionEngine(
+           run_engine=RE,
+           devices=setup(),
+           info_signals=info_sigs,
+       ),
        n_readings=3
     )
 
