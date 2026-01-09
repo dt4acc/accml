@@ -6,11 +6,8 @@ U = TypeVar("U")
 
 
 class PolicyBase(metaclass=ABCMeta):
-    """
-    Todo:
-        should it use different method names than the
-        
-    """
+    """Present a step based on current step, difference and suggest correction step"""
+
     @abstractmethod
     def step(self, current_state: Generic[T], diff: Generic[T], step: Generic[U]) -> U:
         raise NotImplementedError("use derived method instead")
