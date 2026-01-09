@@ -26,8 +26,8 @@ def tune_correction(
         policy=policy,
         mexec=mexec,
         num_readings=2,
-        wait_before_read=0.1,
-        delay=0.1,
+        wait_before_read=0.5,
+        delay=0.5,
     )
 
     rcmds = [ReadCommand(id="tune", property="transversal")]
