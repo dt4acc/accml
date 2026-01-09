@@ -19,19 +19,13 @@ class MeasurementExecutionEngine(metaclass=ABCMeta):
         raise NotImplementedError("use derived class instead")
 
     @abstractmethod
-    async def trigger(self, cmds: Sequence[ReadCommand]):
+    async def trigger_read(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
         """Following ophyd-async / ophyd design
 
-        Todo:
-            Is this a good idea?
+            Todo:
+                Is this a good idea?
         """
         raise NotImplementedError("use derived class instead")
-
-    @abstractmethod
-    async def read(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
-        """read these commands together"""
-        raise NotImplementedError("use derived class instead")
-
 
     @abstractmethod
     async def set(self, cmds: Sequence[Command]):

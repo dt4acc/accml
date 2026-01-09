@@ -113,10 +113,7 @@ class SimulatorExecutionEngine(MeasurementExecutionEngine):
         uuid = self.storage.add(converted)
         return uuid
 
-    async def trigger(self, cmds: Sequence[ReadCommand]):
-        return await trigger(self.backend, cmds)
-
-    async def read(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
+    async def trigger_read(self, cmds: Sequence[ReadCommand]) -> ReadTogether:
         """
         Todo:
             review handling context or view:
