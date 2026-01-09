@@ -7,14 +7,15 @@ import numpy as np
 
 from accml.app.tune.model import CorrectionStat
 from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from accml.core.interfaces.solver.controller import ControllerInterface
 from accml.core.interfaces.solver.oracle import Oracle
 from accml.core.interfaces.solver.policy import PolicyBase
-from accml.core.model.command import TransactionCommand, ReadCommand
+from accml.core.model.command import TransactionCommand, ReadCommand, Command
 
 logger = logging.getLogger("accml")
 
 
-class TuneCorrectionController:
+class TuneCorrectionController(ControllerInterface):
     def __init__(
             self,
             *,
@@ -34,7 +35,13 @@ class TuneCorrectionController:
         self.delay = delay
         self.logger = logger
 
-    async def continuous(self, *, read_commands: Sequence[ReadCommand], n_steps=None, ):
+    async def continuous(
+        self,
+        *,
+        read_commands: Sequence[ReadCommand],
+        set_commands: Sequence[Command],
+        n_steps=None
+    ):
         counter = itertools.count()
         for cnt in counter:
             if n_steps is not None and cnt >= n_steps:
@@ -42,7 +49,11 @@ class TuneCorrectionController:
                 return
             await self.one_step(read_commands)
 
-    async def one_step(self, read_commands: Sequence[ReadCommand]):
+    async def one_step(
+        self,
+        read_commands: Sequence[ReadCommand],
+        set_commands: Sequence[Command],
+    ):
         current_state = None
 
         if self.wait_before_read > 0e0:
