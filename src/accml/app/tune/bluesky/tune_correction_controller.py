@@ -72,6 +72,9 @@ class BlueskyTuneCorrectionController(TuneControllerInterface):
                 # todo: fix me layer violation
                 info_signals=self.mexec.info_signals,
                 md={},
+                n_steps=n_steps,
                 n_readings=self.num_readings,
+                delay=self.delay,
+                wait_before_read=self.wait_before_read,
             )
         )

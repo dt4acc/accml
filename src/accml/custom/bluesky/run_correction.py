@@ -7,7 +7,7 @@ Todo:
 """
 import logging
 import itertools
-from typing import Sequence, Dict
+from typing import Sequence, Dict, Union
 
 from ophyd_async.core import Device, SignalRW
 import bluesky.preprocessors as bpp
@@ -75,6 +75,7 @@ def run_corrections_commands_plan(
     info_signals: Dict[str, SignalRW],
     wait_before_read: float = 0,
     delay: float = 0,
+    n_steps: Union[int, None] = None
 ):
     """
 
@@ -99,6 +100,10 @@ def run_corrections_commands_plan(
     counter = itertools.count()
 
     for cnt in counter:
+        current_state = None
+        if n_steps is not None and cnt >= n_steps:
+            logger.info("Terminating control loop at step %s", cnt)
+            return
         # presumably set some value already ...
         yield from bps.wait()
         if wait_before_read > 0e0:
@@ -108,7 +113,10 @@ def run_corrections_commands_plan(
                 yield from bps.sleep(delay)
             current_state = yield from bps.trigger_and_read(all_detectors)
 
-        # Todo: the device should return already a data model ...
+        assert current_state is not None, "no current state read, can not process further"
+        # Todo: the device can not return the model but only a dict
+        #       this is required for databroker serialisation
+        #       oracle could happily work with a dictionary too
         t_tune = Tune(**current_state["tune-transversal"]["value"])
         diff, correction_action = oracle.ask(t_tune)
         pca = policy.step(
