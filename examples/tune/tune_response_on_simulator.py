@@ -3,17 +3,14 @@ import json
 
 import jsons
 
-from accml.app.tune.tune_measurement import tune
+from accml.app.tune.tune_measurement import measure_tune_response
 from accml.core.bl.command_rewritter import CommandRewriter
-from accml.core.bl.delta_backend import DeltaBackendRWProxy, StateCache
-from accml.core.model.command import Command, ReadCommand
+from accml.core.model.command import ReadCommand
 from accml.core.model.identifiers import LatticeElementPropertyID
 from accml.core.model.result import register_serializers_to_json_fork
 from accml.core.simulator.simulator_execution_engine import SimulatorExecutionEngine, SimpleDataStorage
-from accml.custom.accml_lib.bessyii.bessyii_pyat_lattice import bessyii_pyat_lattice
 from accml.custom.accml_lib.bessyii.liasion_translator_setup import load_managers
-from accml.custom.simulators.pyat.accelerator_simulator import PyATAcceleratorSimulator
-from accml.custom.simulators.pyat.simulator_backend import SimulatorBackend
+from accml.custom.accml_lib.bessyii.pyat_simulator_backend import simulator_backend
 
 jsons_fork = jsons.fork()
 register_serializers_to_json_fork(jsons_fork)
@@ -31,23 +28,14 @@ def main():
     # Now I add a hack: I only use quadrupoles whoes power converter is unique
     # I should rather work in device space right away
     pc_names=list(set(pc_names))
-
-    backend = DeltaBackendRWProxy(
-        backend=SimulatorBackend(
-            name="BESSY_on_PyAT",
-            acc=PyATAcceleratorSimulator(
-                at_lattice=bessyii_pyat_lattice(filename="bessy2_storage_ring_reflat.json")
-            )
-        ),
-        cache=StateCache(name="BESSY_on_PyAT_delta_state_cache")
-    )
+    backend = simulator_backend()
     storage = SimpleDataStorage()
     mexec = SimulatorExecutionEngine(
         backend=backend,
         cmd_rewritter=CommandRewriter(liaison_manager=lm, translation_service=ts),
         storage=storage
     )
-    uuid = tune(
+    uuid = measure_tune_response(
        detectors=[
            ReadCommand("tune", "transversal"),
        ],
@@ -59,7 +47,7 @@ def main():
     data = storage.get(uuid)
     data = jsons.dump(data, fork_inst=jsons_fork)
 
-    with open("data_storage.json", "wt") as fp:
+    with open("tune_response_data_from_simulator.json", "wt") as fp:
         json.dump(data, fp, indent=4)
 
 

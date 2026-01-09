@@ -9,7 +9,7 @@ from bluesky.callbacks import LiveTable
 from databroker import catalog
 from ophyd_async.core import soft_signal_rw
 
-from accml.app.tune.tune_measurement import tune
+from accml.app.tune.tune_measurement import measure_tune_response
 from accml.core.model.identifiers import LatticeElementPropertyID
 from accml.custom.bluesky.bluesky_measurement_execution_engine import BlueskyMeasurementExecutionEngine
 
@@ -40,9 +40,6 @@ def main():
     # TODO: if you need to save the results, you need mongo and then uncomment the below two lines.
     db = catalog["heavy_local"]
     RE.subscribe(db.v1.insert)
-    # TODO: need to address live plots
-    #   here a databroker should be added so that data can be accessed
-    #   later on
 
     yp, lm, _ = load_managers()
     # Todo: remove this line after only Q3/Q4 are flagged as tune correction magnets
@@ -55,7 +52,7 @@ def main():
     # Now I add a hack: I only use quadrupoles whoes power converter is unique
     # I should rather work in device space right away
     pc_names=list(set(pc_names))
-    tune(
+    measure_tune_response(
        detectors=[ReadCommand(id="tune", property="transversal")],
        quadrupole_pc_names=pc_names,
        measurement_values=[0, 1e0, 0, -1e0, 0],
