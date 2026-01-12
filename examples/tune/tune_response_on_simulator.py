@@ -8,7 +8,8 @@ from accml.core.bl.command_rewritter import CommandRewriter
 from accml.core.model.command import ReadCommand
 from accml.core.model.identifiers import LatticeElementPropertyID
 from accml.core.model.result import register_serializers_to_json_fork
-from accml.core.simulator.simulator_execution_engine import SimulatorExecutionEngine, SimpleDataStorage
+from accml.core.utils.basic_measurement_execution_engine import BasicMeasurementExecutionEngine
+from accml.core.utils.simple_storage import SimpleDataStorage
 from accml.custom.accml_lib.bessyii.liasion_translator_setup import load_managers
 from accml.custom.accml_lib.bessyii.pyat_simulator_backend import simulator_backend
 
@@ -30,10 +31,11 @@ def main():
     pc_names=list(set(pc_names))
     backend = simulator_backend()
     storage = SimpleDataStorage()
-    mexec = SimulatorExecutionEngine(
+    mexec = BasicMeasurementExecutionEngine(
         backend=backend,
-        cmd_rewritter=CommandRewriter(liaison_manager=lm, translation_service=ts),
-        storage=storage
+        cmd_rewriter=CommandRewriter(liaison_manager=lm, translation_service=ts),
+        storage=storage,
+        expected_view_for_output="device"
     )
     uuid = measure_tune_response(
        detectors=[
