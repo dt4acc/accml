@@ -60,5 +60,5 @@ p4p = {version = "*", optional = true}
 pytango = {version = "*", optional = true}
 
 [tool.poetry.extras]
-bluesky-epics = ["ophyd-async", "aioca", "p4p", "epics", "bluesky"]
+bluesky-epics = ["ophyd-async", "aioca", "p4p", "epics", "bluesky", "databroker"]
 bluesky-tango = ["ophyd-async", "pytango", "bluesky"]
