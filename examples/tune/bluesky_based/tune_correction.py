@@ -42,7 +42,7 @@ def main():
         run_engine=RE, devices=setup(), info_signals=info_sigs
     )
 
-    tune_correction(dm, mexec=mexec, tune_target=Tune(x=1055, y=902))
+    tune_correction(dm, mexec=mexec, tune_target=Tune(x=1060, y=907))
 
 
 if __name__ == "__main__":

@@ -19,13 +19,13 @@ def tune_correction(
     **kwargs
 ):
     oracle = TuneOracle(col=dm, target=tune_target)
-    policy = TunePolicy(scale=1.0)
+    policy = TunePolicy(scale=.5)
     logger.info("correction start")
     controller = BlueskyTuneCorrectionController(
         oracle=oracle,
         policy=policy,
         mexec=mexec,
-        num_readings=2,
+        num_readings=3,
         wait_before_read=0.5,
         delay=0.5,
     )
@@ -36,6 +36,6 @@ def tune_correction(
     ]
 
     async def run_continuously():
-        await controller.continuous(read_commands=rcmds, set_commands=set_cmds)
+        await controller.continuous(read_commands=rcmds, set_commands=set_cmds, n_steps=10)
 
     asyncio.get_event_loop().run_until_complete(run_continuously())
