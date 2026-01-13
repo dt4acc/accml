@@ -23,7 +23,12 @@ logger = logging.getLogger("accml")
 
 
 class TuneCorrectionController(TuneControllerInterface):
-    """A simple P type controller"""
+    """A simple I type controller
+
+    It only implements the integral part of the controller:
+       i.e. react to the change
+
+    """
 
     def __init__(
         self,
