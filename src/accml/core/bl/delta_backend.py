@@ -97,7 +97,7 @@ class DeltaBackendRWProxy(DeltaBackendRProxy, BackendRW):
         rcmd = ReadCommand(id=dev_id, property=prop_id)
         ref = self.cache.get(rcmd, None)
         if not ref:
-            r = await self.read(dev_id=dev_id, prop_id=orig_prop_id)
+            r = await self.backend.read(dev_id=dev_id, prop_id=orig_prop_id)
             # Todo: refactor the classes here so this does not need
             #        to be repeated here
             self.cache.set(rcmd, r)
@@ -112,4 +112,4 @@ class DeltaBackendRWProxy(DeltaBackendRProxy, BackendRW):
         """
         ref = self.cache.get(rcmd, None)
         assert ref is not None
-        return value - ref
+        return value + ref
