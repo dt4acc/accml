@@ -9,13 +9,16 @@ class BehaviourOnError(IntEnum):
     roll_back = 3
 
 
+@dataclass(frozen=True)
+class ReadCommand:
+    """Use for retrieving data"""
+
+    id: str
+    property: str
+
+
 @dataclass
 class Command:
-    """
-    Todo:
-        how to handle the devices that should be read back?
-    """
-
     #: can be the identifier of a lattice element or a device
     id: str
     property: str
@@ -24,7 +27,13 @@ class Command:
 
 
 @dataclass
-class TransactionalCommand:
+class TransactionCommand:
+    """Commands that should be executed (more or less) at the same time
+
+    In particular: state of the machine is only relevant *after* all
+    commands have been executed
+    """
+
     transaction: Sequence[Command]
 
 
@@ -32,7 +41,7 @@ class TransactionalCommand:
 class CommandSequence:
     """These commands are expected to be executed on by one"""
 
-    commands: Sequence[TransactionalCommand]
+    commands: Sequence[TransactionCommand]
 
 
-__all__ = ["BehaviourOnError", "Command", "CommandSequence"]
+__all__ = ["BehaviourOnError", "Command", "CommandSequence", "ReadCommand", "TransactionCommand"]

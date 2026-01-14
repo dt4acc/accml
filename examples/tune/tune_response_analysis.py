@@ -1,30 +1,61 @@
+from accml.app.tune.bluesky.preprocess_databroker_data import select_repetitions
+from accml.app.tune.model import Tune
 from accml.app.tune.tune_response_analysis import tune_response_analysis
-from databroker import catalog
+import json
 import jsons
 import yaml
 
+from accml.core.model.result import Result, register_deserializers_to_json_fork
 
-def main():
+jsons_fork = jsons.fork()
+register_deserializers_to_json_fork(jsons_fork)
+
+
+def data_from_simple_storage(filename: str):
+    """convert data stored in simple storage to data model
+    """
+    from accml.app.tune.preprocess_simple_storage_data import data_to_model
+
+    with open(filename) as fp:
+        data = json.load(fp)
+
+    return data_to_model(jsons.load(data, Result, fork_inst=jsons_fork))
+
+
+def data_from_data_broker(catalog_name: str, uid: str):
+    """convert data from intake catalog to data model
+    """
+    from databroker import catalog
+    from accml.app.tune.bluesky.preprocess_databroker_data import data_to_model
+
     db = catalog["heavy_local"]
-    uid = '1955adfd-2f94-4459-8888-4f63cbc839de'
-    run  = db[uid]
+    run = db[uid]
     data = run.primary.read()
 
     # just strip off all the extra information an xarray would provide
     d = {
         "device_name": data["device_name"].data,
         "channel_value": data["channel_value"].data,
-        "tune-x-sig": data["tune-x-sig"].data,
-        "tune-y-sig": data["tune-y-sig"].data
+        "tunes": [jsons.load(obj, Tune) for obj in data["tune-transversal"].data],
     }
+    data_ = data_to_model(d)
+    data = select_repetitions(data_, acceptable_repetition=(1, 2, 3, 4, 5))
+    return data
 
-    result = tune_response_analysis(d)
-    tmp = jsons.dump(result)
-    # Todo: currently a hack ... need to foresee appropriate methods at the data class
-    del tmp["_dict"]
-    with open("tune_result.yml", "wt") as fp:
+
+def main():
+    simulation = True
+    if simulation:
+        prep_data = data_from_simple_storage("tune_response_data_from_simulator.json")
+        save_file = "tune_response_from_simulation.yml"
+    else:
+        prep_data = data_from_data_broker("heavy_local", uid="a8bb94fb")
+        save_file = "tune_response_from_twin.yml"
+
+    result = tune_response_analysis(prep_data)
+    tmp = jsons.dump(result, Result)
+    with open(save_file, "wt") as fp:
         yaml.dump(tmp, fp)
-
 
 
 if __name__ == "__main__":

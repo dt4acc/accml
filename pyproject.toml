@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "accml"
-version = "0.1.0a1"
+version = "0.2.0b1"
 description = "python accelerator middle layer"
 authors = [
      {name = "Waheedullah Sulaiman Khail", email = "<waheedullah.sulaiman_khail@helmholtz-berlin.de"},
@@ -24,9 +24,41 @@ readme = "README.md"
 python = ">=3.7"
 pydantic = "*"
 jsons = "*"
-# Packages below here are to be revisited if we need to depend on them (they are mostly custom packages
-databroker = "*"
 
+numpy = "*"
+
+# actually only for least square fitting
+scipy = "*"
+
+# any state machine implementation would do
+# currently it is only used to track if new calculations
+# are required
+transitions = "*"
+
+
+# for simulation engine backend ... currently only using pyat
+accelerator_toolbox = "*"
+
+# lat2db ... for readling lattice
+lat2db = ">=0.1"
+
+# move support routines for fit error calculation from this package here
+# then this package can be taken out
+bact_math_utils = ">=0.1.1"
+
+# Packages below should be optional ones, only to be installed
+# depending on what is used.
+bluesky = {version = "*", optional = true}
+# typically using mongodb as a database / storage
+databroker = {version = "<2.0", optional = true}
 # ophyd async does not specify which transport is to be used
-ophyd-async = "*"
-aioca = "*"
+ophyd-async = {version = "*", optional = true}
+# epics transport protocols
+aioca = {version = "*", optional = true}
+p4p = {version = "*", optional = true}
+# trango interface
+pytango = {version = "*", optional = true}
+
+[tool.poetry.extras]
+bluesky-epics = ["ophyd-async", "aioca", "p4p", "epics", "bluesky"]
+bluesky-tango = ["ophyd-async", "pytango", "bluesky"]
