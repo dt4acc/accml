@@ -1,11 +1,11 @@
 from accml.app.tune.bluesky.preprocess_databroker_data import select_repetitions
-from accml.app.tune.model import Tune
 from accml.app.tune.tune_response_analysis import tune_response_analysis
 import json
 import jsons
 import yaml
 
-from accml.core.model.result import Result, register_deserializers_to_json_fork
+from accml_lib.core.model.result import Result, register_deserializers_to_json_fork
+from accml_lib.core.model.tune import Tune
 
 jsons_fork = jsons.fork()
 register_deserializers_to_json_fork(jsons_fork)

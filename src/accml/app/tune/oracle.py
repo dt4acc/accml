@@ -1,9 +1,11 @@
 from typing import Dict
 
 import numpy as np
-from accml.app.tune.model import TuneResponseCollection, Tune
-from accml.core.interfaces.solver.oracle import Oracle
 from scipy.linalg import pinv
+
+from .model import TuneResponseCollection
+from accml_lib.core.interfaces.solver.oracle import Oracle
+from accml_lib.core.model.tune import Tune
 
 
 class TuneOracle(Oracle):

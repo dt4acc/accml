@@ -3,14 +3,12 @@ import datetime
 import itertools
 from typing import Any, Mapping, Sequence
 
-from accml.core.interfaces.backend.backend import BackendRW
-from accml.core.interfaces.command_rewritter import CommandRewriterBase
-from accml.core.interfaces.measurement_execution_engine import (
-    MeasurementExecutionEngine,
-)
-from accml.core.interfaces.storage import StorageInterface
-from accml.core.model.command import ReadCommand, TransactionCommand, Command
-from accml.core.model.result import SingleReading, SingleFloat, ReadTogether, Result
+from accml_lib.core.interfaces.backend.backend import BackendRW
+from accml_lib.core.interfaces.command_rewritter import CommandRewriterBase
+from accml_lib.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from accml_lib.core.interfaces.storage import StorageInterface
+from accml_lib.core.model.command import TransactionCommand, ReadCommand, Command
+from accml_lib.core.model.result import SingleReading, SingleFloat, ReadTogether, Result
 
 
 class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):

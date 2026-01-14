@@ -1,9 +1,9 @@
 from abc import abstractmethod, ABCMeta
 
-from ...core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
-from ...core.interfaces.solver.controller import ControllerInterface
-from ...core.interfaces.solver.oracle import Oracle
-from ...core.interfaces.solver.policy import PolicyBase
+from accml_lib.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from accml_lib.core.interfaces.solver.controller import ControllerInterface
+from accml_lib.core.interfaces.solver.oracle import Oracle
+from accml_lib.core.interfaces.solver.policy import PolicyBase
 
 
 class TuneControllerInterface(ControllerInterface, metaclass=ABCMeta):
