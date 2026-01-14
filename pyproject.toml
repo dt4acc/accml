@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "accml"
-version = "0.2.0b1"
+version = "0.3.0a1"
 description = "python accelerator middle layer"
 authors = [
      {name = "Waheedullah Sulaiman Khail", email = "<waheedullah.sulaiman_khail@helmholtz-berlin.de"},
@@ -22,29 +22,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.7"
-pydantic = "*"
-jsons = "*"
-
-numpy = "*"
-
-# actually only for least square fitting
-scipy = "*"
-
-# any state machine implementation would do
-# currently it is only used to track if new calculations
-# are required
-transitions = "*"
-
-
-# for simulation engine backend ... currently only using pyat
-accelerator_toolbox = "*"
-
-# lat2db ... for readling lattice
-lat2db = ">=0.1"
-
-# move support routines for fit error calculation from this package here
-# then this package can be taken out
-bact_math_utils = ">=0.1.1"
+accml_lib = "*"
 
 # Packages below should be optional ones, only to be installed
 # depending on what is used.
@@ -62,3 +40,8 @@ pytango = {version = "*", optional = true}
 [tool.poetry.extras]
 bluesky-epics = ["ophyd-async", "aioca", "p4p", "epics", "bluesky"]
 bluesky-tango = ["ophyd-async", "pytango", "bluesky"]
+
+# ophyd-async depends currenlty on bluesky for protocols definiton
+# need to find out if that is required here
+ophyd-async-epics = ["ophyd-async", "aioca", "p4p", "epics"]
+ophyd-async-tango = ["ophyd-async", "pytango"]
