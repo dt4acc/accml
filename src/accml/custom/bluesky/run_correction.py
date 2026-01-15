@@ -13,19 +13,20 @@ from ophyd_async.core import Device, SignalRW
 import bluesky.preprocessors as bpp
 import bluesky.plan_stubs as bps
 
+# Todo: fix this dependency problem
 from accml.app.tune.tune_correction_controller import (
     compute_stat_for_transactional_command,
     correction_action_to_commands,
 )
-from accml.custom.bluesky.plans import transactional_actuator_commands_plan
+from .plans import transactional_actuator_commands_plan, retrieve_reference_state_plan, \
+    extract_current_state_probe_commands, rework_delta_commands
+from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.interfaces.solver.oracle import Oracle
 from accml_lib.core.interfaces.solver.policy import PolicyBase
-from accml_lib.core.model.command import Command
+from accml_lib.core.model.command import Command, TransactionCommand
 from accml_lib.core.model.tune import Tune
 
 logger = logging.getLogger("accml")
-
-
 
 
 def corrections_plan(
@@ -36,6 +37,7 @@ def corrections_plan(
     actuators: Dict[str, Device],
     set_commands: Dict[str, Command],
     info_signals: Dict[str, SignalRW],
+    cache: StateCache,
     md: Dict,
     **kwargs,
 ):
@@ -51,6 +53,14 @@ def corrections_plan(
     )
     @bpp.run_decorator(md=_md)
     def inner():
+        # first ... load cache with reference state
+        yield from retrieve_reference_state_plan(
+            commands=extract_current_state_probe_commands([cmd for _, cmd in set_commands.items()]),
+            detectors=detectors,
+            actuators=actuators,
+            cache=cache
+        )
+
         r = yield from run_corrections_commands_plan(
             oracle=oracle,
             policy=policy,
@@ -58,6 +68,7 @@ def corrections_plan(
             set_commands=set_commands,
             actuators=actuators,
             info_signals=info_signals,
+            cache=cache,
             **kwargs,
         )
         return r
@@ -73,6 +84,7 @@ def run_corrections_commands_plan(
     detectors: Sequence[Device],
     actuators: Dict[str, Device],
     set_commands: Dict[str, Command],
+    cache: StateCache,
     n_readings: int,
     info_signals: Dict[str, SignalRW],
     wait_before_read: float = 0,
@@ -145,10 +157,12 @@ def run_corrections_commands_plan(
             stat_cmd.max,
         )
 
+        t_cmds = rework_delta_commands(commands=t_cmd.transaction, cache=cache)
         yield from transactional_actuator_commands_plan(
-            transactional_commands=[t_cmd],
+            transactional_commands=[TransactionCommand(transaction=t_cmds)],
             detectors=detectors,
             actuators=actuators,
+            cache=cache,
             num_readings=0,
         )
 

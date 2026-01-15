@@ -1,5 +1,6 @@
 import logging
 
+from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.model.command import ReadCommand
 from accml_lib.core.model.identifiers import LatticeElementPropertyID
 from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
@@ -60,6 +61,7 @@ def main():
            run_engine=RE,
            devices=setup(),
            info_signals=info_sigs,
+           cache=StateCache(name="reference-data-cache-used-by-bluesky"),
        ),
        n_readings=3
     )
