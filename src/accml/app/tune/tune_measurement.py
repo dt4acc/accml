@@ -1,9 +1,8 @@
 import asyncio
 from typing import Sequence
 
-from accml.core.interfaces.devices_facade import DevicesFacade
-from accml.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
-from accml.core.model.command import Command, BehaviourOnError, CommandSequence, TransactionCommand, ReadCommand
+from accml_lib.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from accml_lib.core.model.command import ReadCommand, TransactionCommand, Command, CommandSequence, BehaviourOnError
 
 
 def measure_tune_response(

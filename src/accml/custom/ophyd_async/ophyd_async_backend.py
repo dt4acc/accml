@@ -1,8 +1,8 @@
 import jsons
 
-from accml.app.tune.model import Tune
-from accml.core.interfaces.backend.backend import BackendR, BackendRW
-from accml.core.interfaces.devices_facade import DevicesFacade
+from accml_lib.core.interfaces.backend.backend import BackendR, BackendRW
+from accml_lib.core.interfaces.devices_facade import DevicesFacade
+from accml_lib.core.model.tune import Tune
 
 
 class OphydAsyncDeviceBackendR(BackendR):

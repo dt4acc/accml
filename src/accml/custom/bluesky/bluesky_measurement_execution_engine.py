@@ -13,101 +13,33 @@ Missing features:
 
 """
 import asyncio
-import functools
-import itertools
-from dataclasses import asdict
 from typing import Sequence, Dict
 
-import bluesky.plan_stubs as bps
-import bluesky.preprocessors as bpp
 from bluesky import RunEngine
-from ophyd_async.core import Device, Signal
+from ophyd_async.core import Signal
 
-from ...core.interfaces.devices_facade import DevicesFacade
-from ...core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
-from ...core.model.command import Command, TransactionCommand, ReadCommand
-from ...core.model.result import ReadTogether
-
-
-def commands_plan(
-        commands: Sequence[TransactionCommand],
-        detectors: Sequence[Device],
-        actuators: Dict[str, Device],
-        info_signals: Dict[str, Signal],
-        n_readings: int
-):
-    """
-
-    Inner plan for :func:`commands_execution_plan`
-
-    Todo:
-        Implement stop, ignore, rollback etc
-        Device replace by ophyd_async.Settable
-        info_signals as dataclass?
-    """
-    all_dev = list(info_signals.values()) + list(detectors) + list(actuators.values())
-    dev_name = info_signals["device_name"]
-    ch_name = info_signals["channel_name"]
-    ch_val = info_signals["channel_value"]
-    for tc in commands:
-        # only prepared for a single device currently
-        command, = tc.transaction
-        # first select the device
-        t_device = actuators[command.id]
-        channel = getattr(t_device, command.property)
-        # then apply it to all
-        yield from bps.mv(
-            dev_name,
-            str(command.id),
-            ch_name,
-            str(command.property),
-            ch_val,
-            command.value,
-            channel,
-            command.value,
-        )
-        # TODO: revisit how to address reading detectors
-        #       also in the command language
-        # read all devices
-        yield from bps.wait()
-        # optional: give hardware / twin time
-        yield from bps.sleep(1)
-        yield from bps.repeat(functools.partial(bps.trigger_and_read, all_dev), num=n_readings)
-
-
-def commands_execution_plan(
-        commands: Sequence[TransactionCommand],
-        detectors: Sequence[Device],
-        actuators: Dict[str, Device],
-        info_signals: Dict[str, Signal],
-        n_readings: int,
-        md: None,
-):
-    """Translate commands to bluesky run-engine messages"""
-    _md = md or dict()
-    # CommandSequence nor Commands is json seriazable ....
-    _md.update(dict(commands=[asdict(cmd) for cmd in commands]))
-
-    @bpp.stage_decorator(list(detectors) + list(actuators.values()))
-    @bpp.run_decorator(md=_md)
-    def inner():
-        r = yield from commands_plan(
-            commands=commands,
-            detectors=detectors,
-            actuators=actuators,
-            info_signals=info_signals,
-            n_readings=n_readings,
-        )
-        return r
-
-    r = yield from inner()
-    return r
+from .plans import commands_execution_plan
+from .utils import extract_device_identifiers, connect_to_devices
+from accml_lib.core.bl.delta_backend import StateCache
+from accml_lib.core.interfaces.devices_facade import DevicesFacade
+from accml_lib.core.interfaces.measurement_execution_engine import (
+    MeasurementExecutionEngine,
+)
+from accml_lib.core.model.command import Command, ReadCommand, TransactionCommand
+from accml_lib.core.model.result import ReadTogether
 
 
 class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
     """Demonstrator of a measurement engine as a bluesky runengine"""
 
-    def __init__(self, devices: DevicesFacade,  run_engine: RunEngine, info_signals: Sequence[Signal]):
+    def __init__(
+        self,
+        *,
+        devices: DevicesFacade,
+        run_engine: RunEngine,
+        info_signals: Sequence[Signal],
+        cache: StateCache,
+    ):
         """
 
         Todo:
@@ -116,14 +48,15 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
         self.run_engine = run_engine
         self.devices = devices
         self.info_signals = info_signals
+        self.cache = cache
 
     def execute(
-            self,
-            commands_collection: Sequence[TransactionCommand],
-            detectors: Sequence[ReadCommand],
-            # actuators: Dict[str, Device],
-            md: Dict[str, object],
-            **kwargs,
+        self,
+        commands_collection: Sequence[TransactionCommand],
+        detectors: Sequence[ReadCommand],
+        # actuators: Dict[str, Device],
+        md: Dict[str, object],
+        **kwargs,
     ) -> str:
 
         actuator_identifiers = extract_device_identifiers(commands_collection)
@@ -138,6 +71,7 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
             commands=commands_collection,
             detectors=dets,
             actuators=actuators,
+            cache=self.cache,
             info_signals=self.info_signals,
             md=md,
             **kwargs,
@@ -152,15 +86,3 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
         # signals = [getattr(self.devices.get(cmd.id), cmd.property) for cmd in cmds]
         # devices = [self.devices.get(cmd.id) for cmd in cmds]
         raise NotImplementedError("needs to be implemented")
-
-
-def extract_device_identifiers(commands_collection: Sequence[TransactionCommand]) -> Sequence[str]:
-    return list(itertools.chain(*[[cmd.id for cmd in tc.transaction] for tc in commands_collection]))
-
-
-async def connect_to_devices(devices, timeout=5.0):
-    """
-    """
-    return await asyncio.gather(
-        *[dev.connect(timeout=timeout) for dev in devices]
-    )

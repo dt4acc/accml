@@ -4,8 +4,8 @@ For those that don't want to use a measurement execution engine
 based on bluesky (measurement orchestration) software stack
 
 """
-from accml.core.bl.delta_backend import DeltaBackendRProxy, DeltaBackendRWProxy
-from accml.core.model.command import ReadCommand
+from accml_lib.core.bl.delta_backend import DeltaBackendRProxy, DeltaBackendRWProxy
+from accml_lib.core.model.command import ReadCommand
 
 
 class OphydAsyncDeltaBackendRProxy(DeltaBackendRProxy):

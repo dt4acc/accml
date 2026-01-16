@@ -4,11 +4,7 @@ from typing import Sequence, Dict
 
 from bact_math_utils.misc import CountSame
 
-from accml.app.tune.model import (
-    MeasuredTuneResponsePerPowerConverter,
-    MeasuredTuneResponseItem,
-    MeasuredTuneResponse,
-)
+from ..model import MeasuredTuneResponse, MeasuredTuneResponseItem, MeasuredTuneResponsePerPowerConverter
 
 
 def data_to_model(data: Dict[str, Sequence[float]]) -> MeasuredTuneResponse:

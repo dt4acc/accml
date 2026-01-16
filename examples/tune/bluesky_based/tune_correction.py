@@ -1,17 +1,19 @@
 import logging
 
-from accml.app.tune.bluesky.tune_correction import tune_correction
+from accml_lib.core.bl.delta_backend import StateCache
 
 logging.basicConfig(level=logging.WARNING)
 
 import jsons
 import yaml
-from accml.app.tune.model import TuneResponseCollection, Tune
-
+from accml.app.tune.model import TuneResponseCollection
+from accml.app.tune.bluesky.tune_correction import tune_correction
 from accml.custom.bluesky.bluesky_measurement_execution_engine import (
     BlueskyMeasurementExecutionEngine,
 )
-from accml.custom.accml_lib.bessyii.setup import setup
+from accml_lib.core.model.tune import Tune
+from accml_lib.custom.bessyii.setup import setup
+
 
 from ophyd_async.core import soft_signal_rw
 from bluesky import RunEngine
@@ -19,7 +21,7 @@ from bluesky.callbacks import LiveTable
 
 
 def main():
-    with open("../tune_response_from_twin.yml") as fp:
+    with open("../tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, TuneResponseCollection)
 
@@ -39,7 +41,10 @@ def main():
     RE = RunEngine()
     RE.subscribe(lt)
     mexec = BlueskyMeasurementExecutionEngine(
-        run_engine=RE, devices=setup(), info_signals=info_sigs
+        run_engine=RE,
+        devices=setup(),
+        info_signals=info_sigs,
+        cache=StateCache(name="bluesky-based-tune-correction-reference"),
     )
 
     tune_correction(dm, mexec=mexec, tune_target=Tune(x=1055, y=902))
