@@ -11,9 +11,8 @@ async def run_device():
     pc = PowerConverter(
         name="pc",
         trl="r1-d100101cab16/mag/psdh-01",
-        # trl="SimpleTangoServer/test/power_converter_Q3P2T6R",
-        # setpoint_name="current_setpoint",
-        # readback_name="current_readback",
+        setpoint_name="current_set",
+        readback_name="current_readback",
     )
     t = await pc.connect()
     t
