@@ -43,19 +43,22 @@ jobs:
           python3 -c 'import numpy; print("numpy version", numpy.__version__)'
           echo "done"
 
-      - name: wheel
+      - name: wheel for accml_lib
         run: |
           # build wheel for accml_lib
           python -m pip wheel -w wheel/ ./external-repositories/accml_lib/
-          # build wheel for accml
+
+      - name: install accml_lib
+        run: |
+          python -m pip install wheel/accml_lib-*.whl
+
+      - name: wheel for accml
+        run: |
           python -m pip wheel -w wheel/ ./
 
-      - name: install
+      - name: install accml
         run: |
-          # listing a non existing directory fails ..
-          ls -l dist/ || echo 'no dist directory'
-          ls -l wheel/
-          python -m pip install wheel/accml_lib-*.whl wheel/accml-*.whl
+          python -m pip install wheel/accml-*.whl
 
       - name: Lint with flake8
         run: |
