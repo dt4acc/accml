@@ -4,11 +4,11 @@ import itertools
 from typing import Any, Mapping, Sequence
 
 from accml_lib.core.interfaces.backend.backend import BackendRW
-from accml_lib.core.interfaces.command_rewritter import CommandRewriterBase
-from accml_lib.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
-from accml_lib.core.interfaces.storage import StorageInterface
-from accml_lib.core.model.command import TransactionCommand, ReadCommand, Command
-from accml_lib.core.model.result import SingleReading, SingleFloat, ReadTogether, Result
+from accml_lib.core.interfaces.utils.command_rewritter import CommandRewriterBase
+from accml_lib.core.interfaces.utils.measurement_execution_engine import MeasurementExecutionEngine
+from accml_lib.core.interfaces.utils.storage import StorageInterface
+from accml_lib.core.model.utils.command import TransactionCommand, ReadCommand, Command
+from accml_lib.core.model.output.result import SingleReading, SingleFloat, ReadTogether, Result
 
 
 class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):

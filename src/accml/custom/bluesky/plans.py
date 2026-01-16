@@ -7,7 +7,7 @@ from bluesky import plan_stubs as bps, preprocessors as bpp
 from ophyd_async.core import Device, Signal
 
 from accml_lib.core.bl.delta_backend import delta_property, StateCache
-from accml_lib.core.model.command import Command, TransactionCommand, ReadCommand
+from accml_lib.core.model.utils.command import Command, TransactionCommand, ReadCommand
 
 
 def transactional_commands_sequence_execution_plan(

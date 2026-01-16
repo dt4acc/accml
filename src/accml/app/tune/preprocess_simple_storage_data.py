@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from accml.app.tune.model import MeasuredTuneResponse, MeasuredTuneResponseItem, MeasuredTuneResponsePerPowerConverter
-from accml_lib.core.model.result import Result
+from accml_lib.core.model.output.result import Result
 
 
 def data_to_model(data: Result) -> MeasuredTuneResponse:

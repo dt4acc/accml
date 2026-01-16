@@ -6,18 +6,18 @@ from typing import Dict, Sequence
 import numpy as np
 
 from accml.app.tune.interface import TuneControllerInterface
-from accml_lib.core.interfaces.measurement_execution_engine import (
+from accml_lib.core.interfaces.utils.measurement_execution_engine import (
     MeasurementExecutionEngine,
 )
 from accml_lib.core.interfaces.solver.oracle import Oracle
 from accml_lib.core.interfaces.solver.policy import PolicyBase
-from accml_lib.core.model.command import (
+from accml_lib.core.model.utils.command import (
     BehaviourOnError,
     Command,
     ReadCommand,
     TransactionCommand,
 )
-from accml_lib.core.model.tune import Tune, CorrectionStat
+from accml_lib.core.model.output.tune import Tune, CorrectionStat
 
 logger = logging.getLogger("accml")
 

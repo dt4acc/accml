@@ -11,7 +11,7 @@ from accml.app.tune.bluesky.tune_correction import tune_correction
 from accml.custom.bluesky.bluesky_measurement_execution_engine import (
     BlueskyMeasurementExecutionEngine,
 )
-from accml_lib.core.model.tune import Tune
+from accml_lib.core.model.output.tune import Tune
 from accml_lib.custom.bessyii.setup import setup
 
 

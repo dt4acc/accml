@@ -27,8 +27,8 @@ from .plans import (
 from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.interfaces.solver.oracle import Oracle
 from accml_lib.core.interfaces.solver.policy import PolicyBase
-from accml_lib.core.model.command import Command, TransactionCommand
-from accml_lib.core.model.tune import Tune
+from accml_lib.core.model.utils.command import Command, TransactionCommand
+from accml_lib.core.model.output.tune import Tune
 
 logger = logging.getLogger("accml")
 

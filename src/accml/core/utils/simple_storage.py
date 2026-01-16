@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from accml_lib.core.interfaces.storage import StorageInterface
+from accml_lib.core.interfaces.utils.storage import StorageInterface
 
 
 class SimpleDataStorage(StorageInterface):
