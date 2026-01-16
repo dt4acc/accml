@@ -18,6 +18,10 @@ jobs:
       # Checkout the repository contents
       - name: Checkout accml code
         uses: actions/checkout@v5
+        with:
+          submodules: 'true'
+          # token: ${{ secrets.PAT_TOKEN }}
+
       - name: Set up Python ${{ matrix.python-version }} ${{ matrix.numpy-version }}
         uses: actions/setup-python@v5
         with:
@@ -39,15 +43,21 @@ jobs:
           python3 -c 'import numpy; print("numpy version", numpy.__version__)'
           echo "done"
 
-      - name: wheel
+      - name: wheel for accml_lib
+        run: |
+          # build wheel for accml_lib
+          python -m pip wheel -w wheel/ ./external-repositories/accml_lib/
+
+      - name: install accml_lib
+        run: |
+          python -m pip install wheel/accml_lib-*.whl
+
+      - name: wheel for accml
         run: |
           python -m pip wheel -w wheel/ ./
 
-      - name: install
+      - name: install accml
         run: |
-          # listing a non existing directory fails ..
-          ls -l dist/ || echo 'no dist directory'
-          ls -l wheel/
           python -m pip install wheel/accml-*.whl
 
       - name: Lint with flake8
@@ -57,9 +67,7 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-#      - name: test
-#        run: |
-#          # make sure to move out of the source directory
-#          cd /tmp
-#          python -c "from pygsl.testing import sf; print(dir(sf))"
-#          python -m pytest -s /home/runner/work/python-accelerator-middle-layer/accml/tests
+      - name: test
+        run: |
+          # make sure to move out of the source directory
+          python3 -m pytest -s tests/
