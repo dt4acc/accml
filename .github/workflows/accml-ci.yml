@@ -41,6 +41,9 @@ jobs:
 
       - name: wheel
         run: |
+          # build wheel for accml_lib
+          python -m pip wheel -w wheel/ ./external-repositories/accml_lib/
+          # build wheel for accml
           python -m pip wheel -w wheel/ ./
 
       - name: install
@@ -48,7 +51,7 @@ jobs:
           # listing a non existing directory fails ..
           ls -l dist/ || echo 'no dist directory'
           ls -l wheel/
-          python -m pip install wheel/accml-*.whl
+          python -m pip install wheel/accml_lib-*.whl wheel/accml-*.whl
 
       - name: Lint with flake8
         run: |
@@ -57,9 +60,7 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-#      - name: test
-#        run: |
-#          # make sure to move out of the source directory
-#          cd /tmp
-#          python -c "from pygsl.testing import sf; print(dir(sf))"
-#          python -m pytest -s /home/runner/work/python-accelerator-middle-layer/accml/tests
+      - name: test
+        run: |
+          # make sure to move out of the source directory
+          python3 -m pytest -s tests/
