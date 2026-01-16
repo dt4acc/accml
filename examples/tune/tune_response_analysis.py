@@ -4,8 +4,8 @@ import json
 import jsons
 import yaml
 
-from accml_lib.core.model.result import Result, register_deserializers_to_json_fork
-from accml_lib.core.model.tune import Tune
+from accml_lib.core.model.output.result import Result, register_deserializers_to_json_fork
+from accml_lib.core.model.output.tune import Tune
 
 jsons_fork = jsons.fork()
 register_deserializers_to_json_fork(jsons_fork)

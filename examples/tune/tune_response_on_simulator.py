@@ -7,9 +7,9 @@ from accml.app.tune.tune_measurement import measure_tune_response
 from accml.core.utils.basic_measurement_execution_engine import BasicMeasurementExecutionEngine
 from accml.core.utils.simple_storage import SimpleDataStorage
 from accml_lib.core.bl.command_rewritter import CommandRewriter
-from accml_lib.core.model.command import ReadCommand
-from accml_lib.core.model.identifiers import LatticeElementPropertyID
-from accml_lib.core.model.result import register_serializers_to_json_fork
+from accml_lib.core.model.utils.command import ReadCommand
+from accml_lib.core.model.utils.identifiers import LatticeElementPropertyID
+from accml_lib.core.model.output.result import register_serializers_to_json_fork
 from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
 from accml_lib.custom.bessyii.pyat_simulator_backend import simulator_backend
 
@@ -29,7 +29,7 @@ def main():
     # Now I add a hack: I only use quadrupoles whoes power converter is unique
     # I should rather work in device space right away
     pc_names=list(set(pc_names))
-    backend = simulator_backend()
+    backend = simulator_backend("bessy2_storage_ring_reflat.json")
     storage = SimpleDataStorage()
     mexec = BasicMeasurementExecutionEngine(
         backend=backend,

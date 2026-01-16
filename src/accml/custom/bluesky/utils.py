@@ -2,7 +2,7 @@ import asyncio
 import itertools
 from typing import Sequence
 
-from accml_lib.core.model.command import TransactionCommand
+from accml_lib.core.model.utils.command import TransactionCommand
 
 
 def extract_device_identifiers(commands_collection: Sequence[TransactionCommand]) -> Sequence[str]:

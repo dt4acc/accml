@@ -5,7 +5,7 @@ from scipy.linalg import pinv
 
 from .model import TuneResponseCollection
 from accml_lib.core.interfaces.solver.oracle import Oracle
-from accml_lib.core.model.tune import Tune
+from accml_lib.core.model.output.tune import Tune
 
 
 class TuneOracle(Oracle):

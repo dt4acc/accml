@@ -1,7 +1,7 @@
 from typing import Dict
 
 from accml_lib.core.interfaces.solver.policy import PolicyBase
-from accml_lib.core.model.tune import Tune
+from accml_lib.core.model.output.tune import Tune
 
 
 class TunePolicy(PolicyBase):

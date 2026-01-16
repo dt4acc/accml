@@ -7,7 +7,7 @@ from accml.custom.ophyd_async.ophyd_async_backend import OphydAsyncDeviceBackend
 from accml.custom.ophyd_async.ophyd_async_measurement_execution_engine import OphydAsyncDeltaBackendRWProxy
 from accml_lib.core.bl.command_rewritter import CommandRewriter
 from accml_lib.core.bl.delta_backend import StateCache
-from accml_lib.core.model.tune import Tune
+from accml_lib.core.model.output.tune import Tune
 from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
 from accml_lib.custom.bessyii.setup import setup
 

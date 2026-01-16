@@ -5,7 +5,7 @@ based on bluesky (measurement orchestration) software stack
 
 """
 from accml_lib.core.bl.delta_backend import DeltaBackendRProxy, DeltaBackendRWProxy
-from accml_lib.core.model.command import ReadCommand
+from accml_lib.core.model.utils.command import ReadCommand
 
 
 class OphydAsyncDeltaBackendRProxy(DeltaBackendRProxy):

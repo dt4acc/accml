@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABCMeta
 
-from accml_lib.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from accml_lib.core.interfaces.utils.measurement_execution_engine import MeasurementExecutionEngine
 from accml_lib.core.interfaces.solver.controller import ControllerInterface
 from accml_lib.core.interfaces.solver.oracle import Oracle
 from accml_lib.core.interfaces.solver.policy import PolicyBase

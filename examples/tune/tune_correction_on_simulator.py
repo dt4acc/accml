@@ -4,7 +4,7 @@ from accml.app.tune.model import TuneResponseCollection
 from accml.core.utils.basic_measurement_execution_engine import BasicMeasurementExecutionEngine
 from accml.core.utils.simple_storage import SimpleDataStorage
 from accml_lib.core.bl.command_rewritter import CommandRewriter
-from accml_lib.core.model.tune import  Tune
+from accml_lib.core.model.output.tune import  Tune
 from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
 from accml_lib.custom.bessyii.pyat_simulator_backend import simulator_backend
 
@@ -25,7 +25,7 @@ def main():
     yp, lm, ts = load_managers()
 
     mexec = BasicMeasurementExecutionEngine(
-        backend=simulator_backend(),
+        backend=simulator_backend(filename="bessy2_storage_ring_reflat.json"),
         cmd_rewriter=CommandRewriter(liaison_manager=lm, translation_service=ts),
         storage=SimpleDataStorage(),
         expected_view_for_output="device",
