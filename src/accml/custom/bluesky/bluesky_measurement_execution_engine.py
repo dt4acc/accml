@@ -22,7 +22,9 @@ from .plans import commands_execution_plan
 from .utils import extract_device_identifiers, connect_to_devices
 from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.interfaces.devices_facade import DevicesFacade
-from accml_lib.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from accml_lib.core.interfaces.measurement_execution_engine import (
+    MeasurementExecutionEngine,
+)
 from accml_lib.core.model.command import Command, ReadCommand, TransactionCommand
 from accml_lib.core.model.result import ReadTogether
 
@@ -30,7 +32,14 @@ from accml_lib.core.model.result import ReadTogether
 class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
     """Demonstrator of a measurement engine as a bluesky runengine"""
 
-    def __init__(self, *, devices: DevicesFacade,  run_engine: RunEngine, info_signals: Sequence[Signal], cache: StateCache):
+    def __init__(
+        self,
+        *,
+        devices: DevicesFacade,
+        run_engine: RunEngine,
+        info_signals: Sequence[Signal],
+        cache: StateCache,
+    ):
         """
 
         Todo:
@@ -42,12 +51,12 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
         self.cache = cache
 
     def execute(
-            self,
-            commands_collection: Sequence[TransactionCommand],
-            detectors: Sequence[ReadCommand],
-            # actuators: Dict[str, Device],
-            md: Dict[str, object],
-            **kwargs,
+        self,
+        commands_collection: Sequence[TransactionCommand],
+        detectors: Sequence[ReadCommand],
+        # actuators: Dict[str, Device],
+        md: Dict[str, object],
+        **kwargs,
     ) -> str:
 
         actuator_identifiers = extract_device_identifiers(commands_collection)
@@ -77,5 +86,3 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
         # signals = [getattr(self.devices.get(cmd.id), cmd.property) for cmd in cmds]
         # devices = [self.devices.get(cmd.id) for cmd in cmds]
         raise NotImplementedError("needs to be implemented")
-
-

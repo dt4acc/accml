@@ -5,7 +5,9 @@ from typing import Sequence
 from accml.app.tune.interface import TuneControllerInterface
 from accml.custom.bluesky.run_correction import corrections_plan
 from accml_lib.core.bl.delta_backend import delta_property
-from accml_lib.core.interfaces.measurement_execution_engine import MeasurementExecutionEngine
+from accml_lib.core.interfaces.measurement_execution_engine import (
+    MeasurementExecutionEngine,
+)
 from accml_lib.core.interfaces.solver.oracle import Oracle
 from accml_lib.core.interfaces.solver.policy import PolicyBase
 from accml_lib.core.model.command import Command, ReadCommand
@@ -47,9 +49,10 @@ class BlueskyTuneCorrectionController(TuneControllerInterface):
         ]
         actuators = {cmd.id: self.mexec.devices.get(cmd.id) for cmd in set_commands}
         # Check that actuators have the signals required
-        def check_func(act_p, property:str):
+        def check_func(act_p, property: str):
             flag, prop = delta_property(property)
             getattr(act_p, prop)
+
         [
             check_func(act_p, cmd.property)
             for act_p, cmd in zip([item for _, item in actuators.items()], set_commands)

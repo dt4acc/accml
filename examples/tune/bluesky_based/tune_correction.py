@@ -41,7 +41,10 @@ def main():
     RE = RunEngine()
     RE.subscribe(lt)
     mexec = BlueskyMeasurementExecutionEngine(
-        run_engine=RE, devices=setup(), info_signals=info_sigs, cache=StateCache(name="bluesky-based-tune-coeewxrion"),
+        run_engine=RE,
+        devices=setup(),
+        info_signals=info_sigs,
+        cache=StateCache(name="bluesky-based-tune-correction-reference"),
     )
 
     tune_correction(dm, mexec=mexec, tune_target=Tune(x=1055, y=902))

@@ -18,8 +18,12 @@ from accml.app.tune.tune_correction_controller import (
     compute_stat_for_transactional_command,
     correction_action_to_commands,
 )
-from .plans import transactional_actuator_commands_plan, retrieve_reference_state_plan, \
-    extract_current_state_probe_commands, rework_delta_commands
+from .plans import (
+    transactional_actuator_commands_plan,
+    retrieve_reference_state_plan,
+    extract_current_state_probe_commands,
+    rework_delta_commands,
+)
 from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.interfaces.solver.oracle import Oracle
 from accml_lib.core.interfaces.solver.policy import PolicyBase
@@ -55,10 +59,12 @@ def corrections_plan(
     def inner():
         # first ... load cache with reference state
         yield from retrieve_reference_state_plan(
-            commands=extract_current_state_probe_commands([cmd for _, cmd in set_commands.items()]),
+            commands=extract_current_state_probe_commands(
+                [cmd for _, cmd in set_commands.items()]
+            ),
             detectors=detectors,
             actuators=actuators,
-            cache=cache
+            cache=cache,
         )
 
         r = yield from run_corrections_commands_plan(
@@ -89,7 +95,7 @@ def run_corrections_commands_plan(
     info_signals: Dict[str, SignalRW],
     wait_before_read: float = 0,
     delay: float = 0,
-    n_steps: Union[int, None] = None
+    n_steps: Union[int, None] = None,
 ):
     """
 
@@ -127,7 +133,9 @@ def run_corrections_commands_plan(
                 yield from bps.sleep(delay)
             current_state = yield from bps.trigger_and_read(all_detectors)
 
-        assert current_state is not None, "no current state read, can not process further"
+        assert (
+            current_state is not None
+        ), "no current state read, can not process further"
         # Todo: the device can not return the model but only a dict
         #       this is required for databroker serialisation
         #       oracle could happily work with a dictionary too

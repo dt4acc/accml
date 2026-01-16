@@ -40,7 +40,9 @@ def transactional_commands_sequence_execution_plan(
     return r
 
 
-def prepare_transactional_move(actuators: Dict[str, Device], transactional_command: Sequence[Command]):
+def prepare_transactional_move(
+    actuators: Dict[str, Device], transactional_command: Sequence[Command]
+):
     r = []
     for cmd in transactional_command:
         t_device = actuators[cmd.id]
@@ -72,7 +74,6 @@ def transactional_actuator_commands_plan(
         wait_before_read >= 0e0
     ), f"wait before read must be >=0 but was {wait_before_read}"
     all_dev = list(detectors) + list(actuators.values())
-
 
     for t_cmds in transactional_commands:
         # first select the device
@@ -174,11 +175,14 @@ def single_actuator_commands_plan(
         )
 
 
-def extract_current_state_probe_commands(commands: Sequence[ReadCommand]) -> Sequence[ReadCommand]:
+def extract_current_state_probe_commands(
+    commands: Sequence[ReadCommand],
+) -> Sequence[ReadCommand]:
     def extract_if_needed(cmd: ReadCommand) -> Union[ReadCommand, None]:
         flag, prop = delta_property(cmd.property)
         if flag:
             return ReadCommand(id=cmd.id, property=prop)
+
     tmp = [extract_if_needed(cmd) for cmd in commands]
     return [t for t in tmp if t is not None]
 
@@ -194,8 +198,14 @@ def rework_delta_commands(
             return cmd
         ref = cache.get(ReadCommand(id=cmd.id, property=prop))
         assert ref is not None
-        ncmd = Command(id=cmd.id, property=prop, value=cmd.value+ref, behaviour_on_error=cmd.behaviour_on_error)
+        ncmd = Command(
+            id=cmd.id,
+            property=prop,
+            value=cmd.value + ref,
+            behaviour_on_error=cmd.behaviour_on_error,
+        )
         return ncmd
+
     return [convert(cmd) for cmd in commands]
 
 
@@ -217,12 +227,12 @@ def retrieve_reference_state_plan(
 
 
 def commands_plan(
-        commands: Sequence[TransactionCommand],
-        detectors: Sequence[Device],
-        actuators: Dict[str, Device],
-        info_signals: Dict[str, Signal],
-        cache: StateCache,
-        n_readings: int
+    commands: Sequence[TransactionCommand],
+    detectors: Sequence[Device],
+    actuators: Dict[str, Device],
+    info_signals: Dict[str, Signal],
+    cache: StateCache,
+    n_readings: int,
 ):
     """
 
@@ -239,10 +249,9 @@ def commands_plan(
     ch_val = info_signals["channel_value"]
     # make cache read all commands
 
-
     for tc in commands:
         # only prepared for a single device currently
-        command, = tc.transaction
+        (command,) = tc.transaction
         flag, prop = delta_property(command.property)
         if flag:
             ref = cache.get(ReadCommand(id=command.id, property=prop))
@@ -270,19 +279,21 @@ def commands_plan(
         yield from bps.wait()
         # optional: give hardware / twin time
         yield from bps.sleep(1)
-        yield from bps.repeat(functools.partial(bps.trigger_and_read, all_dev), num=n_readings)
+        yield from bps.repeat(
+            functools.partial(bps.trigger_and_read, all_dev), num=n_readings
+        )
 
 
 def commands_execution_plan(
-        *,
-        commands: Sequence[TransactionCommand],
-        detectors: Sequence[Device],
-        actuators: Dict[str, Device],
-        info_signals: Dict[str, Signal],
-        cache: StateCache,
-        n_readings: int,
-        retrieve_reference: bool = False,
-        md: None,
+    *,
+    commands: Sequence[TransactionCommand],
+    detectors: Sequence[Device],
+    actuators: Dict[str, Device],
+    info_signals: Dict[str, Signal],
+    cache: StateCache,
+    n_readings: int,
+    retrieve_reference: bool = False,
+    md: None,
 ):
     """Translate commands to bluesky run-engine messages"""
     _md = md or dict()
@@ -294,12 +305,16 @@ def commands_execution_plan(
     def inner():
         # first ... load cache with reference state
         yield from retrieve_reference_state_plan(
-            commands=list(set(
-            extract_current_state_probe_commands(itertools.chain(*[tc.transaction for tc in commands]))
-        )),
+            commands=list(
+                set(
+                    extract_current_state_probe_commands(
+                        itertools.chain(*[tc.transaction for tc in commands])
+                    )
+                )
+            ),
             detectors=detectors,
             actuators=actuators,
-            cache=cache
+            cache=cache,
         )
         r = yield from commands_plan(
             commands=commands,
@@ -307,7 +322,7 @@ def commands_execution_plan(
             actuators=actuators,
             info_signals=info_signals,
             n_readings=n_readings,
-            cache=cache
+            cache=cache,
         )
         return r
 
