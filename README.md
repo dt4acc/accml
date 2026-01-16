@@ -15,7 +15,7 @@ For details of its concept see [design.md](https://github.com/python-accelerator
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/python-accelerator-middle-layer/accml.git
+git clone --recurse-submodules https://github.com/python-accelerator-middle-layer/accml.git
 cd accml
 
 ### 2. Install Dependencies
@@ -28,6 +28,15 @@ git submodule update --init --recursive
 ```bash
 python3 -m pip install -e .
 ```
+
+#### 3.1 Install package for tango usage
+
+Tested for twin for MAX IV
+
+```bash
+python3 -m pip install -e accml/external-repositories/accml_lib/[bluesky-tango] -e ./accml/
+```
+
 ### 4. Run the Virtual Accelerator (Test bench) --EPICS VERSION
 ```bash 
 apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/containers/pyat-softioc-digital-twin:v0-1-2-bessy.2475331
