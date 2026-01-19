@@ -68,7 +68,7 @@ def main():
         measurement_values=[0, 1e0, 0, -1e0, 0],
         mexec=BlueskyMeasurementExecutionEngine(
             run_engine=RE,
-            devices=setup(),
+            devices=setup(prefix=""),
             info_signals=info_sigs,
             cache=StateCache(name="reference-data-cache-used-by-bluesky"),
         ),
