@@ -16,8 +16,7 @@ import jsons
 from accml.app.tune.tune_correction import tune_correction
 
 
-
-def main():
+async def main():
     with open("tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, TuneResponseCollection)
@@ -30,8 +29,9 @@ def main():
         storage=SimpleDataStorage(),
         expected_view_for_output="device",
     )
-    tune_correction(dm, tune_target=Tune(x=1055, y=902), mexec=mexec)
+    await tune_correction(dm, tune_target=Tune(x=1055, y=902), mexec=mexec)
 
 
 if __name__ == "__main__":
-    main()
+    import asyncio
+    asyncio.run(main())
