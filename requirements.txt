@@ -1,2 +1,2 @@
 # Todo: remove this requirement as soon as it stablised
-accml_lib>=0.3.0a1
+accml_lib>=0.3.0b1
