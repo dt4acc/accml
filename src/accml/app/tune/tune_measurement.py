@@ -5,7 +5,7 @@ from accml_lib.core.interfaces.utils.measurement_execution_engine import Measure
 from accml_lib.core.model.utils.command import ReadCommand, TransactionCommand, Command, CommandSequence, BehaviourOnError
 
 
-def measure_tune_response(
+async def measure_tune_response(
     *,
     detectors: Sequence[ReadCommand],
     quadrupole_pc_names: Sequence[str],
@@ -44,7 +44,7 @@ def measure_tune_response(
 
     md = {}
 
-    uid = mexec.execute(
+    uid = await mexec.execute(
         detectors=detectors,
         commands_collection=cmds_on_machine.commands,  # need to add bpms
         **kwargs,
