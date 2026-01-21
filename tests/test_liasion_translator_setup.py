@@ -2,9 +2,10 @@ import pytest
 from pathlib import Path
 import shutil
 
-import accml.core.bl.liasion_translator_setup as lts
-from accml.core.bl.unit_conversion import EnergyDependentLinearUnitConversion
-from accml.core.model.identifiers import ConversionID, LatticeElementPropertyID, DevicePropertyID
+from accml_lib.core.bl.unit_conversion import EnergyDependentLinearUnitConversion
+from accml_lib.core.model.utils.identifiers import ConversionID, LatticeElementPropertyID, DevicePropertyID
+import accml_lib.custom.bessyii.liasion_translator_setup as lts
+
 
 
 @pytest.fixture(scope="module")
@@ -14,12 +15,13 @@ def config_dir(tmp_path_factory):
 
     base_config_path = (
         Path(__file__).resolve().parents[1]
-        / "src"
-        / "accml"
-        / "custom"
-        / "epics"
+        / "external-repositories"
         / "accml_lib"
+        / "src"
+        / "accml_lib"
+        / "custom"
         / "config_data"
+        / "bessyii"
     )
 
     shutil.copy(base_config_path / "magnets.yaml", tmp_dir / "magnets.yaml")
