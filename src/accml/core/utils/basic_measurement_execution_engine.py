@@ -33,7 +33,7 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
     def get_expected_view_for_output(self) -> str:
         return self.expected_view_for_output
 
-    def execute(
+    async def execute(
         self,
         commands_collection: Sequence[TransactionCommand],
         detectors: Sequence[ReadCommand],
@@ -68,11 +68,7 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
             ]
 
         # Todo: rewrite detectors!
-
-        loop = asyncio.get_event_loop()
-        data = loop.run_until_complete(
-            execute(self.backend, detectors, cmd_backend_ctxt)
-        )
+        data = await execute(self.backend, detectors, cmd_backend_ctxt)
 
         converted_data = [
             convert_data_seq(

@@ -17,7 +17,7 @@ jsons_fork = jsons.fork()
 register_serializers_to_json_fork(jsons_fork)
 
 
-def main():
+async def main():
     yp, lm, ts = load_managers()
     # Todo: remove this line after only Q3/Q4 are flagged as tune correction magnets
     tune_correction_quads = [name for name in yp.tune_correction_quadrupole_names() if name[1] in ["3", "4"]]
@@ -37,7 +37,7 @@ def main():
         storage=storage,
         expected_view_for_output="device"
     )
-    uuid = measure_tune_response(
+    uuid = await measure_tune_response(
        detectors=[
            ReadCommand("tune", "transversal"),
        ],
@@ -54,4 +54,5 @@ def main():
 
 
 if __name__  == "__main__":
-    main()
+    import asyncio
+    asyncio.run(main())
