@@ -1,16 +1,12 @@
-"""
-accml package
-~~~~~~~~~~~~~~~~
-
-accml
+"""Accml: the particle accelerator middle layer package.
 
 """
 
 __title__ = "accml"
-__description__ = "Python Accelerator Middle Layer"
+__description__ = "Accelerator Middle Layer"
 __url__ = "https://github.com/python-accelerator-middle-layer/accml"
-__version__ = "0.0.0"
-__author__ = "accml collaboration"
+__version__ = "0.3.0"
+__author__ = "Helmholtz Zentrum Berlin"
 __author_email__ = ""
 
-__all__ = [__version__]
+__all__ = ["__version__", "core", "custom", "app", "work_bench"]

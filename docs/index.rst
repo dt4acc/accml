@@ -1,63 +1,116 @@
-pyAML documentation
+accml documentation
 ===================
+
+
+.. toctree::
+   :caption: Contents
+   :maxdepth: 1
+   :glob:
+
+   background/design.rst
+   background/implementation.rst
+   api/accml.rst
+
 
 Introduction
 ------------
 
-python Accelerator Middle Layer (pyAML) is a joint technology platform to develop common tools for control, tuning and development of storage rings, beam transport lines and linear accelerators.
+accml provides a particle accelerator middle layer, which is built using
+a clean architecture and structured communication. It consists of two
+main packages: `accml` it self and the libray `accml_lib`.
 
-With pyAML, it WILL be possible to (the software is at conceptualization stage):
+* accml_lib contains:
 
-- **get/set instruments attributes**: such as strengths of magnets and positions from BPMS
-- **use the same tuning tools in any facility using pyAML**,
-- **compare data to it's digital twin equivalent**,
-- **compute statistical properties for several lattice instances with errors**
-- **flexible complex unit conversions**
-- **easy and friendly configuration**
-- many more features 
+    * used data models
+    * interface definitions
+    * and all code which is used by client and twin code
+
+* accml contains:
+    * code that is only used by the client
+
+The `accml` design is described in :doc:`background/design`.
+Its implementation concepts are give in
+:doc:`background/implementation`.
+
 
 Installation
-------------
-pip support will be provided later. 
-for the time being: 
+============
 
-git clone https://github.com/python-accelerator-middle-layer/pyaml.git
+``pip`` support will be provided later. For the time being, follow these steps.
 
+First clone the repository:
+
+.. code-block:: bash
+
+    git clone https://github.com/python-accelerator-middle-layer/accml.git --recurse-submodules
+
+Create a fresh virtual environment (the name ``venv-accml`` is just an example):
+
+.. code-block:: bash
+
+    python3 -m venv venv-accml
+
+Activate the virtual environment. In a Bourne-style shell (e.g. ``bash``) run:
+
+.. code-block:: bash
+
+    source venv-accml/bin/activate
+
+Now install ``accml`` in the activated environment.
+
+For an EPICS facility use:
+
+.. code-block:: bash
+
+    python3 -m pip install \
+        'accml[bluesky-epics]' accml \
+        'accml/external-repositories/accml_lib[bluesky-epics,pyat-simulator]'
+
+For a TANGO facility use:
+
+.. code-block:: bash
+
+    python3 -m pip install \
+        'accml[bluesky-tango]' accml \
+        'accml/external-repositories/accml_lib[bluesky-tango,pyat-simulator]'
+
+
+
+Getting started
+---------------
+
+Have a look to the example directory of accml! Please drop a line for any
+further information.
+
+API documentation
+-----------------
+
+* accml documentation :doc:src/accml.rst
+* accml_lib documentation at  https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.html
 
 Collaboration community
-------------
+-----------------------
 
 Discussion
-~~~~~~~~~~~~
+~~~~~~~~~~
 
 `Mattermost <https://mattermost.hzdr.de/accelerator-middle-layer/channels/town-square>`_
 
 (please log in using Helmoltz ID, you will be prompt to access with your own lab/university credentials)
 
 Shared documents
-~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 to access the shared documents please ask S.Liuzzo for access rigths. 
 
-The pyAML "software requirement specification" document is visible here:
-https://www.overleaf.com/read/hnrqzhfpbvpp#ef8935
+The  "software requirement specification" document is visible here:
+https://www.overleaf.com/project/67d2b7d267244c3902da8265
 
-to be added to editors list please write to S.Liuzzo
 
 Mailing list:
-~~~~~~~~~~~~
+~~~~~~~~~~~~~
 to be added to the pyAML mailing list please write to S.Liuzzo
 
-
-Package Reference
-=================
-
-.. toctree::
-   :caption: Modules
-   :maxdepth: 1
-   :glob:
-
-   modules/*
 
 
 Indices and tables
