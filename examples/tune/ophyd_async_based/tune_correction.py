@@ -22,12 +22,12 @@ from accml.app.tune.tune_correction import tune_correction
 
 
 def main():
-    with open("tune_response_from_simulation.yml") as fp:
+    with open("../tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, TuneResponseCollection)
 
     yp, lm, ts = load_managers()
-    devices = setup()
+    devices = setup(prefix="")
 
     async def connect():
         await devices.get("tune").connect()
@@ -46,7 +46,7 @@ def main():
         storage=SimpleDataStorage(),
         expected_view_for_output="device"
     )
-    tune_correction(dm, tune_target=Tune(x=1055, y=902), mexec=mexec)
+    tune_correction(dm, tune_target=Tune(x=1060, y=907), n_iterations=2, mexec=mexec)
 
 
 if __name__ == "__main__":
