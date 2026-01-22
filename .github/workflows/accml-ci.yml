@@ -52,16 +52,14 @@ jobs:
         run: |
           find wheel -type f
           python -m pip install wheel/accml_lib-*.whl
-          # should be removed later on
-          python -m pip install wheel/accml*.whl
 
       - name: wheel for accml
         run: |
-          python -m pip wheel -w wheel/ ./
+          python -m pip wheel -w wheel/ --find-links wheel/ ./
 
       - name: install accml
         run: |
-          python -m pip install wheel/accml-*.whl
+          python -m pip install wheel/accml*.whl
 
       - name: Lint with flake8
         run: |

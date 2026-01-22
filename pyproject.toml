@@ -22,6 +22,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.7"
+# accml_lib = ">=0.3.0b1"
 accml_lib = "*"
 
 # Packages below should be optional ones, only to be installed
