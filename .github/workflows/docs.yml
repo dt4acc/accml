@@ -31,7 +31,7 @@ jobs:
       - name: Build docs
         working-directory: docs
         run: |
-          python3 -m sphinx.ext.apidoc -o src/ ../src/accml_lib/  || echo  "failed to create auto/API docs!"
+          python3 -m sphinx.ext.apidoc -o src/ ../src/accml/  || echo  "failed to create auto/API docs!"
           python3 -m sphinx.cmd.build --conf-dir ./  ./ _build/html/
 
       - name: Deploy to gh-pages
