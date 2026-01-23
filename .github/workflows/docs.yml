@@ -1,0 +1,42 @@
+name: Build and deploy accml docs
+
+on:
+  push:
+    branches: [ main ]   # build on pushes to main (adjust as needed)
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'  # choose your supported version
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python3 -m pip install \
+              ./external-repositories/accml_lib/[bluesky-epics,docs,pyat-simulator]
+              ./[bluesky-epics]
+
+      - name: Build docs
+        working-directory: docs
+        run: |
+          python3 -m sphinx.ext.apidoc -o src/ ../src/accml/  || echo  "failed to create auto/API docs!"
+          python3 -m sphinx.cmd.build --conf-dir ./  ./ _build/html/
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build/html
+          # optional: cname: docs.example.com
