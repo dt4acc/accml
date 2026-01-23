@@ -1,6 +1,4 @@
 import json
-
-
 import jsons
 
 from accml.app.tune.tune_measurement import measure_tune_response
@@ -35,7 +33,8 @@ async def main():
         backend=backend,
         cmd_rewriter=CommandRewriter(liaison_manager=lm, translation_service=ts),
         storage=storage,
-        expected_view_for_output="device"
+        expected_view_for_output="device",
+        num_readings=1,
     )
     uuid = await measure_tune_response(
        detectors=[

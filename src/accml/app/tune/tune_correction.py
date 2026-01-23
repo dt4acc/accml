@@ -39,9 +39,9 @@ async def tune_correction(
         oracle=oracle,
         policy=policy,
         mexec=mexec,
-        num_readings=n_samples,
-        wait_before_read=wait_after_set,
-        delay=wait_between_sample,
+        n_samples=n_samples,
+        wait_after_set=wait_after_set,
+        wait_between_samples=wait_between_sample,
     )
 
     rcmds = [ReadCommand(id="tune", property="transversal")]
