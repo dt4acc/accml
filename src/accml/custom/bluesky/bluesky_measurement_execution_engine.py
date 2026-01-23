@@ -50,7 +50,7 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
         self.info_signals = info_signals
         self.cache = cache
 
-    def execute(
+    async def execute(
         self,
         commands_collection: Sequence[TransactionCommand],
         detectors: Sequence[ReadCommand],
@@ -64,8 +64,7 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
         actuators = {id_: self.devices.get(id_) for id_ in actuator_identifiers}
         dets = [self.devices.get(det.id) for det in detectors]
 
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(connect_to_devices(list(actuators.values()) + dets))
+        await connect_to_devices(list(actuators.values()) + dets)
 
         plan = commands_execution_plan(
             commands=commands_collection,
