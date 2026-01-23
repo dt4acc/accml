@@ -139,18 +139,20 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
             output_view=self.get_expected_view_for_output(),
             backend_view=self.backend.get_natural_view_name(),
         )
-        data = await read(self.backend, rcmds)
+        start = datetime.datetime.now()
+        data = await read_and_encapsulate(self.backend, rcmds)
+        end = datetime.datetime.now()
         # Todo: how to convert data back ... I think
         #       that gets difficult as soon as there is no 1-to-1 mapping any more
         #       how to handle delta_ ... I need to be able to access reference storage
         converted_data = convert_data_seq(
             cmd_rewriter=self.cmd_rewriter,
             detectors=rcmds,
-            data=data,
+            data=data.data,
             output_view=self.get_expected_view_for_output(),
             backend_view=self.backend.get_natural_view_name(),
         )
-        return converted_data
+        return ReadTogether(data=converted_data, start=start, end=end)
 
     async def set(self, cmds: Sequence[Command]):
         return await set_(

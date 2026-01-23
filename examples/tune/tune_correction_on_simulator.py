@@ -28,6 +28,7 @@ async def main():
         cmd_rewriter=CommandRewriter(liaison_manager=lm, translation_service=ts),
         storage=SimpleDataStorage(),
         expected_view_for_output="device",
+        num_readings=1
     )
     await tune_correction(dm, tune_target=Tune(x=1055, y=902), mexec=mexec)
 

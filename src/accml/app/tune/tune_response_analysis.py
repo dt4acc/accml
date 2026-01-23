@@ -32,7 +32,7 @@ def fit_one_power_converter(data: MeasuredTuneResponsePerPowerConverter):
     return TuneResponse(pc_name=data.pc_name, x=xrm, y=yrm)
 
 
-def tune_response_analysis(prep_data: MeasuredTuneResponse):
+def tune_response_analysis(prep_data: MeasuredTuneResponse) -> TuneResponseCollection:
     # prep_data = data_to_model(data)
     return TuneResponseCollection(
         col=[fit_one_power_converter(data) for data in prep_data.col]

@@ -1,15 +1,20 @@
+from dataclasses import asdict
+
 from accml.app.tune.bluesky.preprocess_databroker_data import select_repetitions
 from accml.app.tune.tune_response_analysis import tune_response_analysis
 import json
 import jsons
 import yaml
 
-from accml_lib.core.model.output.result import Result, register_deserializers_to_json_fork
+from accml_lib.core.model.output.result import Result, register_deserializer_for_single_reading, ResultOfExecutionStep, \
+    ReadTogether, SingleReading, register_serializer_for_read_together
+from accml_lib.core.model.utils.command import register_deserializer_for_command as register_cmd_deserializer
 from accml_lib.core.model.output.tune import Tune
 
 jsons_fork = jsons.fork()
-register_deserializers_to_json_fork(jsons_fork)
-
+register_deserializer_for_single_reading(jsons_fork)
+register_serializer_for_read_together(jsons_fork)
+register_cmd_deserializer(jsons_fork)
 
 def data_from_simple_storage(filename: str):
     """convert data stored in simple storage to data model
@@ -45,15 +50,19 @@ def data_from_data_broker(catalog_name: str, uid: str):
 
 def main():
     simulation = True
+    ophyd_async_read = False
     if simulation:
         prep_data = data_from_simple_storage("tune_response_data_from_simulator.json")
         save_file = "tune_response_from_simulation.yml"
+    elif ophyd_async_read:
+        prep_data = data_from_simple_storage("ophyd_async_based/tune_response_data_with_ophyd_async.json")
+        save_file = "tune_response_from_measurement_w_ophyd_async.yml"
     else:
         prep_data = data_from_data_broker("heavy_local", uid="a8bb94fb")
         save_file = "tune_response_from_twin.yml"
 
     result = tune_response_analysis(prep_data)
-    tmp = jsons.dump(result, Result)
+    tmp = jsons.dump(asdict(result))
     with open(save_file, "wt") as fp:
         yaml.dump(tmp, fp)
 

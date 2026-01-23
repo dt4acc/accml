@@ -7,12 +7,12 @@ from accml.core.utils.simple_storage import SimpleDataStorage
 from accml_lib.core.bl.command_rewritter import CommandRewriter
 from accml_lib.core.model.utils.command import ReadCommand
 from accml_lib.core.model.utils.identifiers import LatticeElementPropertyID
-from accml_lib.core.model.output.result import register_serializers_to_json_fork
 from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
 from accml_lib.custom.bessyii.pyat_simulator_backend import simulator_backend
+from accml_lib.core.model import jsons_support
 
 jsons_fork = jsons.fork()
-register_serializers_to_json_fork(jsons_fork)
+jsons_support.register_serializers(jsons_fork)
 
 
 async def main():
