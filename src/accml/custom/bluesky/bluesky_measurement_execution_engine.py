@@ -61,8 +61,12 @@ class BlueskyMeasurementExecutionEngine(MeasurementExecutionEngine):
 
         actuator_identifiers = extract_device_identifiers(commands_collection)
 
-        actuators = {id_: self.devices.get(id_) for id_ in actuator_identifiers}
-        dets = [self.devices.get(det.id) for det in detectors]
+        def get_device(id_: str):
+            dev = self.devices.get(id_)
+            assert dev is not None, f"Failed to find a device assosiated for {id_}"
+            return dev
+        actuators = {id_: get_device(id_) for id_ in actuator_identifiers}
+        dets = [get_device(det.id) for det in detectors]
 
         await connect_to_devices(list(actuators.values()) + dets)
 

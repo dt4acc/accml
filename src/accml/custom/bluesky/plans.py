@@ -222,7 +222,10 @@ def retrieve_reference_state_plan(
     # how to handle that some data need an extra read ?
     ref_data = yield from bps.trigger_and_read(all_dev, name=ref_stream)
     for rcmd in commands:
-        value = ref_data.get(f"{rcmd.id}-{rcmd.property}").get("value")
+        needed_data_tag = f"{rcmd.id}-{rcmd.property}"
+        dev = ref_data.get(needed_data_tag)
+        assert dev is not None, f"Could not find data {needed_data_tag}, only know {list(ref_data)}"
+        value = dev.get("value")
         cache.set(rcmd, value)
 
 
@@ -233,6 +236,8 @@ def commands_plan(
     info_signals: Dict[str, Signal],
     cache: StateCache,
     n_readings: int,
+    wait_after_set: int = 1,
+    wait_between_sample: int = 1,
 ):
     """
 
@@ -278,9 +283,9 @@ def commands_plan(
         # read all devices
         yield from bps.wait()
         # optional: give hardware / twin time
-        yield from bps.sleep(1)
+        yield from bps.sleep(wait_after_set)
         yield from bps.repeat(
-            functools.partial(bps.trigger_and_read, all_dev), num=n_readings
+            functools.partial(bps.trigger_and_read, all_dev), num=n_readings, delay=wait_between_sample
         )
 
 
@@ -294,6 +299,7 @@ def commands_execution_plan(
     n_readings: int,
     retrieve_reference: bool = False,
     md: None,
+    **kwargs
 ):
     """Translate commands to bluesky run-engine messages"""
     _md = md or dict()
@@ -323,6 +329,7 @@ def commands_execution_plan(
             info_signals=info_signals,
             n_readings=n_readings,
             cache=cache,
+            **kwargs
         )
         return r
 
