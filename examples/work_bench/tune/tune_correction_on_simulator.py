@@ -1,3 +1,4 @@
+import asyncio
 import logging
 logging.basicConfig(level=logging.WARNING)
 
@@ -6,9 +7,10 @@ import jsons
 
 import accml.work_bench as wb
 import accml.work_bench.all as wba
-import accml.work_bench.lib.custom.bessyii as b2
+import accml.work_bench.lib_.custom.bessyii as b2
 
-def main():
+
+async def main():
     with open("tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, wb.app.tune.TuneResponseCollection)
@@ -20,9 +22,10 @@ def main():
         cmd_rewriter=wba.CommandRewriter(liaison_manager=lm, translation_service=ts),
         storage=wba.SimpleDataStorage(),
         expected_view_for_output="device",
+        num_readings=1
     )
-    wb.app.tune.tune_correction(dm, tune_target=wb.app.tune.Tune(x=1055, y=902), mexec=mexec)
+    await wb.app.tune.tune_correction(dm, tune_target=wb.app.tune.Tune(x=1055, y=902), mexec=mexec)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
