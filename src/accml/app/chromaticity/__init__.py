@@ -1,1 +1,1 @@
-__all__ = ["measure_chromaticity"]
+__all__ = ["measure"]
