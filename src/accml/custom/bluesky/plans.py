@@ -222,7 +222,7 @@ def retrieve_reference_state_plan(
     # how to handle that some data need an extra read ?
     ref_data = yield from bps.trigger_and_read(all_dev, name=ref_stream)
     for rcmd in commands:
-        needed_data_tag = f"{rcmd.id}-{rcmd.property}"
+        needed_data_tag = f"{rcmd.id.json_compatible()}-{rcmd.property}"
         dev = ref_data.get(needed_data_tag)
         assert dev is not None, f"Could not find data {needed_data_tag}, only know {list(ref_data)}"
         value = dev.get("value")
