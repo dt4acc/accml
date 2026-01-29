@@ -1,3 +1,8 @@
+"""Reading tune: adapted to soleil
+
+There are many imports below here. At the current state the
+
+"""
 import asyncio
 import logging
 
@@ -12,12 +17,10 @@ from accml_lib.core.model.utils.command import ReadCommand, TransactionCommand, 
 from accml_lib.custom.soleil.manager_setup import load_managers
 from accml_lib.custom.soleil.setup import setup
 
-
 from bluesky import RunEngine
 from bluesky.callbacks import LiveTable
 from databroker import catalog
 from ophyd_async.core import soft_signal_rw
-
 
 
 async def main():
@@ -43,12 +46,8 @@ async def main():
         await dev.connect()
 
     tune = devices.get("tune")
-    tune
-    #  Find out to which power converters these are connected to
-    # Now I add a hack: I only use quadrupoles whoes power converter is unique
-    # I should rather work in device space right away
+
     detectors=[ReadCommand(id="tune", property="transversal")]
-    quadrupole_names=tune_correction_quads,
     measurement_values=[0, 1e-2, 0, -1e-2, 0]
 
     info_sigs = {
@@ -63,7 +62,7 @@ async def main():
         [sig.name for _, sig in info_sigs.items()] +
         ["tune-hor", "tune-vert"],
         # required so that the TRL of the magnet is visible
-        min_width=20
+        min_width=21
     )
     RE = RunEngine()
     [RE.subscribe(consumer) for consumer in [lt]]
@@ -98,6 +97,7 @@ async def main():
     )
 
     print(f"Measurement {uid=}")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
