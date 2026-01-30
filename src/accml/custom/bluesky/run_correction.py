@@ -91,10 +91,10 @@ def run_corrections_commands_plan(
     actuators: Dict[str, Device],
     set_commands: Dict[str, Command],
     cache: StateCache,
-    n_readings: int,
     info_signals: Dict[str, SignalRW],
-    wait_before_read: float = 0,
-    delay: float = 0,
+    n_readings: int,
+    wait_after_set: float = 0.0,
+    wait_between_samples: float = 0.0,
     n_steps: Union[int, None] = None,
 ):
     """
@@ -110,8 +110,8 @@ def run_corrections_commands_plan(
     """
 
     assert (
-        wait_before_read >= 0e0
-    ), f"wait before read must be >=0 but was {wait_before_read}"
+            wait_after_set >= 0e0
+    ), f"wait before read must be >=0 but was {wait_after_set}"
     assert (
         n_readings >= 1
     ), f"detectors must be read at least once per turn, but was {n_readings}"
@@ -126,11 +126,11 @@ def run_corrections_commands_plan(
             return
         # presumably set some value already ...
         yield from bps.wait()
-        if wait_before_read > 0e0:
-            yield from bps.sleep(wait_before_read)
+        if wait_after_set > 0e0:
+            yield from bps.sleep(wait_after_set)
         for i in range(n_readings):
-            if i > 0 and delay > 0:
-                yield from bps.sleep(delay)
+            if i > 0 and wait_between_samples > 0:
+                yield from bps.sleep(wait_between_samples)
             current_state = yield from bps.trigger_and_read(all_detectors)
 
         assert (

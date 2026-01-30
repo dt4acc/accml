@@ -15,8 +15,8 @@ class TuneControllerInterface(ControllerInterface, metaclass=ABCMeta):
         oracle: Oracle,
         policy: PolicyBase,
         num_readings: int,
-        wait_before_read: float,
-        delay: float,
+        wait_after_set: float,
+        wait_between_samples: float,
         logger,
     ):
         """
