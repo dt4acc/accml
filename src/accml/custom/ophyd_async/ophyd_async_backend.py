@@ -1,8 +1,11 @@
+import logging
 import jsons
 
 from accml_lib.core.interfaces.backend.backend import BackendR, BackendRW
 from accml_lib.core.interfaces.utils.devices_facade import DevicesFacade
 from accml_lib.core.model.output.tune import Tune
+
+logger = logging.getLogger("accml")
 
 
 class OphydAsyncDeviceBackendR(BackendR):
@@ -13,7 +16,15 @@ class OphydAsyncDeviceBackendR(BackendR):
         return "device"
 
     async def trigger(self, dev_id: str, prop_id: str):
-        raise NotImplementedError("needs to be done")
+        dev = self.devices.get(dev_id)
+        ch = getattr(dev, prop_id)
+        try:
+            trigger = ch.trigger
+        except AttributeError:
+            logger.debug("channel %s has no attribute trigger", ch)
+            return
+        await trigger()
+
 
     async def read(self, dev_id: str, prop_id: str) -> object:
         dev = self.devices.get(dev_id)

@@ -20,21 +20,16 @@ from accml.app.tune.model import  TuneResponseCollection
 from accml.app.tune.tune_correction import tune_correction
 
 
-
-def main():
+async def main():
     with open("../tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, TuneResponseCollection)
 
     yp, lm, ts = load_managers()
-    devices = setup(prefix="")
+    devices = setup(prefix=None)
 
-    async def connect():
-        await devices.get("tune").connect()
-        await devices.get('quadrupole_pcs').connect()
-        # await devices.g
-
-    asyncio.get_event_loop().run_until_complete(connect())
+    await devices.get("tune").connect()
+    await devices.get('quadrupole_pcs').connect()
 
     backend = OphydAsyncDeltaBackendRWProxy(
         OphydAsyncDeviceBackendRW(devices=devices),
@@ -44,10 +39,11 @@ def main():
         backend=backend,
         cmd_rewriter=CommandRewriter(liaison_manager=lm, translation_service=ts),
         storage=SimpleDataStorage(),
-        expected_view_for_output="device"
+        expected_view_for_output="device",
+        num_readings=1
     )
-    tune_correction(dm, tune_target=Tune(x=1060, y=907), n_iterations=2, mexec=mexec)
+    await tune_correction(dm, tune_target=Tune(x=1055, y=902), n_iterations=2, mexec=mexec)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

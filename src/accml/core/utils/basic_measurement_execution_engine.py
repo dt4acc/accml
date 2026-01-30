@@ -8,8 +8,9 @@ from accml_lib.core.interfaces.utils.command_rewritter import CommandRewriterBas
 from accml_lib.core.interfaces.utils.measurement_execution_engine import MeasurementExecutionEngine
 from accml_lib.core.interfaces.utils.storage import StorageInterface
 from accml_lib.core.model.utils.command import TransactionCommand, ReadCommand, Command
-from accml_lib.core.model.output.result import SingleReading, SingleFloat, ReadTogether, Result
+from accml_lib.core.model.output.result import SingleReading, SingleFloat, ReadTogether, Result, ResultOfExecutionStep
 
+import tqdm
 
 class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
     """Common functionality of the measurement execution engine"""
@@ -21,11 +22,14 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
         cmd_rewriter: CommandRewriterBase,
         storage: StorageInterface,
         expected_view_for_output: str,
+        num_readings: int
     ):
+        assert num_readings >= 1, f"{num_readings=} must be at least one!"
         self.backend = backend
         self.cmd_rewriter = cmd_rewriter
         self.storage = storage
         self.expected_view_for_output = expected_view_for_output
+        self.num_readings = num_readings
 
     def get_data(self, uuid):
         return self.storage.get(uuid)
@@ -33,7 +37,7 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
     def get_expected_view_for_output(self) -> str:
         return self.expected_view_for_output
 
-    def execute(
+    async def execute(
         self,
         commands_collection: Sequence[TransactionCommand],
         detectors: Sequence[ReadCommand],
@@ -68,21 +72,23 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
             ]
 
         # Todo: rewrite detectors!
+        data = await execute(self.backend, detectors, cmd_backend_ctxt, num_readings=self.num_readings)
 
-        loop = asyncio.get_event_loop()
-        data = loop.run_until_complete(
-            execute(self.backend, detectors, cmd_backend_ctxt)
-        )
-
-        converted_data = [
-            convert_data_seq(
-                cmd_rewriter=self.cmd_rewriter,
-                detectors=detectors,
-                data=[item for _, item in d.items()],
-                output_view=self.get_expected_view_for_output(),
-                backend_view=self.backend.get_natural_view_name(),
-            ) for d in data["data"]
-        ]
+        # Todo: consider using ConvertedReadTogether based on ConvertedSingleReading
+        #       these could contain the original and the converted data
+        def _conv(data: ReadTogether):
+            return ReadTogether(
+                start=data.start,
+                end=data.end,
+                data=convert_data_seq(
+                    cmd_rewriter=self.cmd_rewriter,
+                    detectors=detectors,
+                    data=data.data,
+                    output_view=self.get_expected_view_for_output(),
+                    backend_view = self.backend.get_natural_view_name(),
+                ),
+            )
+        converted_data = [[_conv(d) for d in epoch] for epoch in data]
         #: Todo ... how to properly enrich the data ... analysis needs to know which
         #           device and which value
         def extract_single(t_cmd: TransactionCommand) -> SingleReading:
@@ -94,25 +100,21 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
                 cmd=ReadCommand(id=cmd.id, property=cmd.property),
             )
 
+        measured_enriched = [
+            ResultOfExecutionStep(data=epoch, cmds=tc.transaction)
+            for epoch, tc in itertools.zip_longest(
+                data, cmd_backend_ctxt
+            )
+        ]
         enriched = [
-            ReadTogether(data=single.data + [extract_single(transaction)])
-            for single, transaction in itertools.zip_longest(
+            ResultOfExecutionStep(data=epoch, cmds=tc.transaction)
+            for epoch, tc in itertools.zip_longest(
                 converted_data, commands_collection
             )
         ]
         converted = Result(
-            start=data["start"],
-            end=data["end"],
             data=enriched,
-            orig_data=[
-                ReadTogether(
-                    data=[
-                        SingleReading(name=tmp[0], cmd=rcmd, payload=tmp[1])
-                        for tmp, rcmd in itertools.zip_longest(single.items(), detectors)
-                    ]
-                )
-                for single in data["data"]
-            ],
+            orig_data=measured_enriched,
             # md=dict(commands=cmd_design_ctxt)
         )
         del data
@@ -137,18 +139,20 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
             output_view=self.get_expected_view_for_output(),
             backend_view=self.backend.get_natural_view_name(),
         )
-        data = await read(self.backend, rcmds)
+        start = datetime.datetime.now()
+        data = await read_and_encapsulate(self.backend, rcmds)
+        end = datetime.datetime.now()
         # Todo: how to convert data back ... I think
         #       that gets difficult as soon as there is no 1-to-1 mapping any more
         #       how to handle delta_ ... I need to be able to access reference storage
         converted_data = convert_data_seq(
             cmd_rewriter=self.cmd_rewriter,
             detectors=rcmds,
-            data=data,
+            data=data.data,
             output_view=self.get_expected_view_for_output(),
             backend_view=self.backend.get_natural_view_name(),
         )
-        return converted_data
+        return ReadTogether(data=converted_data, start=start, end=end)
 
     async def set(self, cmds: Sequence[Command]):
         return await set_(
@@ -166,33 +170,30 @@ async def execute(
     backend: BackendRW,
     detectors: Sequence[ReadCommand],
     commands: Sequence[TransactionCommand],
-):
-    start = datetime.datetime.now()
-    d = dict(
-        start=start,
-        commands=commands,
-        # execute one step after the other
-        data=[
-            await execute_step(backend, detectors, cmd.transaction) for cmd in commands
-        ],
-    )
-    d["end"] = datetime.datetime.now()
-    return d
+    num_readings: int
+    ) -> Sequence[ReadTogether]:
+    data_docs = []
+    for cmd in tqdm.tqdm(commands, total=len(commands)):
+        r = await execute_step(backend, detectors, cmd.transaction, num_readings=num_readings)
+        data_docs.append(r)
+    return data_docs
 
 
 async def execute_step(
     backend: BackendRW,
     detectors: Sequence[ReadCommand],
     transaction_commands: Sequence[Command],
-):
+    num_readings: int
+) -> Sequence[ReadTogether]:
     """Handle transactional commands"""
+    assert num_readings >= 1
     # for simulator this is not necessary but just in case
-    # set all in parallel
+    # set all in parallel: e.g. if used with ophyd_async backend
     await set_(backend=backend, transaction_commands=transaction_commands)
     await trigger(backend=backend, detectors=detectors)
-    data = await read(backend=backend, detectors=detectors)
-    return {f"{dev.id}-{dev.property}": datum for dev, datum in itertools.zip_longest(detectors, data)}
 
+    data_epoch = [await read_and_encapsulate(backend=backend, detectors=detectors) for cnt in range(num_readings)]
+    return data_epoch
 
 async def set_(backend: BackendRW, transaction_commands: Sequence[Command]) -> None:
     await asyncio.gather(
@@ -209,6 +210,18 @@ async def trigger(backend: BackendRW, detectors: Sequence[ReadCommand]) -> None:
         *[backend.trigger(dev_id=dev.id, prop_id=dev.property) for dev in detectors]
     )
 
+async def read_and_encapsulate(backend: BackendRW, detectors: Sequence[ReadCommand]) -> ReadTogether:
+    """put data into a ReadToGether envelope"""
+    start = datetime.datetime.now()
+    data = await read(backend, detectors)
+    end = datetime.datetime.now()
+    reading = [
+        SingleReading(
+            name=f"{cmd.id}-{cmd.property}", payload=datum, cmd=cmd,
+        )
+        for datum, cmd in zip(data, detectors)
+    ]
+    return ReadTogether(data=reading, start=start, end=end)
 
 async def read(backend: BackendRW, detectors: Sequence[ReadCommand]) -> Sequence[Any]:
     # read in parallel
@@ -254,7 +267,6 @@ def convert_set_commands(
     output_view: str,
     backend_view: str,
 ):
-    command = commands
     if output_view == backend_view:
         # no need to convert
         return commands
@@ -264,13 +276,13 @@ def convert_set_commands(
         ), "expected to need to convert from design to device"
         #: Warning: this code path is not yet tested
         # raise AssertionError("This path is not yet tested!")
-        tmp = [cmd_rewriter.forward(c) for c in command]
+        tmp = [cmd_rewriter.forward(c) for c in commands]
         return list(itertools.chain(*tmp))
     elif output_view == "device":
         assert (
             backend_view == "design"
         ), "expected to need to convert from device to design"
-        tmp = [cmd_rewriter.inverse(c) for c in command]
+        tmp = [cmd_rewriter.inverse(c) for c in commands]
         return list(itertools.chain(*tmp))
     raise AssertionError("Did not expect to end up here!")
 
@@ -300,20 +312,20 @@ def convert_data_seq(
     *,
     cmd_rewriter: CommandRewriterBase,
     detectors: Sequence[ReadCommand],
-    data: Sequence[object],
+    data: Sequence[SingleReading],
     output_view: str,
     backend_view: str,
-) -> ReadTogether:
+) -> Sequence[SingleReading]:
     """
     Todo:
         merge with convert_data
 
     """
 
-    def create_command(rcmd: ReadCommand, datum):
+    def create_command(rcmd: ReadCommand, datum: SingleReading):
         assert rcmd is not None
         return Command(
-            id=rcmd.id, property=rcmd.property, value=datum, behaviour_on_error=None
+            id=rcmd.id, property=rcmd.property, value=datum.payload, behaviour_on_error=None
         )
 
     cmds = convert_set_commands(
@@ -327,12 +339,11 @@ def convert_data_seq(
     )
 
     # Todo: use key for checking ...
-    r = ReadTogether(
-        data=[
-            SingleReading(name=f"{cmd.id}-{cmd.property}", cmd=ReadCommand(id=cmd.id, property=cmd.property), payload=cmd.value)
-            for cmd in cmds
-        ]
-    )
+    r=[
+        SingleReading(name=f"{cmd.id}-{cmd.property}",
+                      cmd=ReadCommand(id=cmd.id, property=cmd.property), payload=cmd.value)
+        for cmd in cmds
+    ]
     return r
 
 

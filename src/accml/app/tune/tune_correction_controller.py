@@ -36,18 +36,18 @@ class TuneCorrectionController(TuneControllerInterface):
         mexec: MeasurementExecutionEngine,
         oracle: Oracle,
         policy: PolicyBase,
-        num_readings: int,
-        wait_before_read: float,
-        delay: float,
+        n_samples: int,
+        wait_after_set: float,
+        wait_between_samples: float,
         logger=logger
     ):
-        assert num_readings >= 1, "need to do at least one reading per loop"
+        assert n_samples >= 1, "need to do at least one reading per loop"
         self.mexec = mexec
         self.oracle = oracle
         self.policy = policy
-        self.num_readings = num_readings
-        self.wait_before_read = wait_before_read
-        self.delay = delay
+        self.num_readings = n_samples
+        self.wait_before_read = wait_after_set
+        self.delay = wait_between_samples
         self.logger = logger
 
     async def continuous(
@@ -156,6 +156,3 @@ def compute_stat_for_transactional_command(inp: TransactionCommand) -> Correctio
     return CorrectionStat(
         mean=data.mean(), std=data.std(), min=data.min(), max=data.max()
     )
-
-
-__all__ = ["TuneCorrectionController"]

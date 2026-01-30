@@ -12,7 +12,7 @@ from .tune_correction_controller import TuneCorrectionController
 logger = logging.getLogger("accml")
 
 
-def tune_correction(    
+async def tune_correction(
     dm: TuneResponseCollection,
     tune_target: Tune,
     *,
@@ -39,9 +39,9 @@ def tune_correction(
         oracle=oracle,
         policy=policy,
         mexec=mexec,
-        num_readings=n_samples,
-        wait_before_read=wait_after_set,
-        delay=wait_between_sample,
+        n_samples=n_samples,
+        wait_after_set=wait_after_set,
+        wait_between_samples=wait_between_sample,
     )
 
     rcmds = [ReadCommand(id="tune", property="transversal")]
@@ -49,7 +49,4 @@ def tune_correction(
         ReadCommand(id=elm.pc_name, property="delta_set_current") for elm in dm.col
     ]
 
-    async def run_continuously():
-        await controller.continuous(read_commands=rcmds, set_commands=set_cmds, n_steps=n_iterations)
-
-    asyncio.get_event_loop().run_until_complete(run_continuously())
+    await controller.continuous(read_commands=rcmds, set_commands=set_cmds, n_steps=n_iterations)

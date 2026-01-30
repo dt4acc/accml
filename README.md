@@ -1,5 +1,4 @@
-[![Documentation](https://github.com/python-accelerator-middle-layer/accml/actions/workflows/docs.yml/badge.svg)](ht
-tps://python-accelerator-middle-layer.github.io/accml/)
+[![Documentation](https://github.com/python-accelerator-middle-layer/accml/actions/workflows/docs.yml/badge.svg)](https://python-accelerator-middle-layer.github.io/accml/)
 
 # accml: Accelerator middle layer
 

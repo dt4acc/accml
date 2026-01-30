@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from accml_lib.core.bl.delta_backend import StateCache
@@ -20,7 +21,7 @@ from bluesky import RunEngine
 from bluesky.callbacks import LiveTable
 
 
-def main():
+async def main():
     with open("../tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, TuneResponseCollection)
@@ -42,13 +43,13 @@ def main():
     RE.subscribe(lt)
     mexec = BlueskyMeasurementExecutionEngine(
         run_engine=RE,
-        devices=setup(prefix=""),
+        devices=setup(prefix=None),
         info_signals=info_sigs,
         cache=StateCache(name="bluesky-based-tune-correction-reference"),
     )
 
-    tune_correction(dm, mexec=mexec, tune_target=Tune(x=1060, y=907))
+    await tune_correction(dm, mexec=mexec, tune_target=Tune(x=1060, y=907))
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

@@ -7,13 +7,16 @@ from accml_lib.core.model.output.result import Result
 def data_to_model(data: Result) -> MeasuredTuneResponse:
     tmp = defaultdict(list)
 
-    for single in data.data:
+    for epoch in data.data:
+        # Todo: improve me
+        #       currently only taking the last data value
+        single =  epoch.data[-1]
         tune = single.get("tune-transversal").payload
-        dev_name = "unknown"
-        setpoint = single.get("setpoint")
-        dev_name = setpoint.cmd["id"]
+        # currently only prepared that a single command i.e. state change was applied
+        cmd, = epoch.cmds
+        dev_name = cmd.id
         tmp[str(dev_name)].append(
-            MeasuredTuneResponseItem(setpoint=float(setpoint.payload["value"]), x=float(tune["x"]), y=float(tune["y"]))
+            MeasuredTuneResponseItem(setpoint=float(cmd.value), x=float(tune["x"]), y=float(tune["y"]))
         )
 
     r = MeasuredTuneResponse(

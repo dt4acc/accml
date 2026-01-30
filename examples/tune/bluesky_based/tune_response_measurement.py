@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from accml_lib.core.bl.delta_backend import StateCache
@@ -21,7 +22,7 @@ from accml.custom.bluesky.bluesky_measurement_execution_engine import (
 # from accml.custom.accml_lib.bessyii_on_tango.setup import setup
 
 
-def main():
+async def main():
     """
     Todo:
         execution engine use and setup should be provided by standard measurement execution engine
@@ -62,19 +63,19 @@ def main():
     # Now I add a hack: I only use quadrupoles whoes power converter is unique
     # I should rather work in device space right away
     pc_names = list(set(pc_names))
-    measure_tune_response(
+    uid = await measure_tune_response(
         detectors=[ReadCommand(id="tune", property="transversal")],
         quadrupole_pc_names=pc_names,
         measurement_values=[0, 1e0, 0, -1e0, 0],
         mexec=BlueskyMeasurementExecutionEngine(
             run_engine=RE,
-            devices=setup(prefix=""),
+            devices=setup(prefix=None),
             info_signals=info_sigs,
             cache=StateCache(name="reference-data-cache-used-by-bluesky"),
         ),
         n_readings=3,
     )
-
+    print(f"Measurement {uid=}")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
