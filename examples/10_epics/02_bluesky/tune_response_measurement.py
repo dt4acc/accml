@@ -1,13 +1,14 @@
 import asyncio
 import logging
 
+logger = logging.basicConfig(level=logging.WARNING)
+
 from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.model.utils.command import ReadCommand
 from accml_lib.core.model.utils.identifiers import LatticeElementPropertyID
 from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
 from accml_lib.custom.bessyii.setup import setup
 
-logger = logging.basicConfig(level=logging.WARNING)
 
 from bluesky import RunEngine
 from bluesky.callbacks import LiveTable
@@ -74,6 +75,7 @@ async def main():
             cache=StateCache(name="reference-data-cache-used-by-bluesky"),
         ),
         n_readings=3,
+        retrieve_reference=True
     )
     print(f"Measurement {uid=}")
 
