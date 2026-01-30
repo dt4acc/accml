@@ -22,7 +22,7 @@ from bluesky.callbacks import LiveTable
 
 
 async def main():
-    with open("../../tune/tune_response_from_simulation.yml") as fp:
+    with open("../../03_reference_data/tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, TuneResponseCollection)
 

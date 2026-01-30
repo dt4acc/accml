@@ -17,14 +17,14 @@ from accml.app.tune.tune_correction import tune_correction
 
 
 async def main():
-    with open("tune_response_from_simulation.yml") as fp:
+    with open("../03_reference_data/tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, TuneResponseCollection)
 
     yp, lm, ts = load_managers()
 
     mexec = BasicMeasurementExecutionEngine(
-        backend=simulator_backend(filename="bessy2_storage_ring_reflat.json"),
+        backend=simulator_backend(filename="../03_reference_data/bessy2_storage_ring_reflat.json"),
         cmd_rewriter=CommandRewriter(liaison_manager=lm, translation_service=ts),
         storage=SimpleDataStorage(),
         expected_view_for_output="device",

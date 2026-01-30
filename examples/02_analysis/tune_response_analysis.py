@@ -52,11 +52,12 @@ def main():
     simulation = True
     ophyd_async_read = False
     if simulation:
-        prep_data = data_from_simple_storage("tune_response_data_from_simulator.json")
-        save_file = "tune_response_from_simulation.yml"
+        prep_data = data_from_simple_storage("../04_measurement_simulation_data/tune_response_data_from_simulator.json")
+        save_file = "../03_reference_data/tune_response_from_simulation.yml"
     elif ophyd_async_read:
-        prep_data = data_from_simple_storage("ophyd_async_based/tune_response_data_with_ophyd_async.json")
-        save_file = "tune_response_from_measurement_w_ophyd_async.yml"
+        prep_data = data_from_simple_storage(
+            "../04_measurement_simulation_data/tune_response_data_with_ophyd_async.json")
+        save_file = "../03_reference_data/tune_response_from_measurement_w_ophyd_async.yml"
     else:
         prep_data = data_from_data_broker("heavy_local", uid="a8bb94fb")
         save_file = "tune_response_from_twin.yml"
