@@ -1,8 +1,7 @@
 import logging
 logging.basicConfig(level=logging.WARNING)
+
 import json
-
-
 import jsons
 
 from accml.app.tune.tune_measurement import measure_tune_response
@@ -14,14 +13,13 @@ from accml_lib.core.bl.command_rewritter import CommandRewriter
 from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.model.utils.command import ReadCommand
 from accml_lib.core.model.utils.identifiers import LatticeElementPropertyID
-from accml_lib.core.model.utils.command import register_serializer_for_command as register_cmd_serializer
-from accml_lib.core.model.output.result import register_serializer_for_read_together
 from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
 from accml_lib.custom.bessyii.setup import setup
+from accml_lib.core.model import jsons_support
 
 jsons_fork = jsons.fork()
-register_serializer_for_read_together(jsons_fork)
-register_cmd_serializer(jsons_fork)
+jsons_support.register_serializers(json_fork=jsons_fork)
+
 
 async def main():
     yp, lm, ts = load_managers()
@@ -38,7 +36,7 @@ async def main():
     # I should rather work in device space right away
     pc_names=list(set(pc_names))
     # here for demo only do it for two magnets
-    pc_names = pc_names[:2]
+    # pc_names = pc_names[:2]
     storage = SimpleDataStorage()
 
     await devices.get("tune").connect()
