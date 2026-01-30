@@ -8,6 +8,9 @@ logging.basicConfig(level=logging.WARNING)
 
 import jsons
 
+# load the necessary sub module
+import accml.work_bench.custom.ophyd_async
+
 import accml.work_bench as wb
 import accml.work_bench.all as wba
 import accml.work_bench.lib_.custom.bessyii as b2
@@ -42,10 +45,41 @@ async def main():
     state_cache = wba.StateCache(name="chromaticity-measurement")
     state_cache.cache
 
-    backend = b2.bessyii_simulator_backend("bessy2_storage_ring_reflat.json")
-    delta_backend = wba.Delta
+    if False:
+        backend = b2.bessyii_simulator_backend("bessy2_storage_ring_reflat.json")
+        delta_backend = wba.DeltaBackendRWProxy(
+            backend=backend,
+            cache=state_cache
+        )
+    else:
+        devices = b2.bessyii_setup(prefix=None)
+        # the measurement execution engine can do this connection directly
+        # at this stage I prefer to do it myself here.
+        # When the connection fails later on it will be not so straight forward
+        # to see what went wrong.
+        # One can inspect the plans below to see which devices are called
+        mc = devices.get("master_clock")
+        assert mc, "No master clock defined"
+        await mc.connect()
+        tune_dev = devices.get("tune")
+        assert tune_dev, "No tune device defined"
+        await tune_dev.connect()
+        del mc, tune_dev
+        backend = wb.custom.ophyd_async.OphydAsyncDeviceBackendRW(devices=devices)
+        delta_backend = wb.custom.ophyd_async.OphydAsyncDeltaBackendRWProxy(
+            backend=backend,
+            cache=state_cache
+        )
+
+    yp, lm, ts = b2.bessyii_load_managers()
+
+    storage = wba.SimpleDataStorage()
     mexec = wba.BasicMeasurementExecutionEngine(
-        cache=state_cache
+        backend=delta_backend,
+        cmd_rewriter=wba.CommandRewriter(liaison_manager=lm, translation_service=ts),
+        storage=storage,
+        expected_view_for_output="device",
+        num_readings=2
     )
 
     md = {}
@@ -66,7 +100,9 @@ async def main():
     # for reliabitlity it should be handled by the calling processes
     rcmd = wba.ReadCommand(id="mc-frequency", property="setpoint")
     ref_value = state_cache.get(wba.ReadCommand(id="mc-frequency", property="setpoint"))
-    assert ref_value is not None, "reference value is none"
+    if ref_value is None:
+        known_keys = state_cache.keys()
+    assert ref_value is not None, f"reference value for frequency is  none, but the following keys are known {known_keys}"
     print(f"{rcmd} started at {ref_value} .. setting it back")
 
     # This option does not work yet ... not to be able to configure
@@ -80,14 +116,14 @@ async def main():
                 wba.Command(
                     id="mc-frequency",
                     property="setpoint",
-                    value=ref_value,
+                    value=ref_value["mc-frequency-setpoint"]["value"],
                     behaviour_on_error=wba.BehaviourOnError.stop
                 )
             ]
         )
     ]
 
-    uid = await mexec.execute(
+    uuid = await mexec.execute(
         detectors=[wba.ReadCommand(id="tune", property="transversal")],
         commands_collection=cmd,
         md=md,
@@ -96,6 +132,12 @@ async def main():
         n_readings=3
         # delay=2
     )
+
+    data = storage.get(uuid)
+    data = jsons.dump(data)
+
+    with open("chromaticity_response_data_from_simulator.json", "wt") as fp:
+        json.dump(data, fp, indent=4)
 
     return uid
 

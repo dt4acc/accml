@@ -1,3 +1,5 @@
+import logging
+logging.basicConfig(level=logging.WARNING)
 import json
 
 
@@ -7,7 +9,7 @@ from accml.app.tune.tune_measurement import measure_tune_response
 from accml.core.utils.basic_measurement_execution_engine import BasicMeasurementExecutionEngine
 from accml.core.utils.simple_storage import SimpleDataStorage
 from accml.custom.ophyd_async.ophyd_async_backend import OphydAsyncDeviceBackendRW
-from accml.custom.ophyd_async.ophyd_async_measurement_execution_engine import OphydAsyncDeltaBackendRWProxy
+from accml.custom.ophyd_async.ophyd_async_delta_backend import OphydAsyncDeltaBackendRWProxy
 from accml_lib.core.bl.command_rewritter import CommandRewriter
 from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.model.utils.command import ReadCommand
@@ -36,7 +38,7 @@ async def main():
     # I should rather work in device space right away
     pc_names=list(set(pc_names))
     # here for demo only do it for two magnets
-    pc_names = pc_names
+    pc_names = pc_names[:2]
     storage = SimpleDataStorage()
 
     await devices.get("tune").connect()
@@ -68,7 +70,7 @@ async def main():
     data = storage.get(uuid)
     data = jsons.dump(data, fork_inst=jsons_fork)
 
-    with open("tune_response_data_with_ophyd_async.json", "wt") as fp:
+    with open("../../tune/ophyd_async_based/tune_response_data_with_ophyd_async.json", "wt") as fp:
         json.dump(data, fp, indent=4)
 
 
