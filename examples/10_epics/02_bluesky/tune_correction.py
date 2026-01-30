@@ -48,7 +48,7 @@ async def main():
         cache=StateCache(name="bluesky-based-tune-correction-reference"),
     )
 
-    await tune_correction(dm, mexec=mexec, tune_target=Tune(x=1060, y=907))
+    await tune_correction(dm, mexec=mexec, tune_target=Tune(x=1055, y=902))
 
 
 if __name__ == "__main__":
