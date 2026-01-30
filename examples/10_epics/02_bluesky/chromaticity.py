@@ -81,7 +81,7 @@ async def main():
     state_cache.cache
     mexec = BlueskyMeasurementExecutionEngine(
         run_engine=RE,
-        devices=setup(prefix=""),
+        devices=setup(prefix=None),
         info_signals=info_sigs,
         cache=state_cache
     )
@@ -92,10 +92,10 @@ async def main():
         detectors=[ReadCommand(id="tune", property="transversal")],
         commands_collection=cmds_on_machine.commands,  # need to add bpms
         md=md,
+        retrieve_reference=True,
         n_readings=2,
         wait_after_set=3,
-        wait_between_sample=2,
-        # delay=2
+        wait_between_samples=2,
     )
     print(f"Chromaticity run created {uid=}")
 
@@ -129,9 +129,10 @@ async def main():
         detectors=[ReadCommand(id="tune", property="transversal")],
         commands_collection=cmd,
         md=md,
+        retrieve_reference=True,
         wait_after_set=3,
-        wait_between_sample=2,
-        n_readings=3
+        wait_between_samples=2,
+        n_readings=3,
         # delay=2
     )
 

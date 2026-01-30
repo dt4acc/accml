@@ -2,6 +2,8 @@ import logging
 logging.basicConfig(level=logging.WARNING)
 
 import asyncio
+import yaml
+import jsons
 
 from accml.core.utils.basic_measurement_execution_engine import BasicMeasurementExecutionEngine
 from accml.core.utils.simple_storage import SimpleDataStorage
@@ -12,11 +14,6 @@ from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.model.output.tune import Tune
 from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
 from accml_lib.custom.bessyii.setup import setup
-
-
-import yaml
-import jsons
-
 from accml.app.tune.model import  TuneResponseCollection
 from accml.app.tune.tune_correction import tune_correction
 
@@ -46,7 +43,7 @@ async def main():
         expected_view_for_output="device",
         num_readings=1
     )
-    await tune_correction(dm, tune_target=Tune(x=1060, y=907), n_iterations=2, mexec=mexec)
+    await tune_correction(dm, tune_target=Tune(x=1055, y=902), n_iterations=2, mexec=mexec)
 
 
 if __name__ == "__main__":

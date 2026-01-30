@@ -46,7 +46,8 @@ async def measure_tune_response(
 
     uid = await mexec.execute(
         detectors=detectors,
-        commands_collection=cmds_on_machine.commands,  # need to add bpms
+        commands_collection=cmds_on_machine.commands,
+
         **kwargs,
         # detectors=[tunes],
         # actuators=actuators,

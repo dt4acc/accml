@@ -222,7 +222,10 @@ def retrieve_reference_state_plan(
     # how to handle that some data need an extra read ?
     ref_data = yield from bps.trigger_and_read(all_dev, name=ref_stream)
     for rcmd in commands:
-        value = ref_data.get(f"{rcmd.id}-{rcmd.property}").get("value")
+        needed_data_tag = f"{rcmd.id}-{rcmd.property}"
+        data_for_dev = ref_data.get(needed_data_tag)
+        assert data_for_dev is not None, f"Could not find data {needed_data_tag}, only know {list(ref_data)}"
+        value = data_for_dev.get("value")
         cache.set(rcmd, value)
 
 
@@ -233,6 +236,8 @@ def commands_plan(
     info_signals: Dict[str, Signal],
     cache: StateCache,
     n_readings: int,
+    wait_after_set: float,
+    wait_between_samples: float,
 ):
     """
 
@@ -254,8 +259,10 @@ def commands_plan(
         (command,) = tc.transaction
         flag, prop = delta_property(command.property)
         if flag:
-            ref = cache.get(ReadCommand(id=command.id, property=prop))
-            assert ref is not None
+            rcmd = ReadCommand(id=command.id, property=prop)
+            ref = cache.get(rcmd)
+            keys = cache.keys()
+            assert ref is not None, f"No reference value for {rcmd}: known keys {keys}"
             value = command.value + ref
         else:
             value = command.value
@@ -278,9 +285,11 @@ def commands_plan(
         # read all devices
         yield from bps.wait()
         # optional: give hardware / twin time
-        yield from bps.sleep(1)
+        yield from bps.sleep(wait_after_set)
         yield from bps.repeat(
-            functools.partial(bps.trigger_and_read, all_dev), num=n_readings
+            functools.partial(bps.trigger_and_read, all_dev),
+            num=n_readings,
+            delay=wait_between_samples
         )
 
 
@@ -291,6 +300,8 @@ def commands_execution_plan(
     actuators: Dict[str, Device],
     info_signals: Dict[str, Signal],
     cache: StateCache,
+    wait_after_set: float = 1.0,
+    wait_between_samples: float = 1.0,
     n_readings: int,
     retrieve_reference: bool = False,
     md: None,
@@ -304,24 +315,27 @@ def commands_execution_plan(
     @bpp.run_decorator(md=_md)
     def inner():
         # first ... load cache with reference state
-        yield from retrieve_reference_state_plan(
-            commands=list(
-                set(
-                    extract_current_state_probe_commands(
-                        itertools.chain(*[tc.transaction for tc in commands])
+        if retrieve_reference:
+            yield from retrieve_reference_state_plan(
+                commands=list(
+                    set(
+                        extract_current_state_probe_commands(
+                            itertools.chain(*[tc.transaction for tc in commands])
+                        )
                     )
-                )
-            ),
-            detectors=detectors,
-            actuators=actuators,
-            cache=cache,
-        )
+                ),
+                detectors=detectors,
+                actuators=actuators,
+                cache=cache,
+            )
         r = yield from commands_plan(
             commands=commands,
             detectors=detectors,
             actuators=actuators,
             info_signals=info_signals,
             n_readings=n_readings,
+            wait_after_set = wait_after_set,
+            wait_between_samples = wait_between_samples,
             cache=cache,
         )
         return r

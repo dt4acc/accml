@@ -23,16 +23,16 @@ class BlueskyTuneCorrectionController(TuneControllerInterface):
         oracle: Oracle,
         policy: PolicyBase,
         num_readings: int,
-        wait_before_read: float,
-        delay: float,
+        wait_after_set: float,
+        wait_between_sample: float,
         logger=logger,
     ):
         self.mexec = mexec
         self.oracle = oracle
         self.policy = policy
         self.num_readings = num_readings
-        self.wait_before_read = wait_before_read
-        self.delay = delay
+        self.wait_after_set = wait_after_set
+        self.wait_between_sample = wait_between_sample
         self.logger = logger
 
     async def continuous(
@@ -80,7 +80,7 @@ class BlueskyTuneCorrectionController(TuneControllerInterface):
                 md={},
                 n_steps=n_steps,
                 n_readings=self.num_readings,
-                delay=self.delay,
-                wait_before_read=self.wait_before_read,
+                wait_between_samples=self.wait_between_sample,
+                wait_after_set=self.wait_after_set,
             )
         )
