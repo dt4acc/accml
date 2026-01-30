@@ -1,8 +1,12 @@
 """
 
-For those that don't want to use a measurement execution engine
-based on bluesky (measurement orchestration) software stack
+Delta Backend when measuring with ophyd-async
 
+Todo:
+    implement it as filters passed to :class:`DeltaBackendRProxy` or
+    :class:`DeltaBackendRWProxy`
+
+    Following acquire instead of inherit
 """
 from accml_lib.core.bl.delta_backend import DeltaBackendRProxy, DeltaBackendRWProxy
 from accml_lib.core.model.utils.command import ReadCommand
