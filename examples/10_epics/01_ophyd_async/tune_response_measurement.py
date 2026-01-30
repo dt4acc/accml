@@ -70,7 +70,7 @@ async def main():
     data = storage.get(uuid)
     data = jsons.dump(data, fork_inst=jsons_fork)
 
-    with open("../../tune/ophyd_async_based/tune_response_data_with_ophyd_async.json", "wt") as fp:
+    with open("../../04_measurement_simulation_data/tune_response_data_with_ophyd_async.json", "wt") as fp:
         json.dump(data, fp, indent=4)
 
 
