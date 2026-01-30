@@ -5,8 +5,7 @@ from accml.custom.tango.devices.tunes import Tunes
 
 
 async def run_device():
-    trl = "SimpleTangoServer/test/tune_device"
-    trl = "PHYSICS/SOLEIL/TUNE"
+    trl = "simulator/ringsimulator/ringsimulator"
     tune = Tunes(name="tunes", trl=trl)
     await tune.connect()
     await tune.stage()
@@ -20,8 +19,8 @@ async def run_device():
     r = await tune.read()
     print("tune read")
     pprint.pprint(r)
-    dT_x = r["tunes-hor"]["timestamp"] - r1["tunes-hor"]["timestamp"]
-    dT_y = r["tunes-vert"]["timestamp"] - r1["tunes-vert"]["timestamp"]
+    dT_x = r["tunes-Tune_h"]["timestamp"] - r1["tunes-Tune_h"]["timestamp"]
+    dT_y = r["tunes-Tune_v"]["timestamp"] - r1["tunes-Tune_v"]["timestamp"]
     pprint.pprint(f"tune change r1 -> r x {dT_x}, {dT_y}")
     await tune.unstage()
 
