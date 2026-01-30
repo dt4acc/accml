@@ -12,6 +12,9 @@ def extract_device_identifiers(commands_collection: Sequence[TransactionCommand]
 async def connect_to_devices(devices, timeout=5.0):
     """
     """
+    for dev in devices:
+        assert dev is not None, "Sanity check, all devices must not be None"
+
     return await asyncio.gather(
         *[dev.connect(timeout=timeout) for dev in devices]
     )

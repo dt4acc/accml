@@ -36,7 +36,7 @@ ophyd-async = {version = "*", optional = true}
 aioca = {version = "*", optional = true}
 p4p = {version = "*", optional = true}
 # trango interface
-pytango = {version = "*", optional = true}
+pytango = {version = "<10.1", optional = true}
 
 [tool.poetry.extras]
 bluesky-epics = ["ophyd-async", "aioca", "p4p", "epics", "bluesky"]

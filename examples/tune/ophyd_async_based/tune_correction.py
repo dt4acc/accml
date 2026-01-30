@@ -26,7 +26,7 @@ async def main():
     dm = jsons.load(d, TuneResponseCollection)
 
     yp, lm, ts = load_managers()
-    devices = setup(prefix=None)
+    devices = setup(prefix="")
 
     await devices.get("tune").connect()
     await devices.get('quadrupole_pcs').connect()
@@ -42,7 +42,7 @@ async def main():
         expected_view_for_output="device",
         num_readings=1
     )
-    await tune_correction(dm, tune_target=Tune(x=1055, y=902), n_iterations=2, mexec=mexec)
+    await tune_correction(dm, tune_target=Tune(x=1060, y=907), n_iterations=2, mexec=mexec)
 
 
 if __name__ == "__main__":
