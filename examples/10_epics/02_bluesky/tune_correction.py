@@ -22,7 +22,7 @@ from bluesky.callbacks import LiveTable
 
 
 async def main():
-    with open("../tune_response_from_simulation.yml") as fp:
+    with open("../../tune/tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, TuneResponseCollection)
 
@@ -48,7 +48,7 @@ async def main():
         cache=StateCache(name="bluesky-based-tune-correction-reference"),
     )
 
-    await tune_correction(dm, mexec=mexec, tune_target=Tune(x=1060, y=907))
+    await tune_correction(dm, mexec=mexec, tune_target=Tune(x=1055, y=902))
 
 
 if __name__ == "__main__":

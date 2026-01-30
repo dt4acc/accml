@@ -46,8 +46,8 @@ class TuneCorrectionController(TuneControllerInterface):
         self.oracle = oracle
         self.policy = policy
         self.num_readings = n_samples
-        self.wait_before_read = wait_after_set
-        self.delay = wait_between_samples
+        self.wait_after_set = wait_after_set
+        self.wait_between_samples = wait_between_samples
         self.logger = logger
 
     async def continuous(
@@ -70,11 +70,11 @@ class TuneCorrectionController(TuneControllerInterface):
     ):
         current_state = None
 
-        if self.wait_before_read > 0e0:
-            await asyncio.sleep(self.wait_before_read)
+        if self.wait_after_set > 0e0:
+            await asyncio.sleep(self.wait_after_set)
         for i in range(self.num_readings):
-            if i > 0 and self.delay > 0:
-                await asyncio.sleep(self.delay)
+            if i > 0 and self.wait_between_samples > 0:
+                await asyncio.sleep(self.wait_between_samples)
             current_state = await self.mexec.trigger_read(read_commands)
 
         assert (
