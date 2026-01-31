@@ -47,19 +47,19 @@ def data_from_data_broker(catalog_name: str, uid: str):
 
 def main():
     simulation = True
-    ophyd_async_read = False
+    ophyd_async_read = True
     if simulation:
-        prep_data = data_from_simple_storage(data_dir / "04_measurement_simulation_data"/"tune_response_data_from_simulator.json")
-        save_file = data_dir / "03_reference_data" / "tune_response_from_simulation.yml"
+        prep_data = data_from_simple_storage(data_dir / "06_measurement_simulation_data"/"tune_response_data_from_simulator.json")
+        save_file = data_dir / "05_reference_data" / "tune_response_from_simulation.yml"
     elif ophyd_async_read:
         prep_data = data_from_simple_storage(
-            data_dir / "04_measurement_simulation_data" / "tune_response_data_with_ophyd_async.json"
+            data_dir / "06_measurement_simulation_data" / "tune_response_data_with_ophyd_async.json"
         )
-        save_file = data_dir / "03_reference_data"/ "tune_response_from_measurement_w_ophyd_async.yml"
+        save_file = data_dir / "05_reference_data"/ "tune_response_from_measurement_w_ophyd_async.yml"
     else:
         # Todo: enter the uuid that bluesky measurement showed
         prep_data = data_from_data_broker("heavy_local", uid="a8bb94fb")
-        save_file = "../../work_bench/tune/tune_response_from_twin.yml"
+        save_file = data_dir / "06_measurement_simulation_data" / "tune_response_from_twin.yml"
 
     result = wb.app.tune.tune_response_analysis(prep_data)
     tmp = jsons.dump(asdict(result))

@@ -1,0 +1,992 @@
+data:
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221489506
+                    y: 905.145527676972
+        end: '2026-01-31T12:31:25.278184+00:00'
+        start: '2026-01-31T12:31:24.637221+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622149096
+                    y: 905.1455276769318
+        end: '2026-01-31T12:31:26.295947+00:00'
+        start: '2026-01-31T12:31:25.278220+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221489465
+                    y: 905.1455276772092
+        end: '2026-01-31T12:31:27.434592+00:00'
+        start: '2026-01-31T12:31:26.298987+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221486675
+                    y: 905.1455276762748
+        end: '2026-01-31T12:31:28.466588+00:00'
+        start: '2026-01-31T12:31:27.434614+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622150375
+                    y: 905.1455276755482
+        end: '2026-01-31T12:31:29.485029+00:00'
+        start: '2026-01-31T12:31:28.469835+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622150382
+                    y: 905.1455276758965
+        end: '2026-01-31T12:31:30.504709+00:00'
+        start: '2026-01-31T12:31:29.485051+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: -1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221485784
+                    y: 905.1455276748877
+        end: '2026-01-31T12:31:31.994519+00:00'
+        start: '2026-01-31T12:31:30.508639+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490758718
+                    y: 894.2920722285068
+        end: '2026-01-31T12:31:33.022604+00:00'
+        start: '2026-01-31T12:31:31.994547+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: -1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490781185
+                    y: 894.2920722277966
+        end: '2026-01-31T12:31:34.045214+00:00'
+        start: '2026-01-31T12:31:33.026337+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490777838
+                    y: 894.2920722282718
+        end: '2026-01-31T12:31:35.063542+00:00'
+        start: '2026-01-31T12:31:34.045237+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: -1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490773138
+                    y: 894.2920722278104
+        end: '2026-01-31T12:31:36.082159+00:00'
+        start: '2026-01-31T12:31:35.066676+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490763464
+                    y: 894.292072228256
+        end: '2026-01-31T12:31:37.196689+00:00'
+        start: '2026-01-31T12:31:36.082187+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490778625
+                    y: 894.2920722271043
+        end: '2026-01-31T12:31:38.656091+00:00'
+        start: '2026-01-31T12:31:37.199730+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622149275
+                    y: 905.145527675701
+        end: '2026-01-31T12:31:39.590867+00:00'
+        start: '2026-01-31T12:31:38.656118+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221496327
+                    y: 905.1455276759667
+        end: '2026-01-31T12:31:39.678146+00:00'
+        start: '2026-01-31T12:31:39.594150+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622149461
+                    y: 905.1455276771323
+        end: '2026-01-31T12:31:40.697249+00:00'
+        start: '2026-01-31T12:31:39.678171+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622149713
+                    y: 905.145527675851
+        end: '2026-01-31T12:31:41.716730+00:00'
+        start: '2026-01-31T12:31:40.700403+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221491802
+                    y: 905.145527676307
+        end: '2026-01-31T12:31:42.734801+00:00'
+        start: '2026-01-31T12:31:41.716761+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221502457
+                    y: 905.1455276752009
+        end: '2026-01-31T12:31:43.998786+00:00'
+        start: '2026-01-31T12:31:42.738431+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.3441418240288
+                    y: 916.0154700431552
+        end: '2026-01-31T12:31:44.977322+00:00'
+        start: '2026-01-31T12:31:43.998808+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.3441418236885
+                    y: 916.0154700414736
+        end: '2026-01-31T12:31:45.017035+00:00'
+        start: '2026-01-31T12:31:44.980120+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.3441418230468
+                    y: 916.015470042315
+        end: '2026-01-31T12:31:46.033583+00:00'
+        start: '2026-01-31T12:31:45.017057+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.3441418244618
+                    y: 916.0154700412037
+        end: '2026-01-31T12:31:47.150592+00:00'
+        start: '2026-01-31T12:31:46.036690+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.3441418245056
+                    y: 916.0154700411364
+        end: '2026-01-31T12:31:48.180992+00:00'
+        start: '2026-01-31T12:31:47.150615+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.344141823075
+                    y: 916.0154700420652
+        end: '2026-01-31T12:31:49.606278+00:00'
+        start: '2026-01-31T12:31:48.184040+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622148407
+                    y: 905.1455276764809
+        end: '2026-01-31T12:31:50.584712+00:00'
+        start: '2026-01-31T12:31:49.606303+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221507548
+                    y: 905.1455276756335
+        end: '2026-01-31T12:31:50.641574+00:00'
+        start: '2026-01-31T12:31:50.587857+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622150342
+                    y: 905.1455276753293
+        end: '2026-01-31T12:31:51.659604+00:00'
+        start: '2026-01-31T12:31:50.641602+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622149941
+                    y: 905.1455276750185
+        end: '2026-01-31T12:31:52.677891+00:00'
+        start: '2026-01-31T12:31:51.662716+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221491643
+                    y: 905.1455276770864
+        end: '2026-01-31T12:31:53.697187+00:00'
+        start: '2026-01-31T12:31:52.677922+00:00'
+orig_data:
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221489506
+                    y: 905.145527676972
+        end: '2026-01-31T12:31:25.278184+00:00'
+        start: '2026-01-31T12:31:24.637221+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622149096
+                    y: 905.1455276769318
+        end: '2026-01-31T12:31:26.295947+00:00'
+        start: '2026-01-31T12:31:25.278220+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221489465
+                    y: 905.1455276772092
+        end: '2026-01-31T12:31:27.434592+00:00'
+        start: '2026-01-31T12:31:26.298987+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221486675
+                    y: 905.1455276762748
+        end: '2026-01-31T12:31:28.466588+00:00'
+        start: '2026-01-31T12:31:27.434614+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622150375
+                    y: 905.1455276755482
+        end: '2026-01-31T12:31:29.485029+00:00'
+        start: '2026-01-31T12:31:28.469835+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622150382
+                    y: 905.1455276758965
+        end: '2026-01-31T12:31:30.504709+00:00'
+        start: '2026-01-31T12:31:29.485051+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: -1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221485784
+                    y: 905.1455276748877
+        end: '2026-01-31T12:31:31.994519+00:00'
+        start: '2026-01-31T12:31:30.508639+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490758718
+                    y: 894.2920722285068
+        end: '2026-01-31T12:31:33.022604+00:00'
+        start: '2026-01-31T12:31:31.994547+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: -1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490781185
+                    y: 894.2920722277966
+        end: '2026-01-31T12:31:34.045214+00:00'
+        start: '2026-01-31T12:31:33.026337+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490777838
+                    y: 894.2920722282718
+        end: '2026-01-31T12:31:35.063542+00:00'
+        start: '2026-01-31T12:31:34.045237+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: -1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490773138
+                    y: 894.2920722278104
+        end: '2026-01-31T12:31:36.082159+00:00'
+        start: '2026-01-31T12:31:35.066676+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490763464
+                    y: 894.292072228256
+        end: '2026-01-31T12:31:37.196689+00:00'
+        start: '2026-01-31T12:31:36.082187+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1072.4738490778625
+                    y: 894.2920722271043
+        end: '2026-01-31T12:31:38.656091+00:00'
+        start: '2026-01-31T12:31:37.199730+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622149275
+                    y: 905.145527675701
+        end: '2026-01-31T12:31:39.590867+00:00'
+        start: '2026-01-31T12:31:38.656118+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221496327
+                    y: 905.1455276759667
+        end: '2026-01-31T12:31:39.678146+00:00'
+        start: '2026-01-31T12:31:39.594150+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622149461
+                    y: 905.1455276771323
+        end: '2026-01-31T12:31:40.697249+00:00'
+        start: '2026-01-31T12:31:39.678171+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622149713
+                    y: 905.145527675851
+        end: '2026-01-31T12:31:41.716730+00:00'
+        start: '2026-01-31T12:31:40.700403+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221491802
+                    y: 905.145527676307
+        end: '2026-01-31T12:31:42.734801+00:00'
+        start: '2026-01-31T12:31:41.716761+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221502457
+                    y: 905.1455276752009
+        end: '2026-01-31T12:31:43.998786+00:00'
+        start: '2026-01-31T12:31:42.738431+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.3441418240288
+                    y: 916.0154700431552
+        end: '2026-01-31T12:31:44.977322+00:00'
+        start: '2026-01-31T12:31:43.998808+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.3441418236885
+                    y: 916.0154700414736
+        end: '2026-01-31T12:31:45.017035+00:00'
+        start: '2026-01-31T12:31:44.980120+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.3441418230468
+                    y: 916.015470042315
+        end: '2026-01-31T12:31:46.033583+00:00'
+        start: '2026-01-31T12:31:45.017057+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 1
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.3441418244618
+                    y: 916.0154700412037
+        end: '2026-01-31T12:31:47.150592+00:00'
+        start: '2026-01-31T12:31:46.036690+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.3441418245056
+                    y: 916.0154700411364
+        end: '2026-01-31T12:31:48.180992+00:00'
+        start: '2026-01-31T12:31:47.150615+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1068.344141823075
+                    y: 916.0154700420652
+        end: '2026-01-31T12:31:49.606278+00:00'
+        start: '2026-01-31T12:31:48.184040+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622148407
+                    y: 905.1455276764809
+        end: '2026-01-31T12:31:50.584712+00:00'
+        start: '2026-01-31T12:31:49.606303+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221507548
+                    y: 905.1455276756335
+        end: '2026-01-31T12:31:50.641574+00:00'
+        start: '2026-01-31T12:31:50.587857+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622150342
+                    y: 905.1455276753293
+        end: '2026-01-31T12:31:51.659604+00:00'
+        start: '2026-01-31T12:31:50.641602+00:00'
+-   cmds:
+    -   behaviour_on_error: !!python/object/apply:accml_lib.core.model.utils.command.BehaviourOnError
+        - 1
+        id: Q3PD1R
+        property: delta_set_current
+        value:
+            type: int
+            value: 0
+    data:
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.408622149941
+                    y: 905.1455276750185
+        end: '2026-01-31T12:31:52.677891+00:00'
+        start: '2026-01-31T12:31:51.662716+00:00'
+    -   data:
+        -   cmd:
+                id: tune
+                property: transversal
+            name: tune-transversal
+            payload:
+                type: dict
+                value:
+                    x: 1070.4086221491643
+                    y: 905.1455276770864
+        end: '2026-01-31T12:31:53.697187+00:00'
+        start: '2026-01-31T12:31:52.677922+00:00'

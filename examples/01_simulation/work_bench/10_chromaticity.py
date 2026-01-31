@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+from pathlib import Path
 
 import numpy as np
 
@@ -14,6 +15,8 @@ import accml.work_bench.custom.ophyd_async
 import accml.work_bench as wb
 import accml.work_bench.all as wba
 import accml.work_bench.lib_.custom.bessyii as b2
+
+data_dir = Path(__name__).absolute().parent.parent.parent
 
 
 async def main():
@@ -136,7 +139,7 @@ async def main():
     data = storage.get(uuid)
     data = jsons.dump(data)
 
-    with open("chromaticity_response_data_from_simulator.json", "wt") as fp:
+    with open(data_dir / "06_measurement_simulation_data" / "chromaticity_response_data_from_simulator.json", "wt") as fp:
         json.dump(data, fp, indent=4)
 
     return uid

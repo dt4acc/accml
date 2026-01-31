@@ -1,17 +1,17 @@
+"""
+Warning:
+    Steerers currently not exported in BESSY II twin.
+"""
 import asyncio
 import logging
 logging.basicConfig(level=logging.WARNING)
 
-import jsons
-import yaml
-
-import numpy as np
 
 from accml_lib.core.bl.delta_backend import StateCache
 from accml.custom.bluesky.bluesky_measurement_execution_engine import (
     BlueskyMeasurementExecutionEngine,
 )
-from accml_lib.core.model.output.tune import Tune
+
 from accml_lib.core.model.utils.command import Command, ReadCommand, TransactionCommand, BehaviourOnError, CommandSequence
 from accml_lib.custom.bessyii.setup import setup
 
@@ -25,7 +25,7 @@ import pprint
 
 async def main():
 
-    devices = setup(prefix="")
+    devices = setup(prefix=None)
     orbit = devices.get("orbit")
     assert orbit is not None, "Could not load orbit"
     steerer_pcs = devices.get("steerer_pcs")
@@ -59,7 +59,7 @@ async def main():
         # + list(actuators.values())
         default_prec=10,
     )
-    db = catalog["heavy"]
+    db = catalog["heavy_local"]
     RE = RunEngine()
     [RE.subscribe(consumer) for consumer in [lt]]    
     RE.subscribe(db.v1.insert)

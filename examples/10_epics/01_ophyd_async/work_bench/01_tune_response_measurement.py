@@ -3,6 +3,7 @@ logging.basicConfig(level=logging.WARNING)
 
 import json
 import jsons
+from pathlib import Path
 
 import accml.work_bench as wb
 import accml.work_bench.all as wba
@@ -10,6 +11,8 @@ import accml.work_bench.lib_.custom.bessyii as b2
 
 # need to import it here ... it used below
 import accml.work_bench.custom.ophyd_async
+
+data_dir = Path(__name__).absolute().parent.parent.parent
 
 
 async def main():
@@ -23,11 +26,9 @@ async def main():
         lm.forward(wba.LatticeElementPropertyID(name, "main_strength")).device_name:
             name for name in tune_correction_quads
     }
-    # Now I add a hack: I only use quadrupoles whoes power converter is unique
-    # I should rather work in device space right away
     pc_names=list(set(pc_names))
     # here for demo only do it for two magnets
-    # pc_names = pc_names[:2]
+    pc_names = pc_names[:2]
     storage = wba.SimpleDataStorage()
 
     await devices.get("tune").connect()
@@ -47,7 +48,7 @@ async def main():
 
     uuid = await wb.app.tune.measure_tune_response(
        detectors=[
-           ReadCommand("tune", "transversal"),
+           wba.ReadCommand("tune", "transversal"),
        ],
        quadrupole_pc_names=pc_names,
        measurement_values=[0, 1e0, 0, -1e0, 0],
@@ -59,7 +60,7 @@ async def main():
     data = storage.get(uuid)
     data = jsons.dump(data)
 
-    with open("../../04_measurement_simulation_data/tune_response_data_with_ophyd_async.json", "wt") as fp:
+    with open(data_dir / "04_measurement_simulation_data" / "tune_response_data_with_ophyd_async.json", "wt") as fp:
         json.dump(data, fp, indent=4)
 
 
