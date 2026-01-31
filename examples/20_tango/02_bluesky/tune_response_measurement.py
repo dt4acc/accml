@@ -5,6 +5,7 @@ There are many imports below here. At the current state the
 """
 import asyncio
 import logging
+import pprint
 
 logger = logging.basicConfig(level=logging.WARNING)
 
@@ -46,9 +47,12 @@ async def main():
         await dev.connect()
 
     tune = devices.get("tune")
+    # I needed to find out how the tune is named here
+    # the keys I then added to the signals I want to see on the life table
+    # pprint.pprint(await tune.describe())
 
     detectors=[ReadCommand(id="tune", property="transversal")]
-    measurement_values=[0, 1e-2, 0, -1e-2, 0]
+    measurement_values=[0, 1e-4, 0, -1e-4, 0]
 
     info_sigs = {
         name: soft_signal_rw(str, name=name) for name in ["device_name", "channel_name"]
@@ -60,7 +64,7 @@ async def main():
     # TODO: should be handled internally, but overridable
     lt = LiveTable(
         [sig.name for _, sig in info_sigs.items()] +
-        ["tune-hor", "tune-vert"],
+        ["tune-Tune_h", "tune-Tune_v"],
         # required so that the TRL of the magnet is visible
         min_width=21
     )
@@ -83,7 +87,7 @@ async def main():
             cmds_on_machine.append(
                 TransactionCommand(
                     transaction=[
-                        Command(id=name, property="delta_magnetic_strength", value=val, behaviour_on_error=BehaviourOnError.stop)
+                        Command(id=name, property="delta_Strength", value=val, behaviour_on_error=BehaviourOnError.stop)
                     ]
                 )
             )
@@ -94,6 +98,7 @@ async def main():
         commands_collection=cmds_on_machine,
         n_readings=3,
         md=md,
+        retrieve_reference=True
     )
 
     print(f"Measurement {uid=}")
