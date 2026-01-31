@@ -19,7 +19,7 @@ from accml.app.tune.tune_correction import tune_correction
 
 
 async def main():
-    with open("../../03_reference_data/tune_response_from_simulation.yml") as fp:
+    with open("../../../05_reference_data/tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, TuneResponseCollection)
 

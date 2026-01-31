@@ -1,5 +1,7 @@
 import asyncio
 import logging
+from pathlib import Path
+
 logging.basicConfig(level=logging.WARNING)
 
 import yaml
@@ -9,16 +11,21 @@ import accml.work_bench as wb
 import accml.work_bench.all as wba
 import accml.work_bench.lib_.custom.bessyii as b2
 
+data_dir = Path(__name__).absolute().parent.parent.parent
+
+
 
 async def main():
-    with open("tune_response_from_simulation.yml") as fp:
+    with open(data_dir / "03_reference_data" / "tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, wb.app.tune.TuneResponseCollection)
 
     yp, lm, ts = b2.bessyii_load_managers()
 
     mexec = wba.BasicMeasurementExecutionEngine(
-        backend=b2.bessyii_simulator_backend(filename="bessy2_storage_ring_reflat.json"),
+        backend=b2.bessyii_simulator_backend(
+            data_dir / "03_reference_data" / "bessy2_storage_ring_reflat.json"
+        ),
         cmd_rewriter=wba.CommandRewriter(liaison_manager=lm, translation_service=ts),
         storage=wba.SimpleDataStorage(),
         expected_view_for_output="device",

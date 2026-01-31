@@ -1,8 +1,4 @@
 import logging
-logging.basicConfig(level=logging.WARNING)
-
-import json
-import jsons
 
 from accml.app.tune.tune_measurement import measure_tune_response
 from accml.core.utils.basic_measurement_execution_engine import BasicMeasurementExecutionEngine
@@ -15,10 +11,20 @@ from accml_lib.core.model.utils.command import ReadCommand
 from accml_lib.core.model.utils.identifiers import LatticeElementPropertyID
 from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
 from accml_lib.custom.bessyii.setup import setup
-from accml_lib.core.model import jsons_support
 
-jsons_fork = jsons.fork()
-jsons_support.register_serializers(json_fork=jsons_fork)
+logging.basicConfig(level=logging.WARNING)
+
+import json
+import jsons
+
+import accml.work_bench as wb
+import accml.work_bench.all as wba
+import accml.work_bench.lib_.custom.bessyii as b2
+
+# need to import it here ... it used below
+import accml.work_bench.custom.ophyd_async
+
+
 
 
 async def main():
