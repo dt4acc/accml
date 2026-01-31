@@ -6,6 +6,7 @@ from typing import Sequence, Dict, Union
 from bluesky import plan_stubs as bps, preprocessors as bpp
 from ophyd_async.core import Device, Signal
 
+from accml.custom.bluesky.utils import as_json_compatible_device_id
 from accml_lib.core.bl.delta_backend import delta_property, StateCache
 from accml_lib.core.model.utils.command import Command, TransactionCommand, ReadCommand
 
@@ -222,7 +223,8 @@ def retrieve_reference_state_plan(
     # how to handle that some data need an extra read ?
     ref_data = yield from bps.trigger_and_read(all_dev, name=ref_stream)
     for rcmd in commands:
-        needed_data_tag = f"{rcmd.id}-{rcmd.property}"
+        # Todo: current approach to be json compatible
+        needed_data_tag = f"{as_json_compatible_device_id(rcmd.id)}-{rcmd.property}"
         data_for_dev = ref_data.get(needed_data_tag)
         assert data_for_dev is not None, f"Could not find data {needed_data_tag}, only know {list(ref_data)}"
         value = data_for_dev.get("value")
