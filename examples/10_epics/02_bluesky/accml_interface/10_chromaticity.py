@@ -44,7 +44,7 @@ async def main():
     fend   = + 1.  * freq_factor * df
 
     frequencies = [0] + np.linspace(fstart, fend, n_steps).tolist()
-    
+
     cmds_on_machine = []
     for val in frequencies:
         cmds_on_machine.append(
@@ -72,8 +72,8 @@ async def main():
         default_prec=10,
     )
 
-    db = catalog["heavy"]
-    
+    db = catalog["heavy_local"]
+
     RE = RunEngine()
     RE.subscribe(lt)
     RE.subscribe(db.v1.insert)
