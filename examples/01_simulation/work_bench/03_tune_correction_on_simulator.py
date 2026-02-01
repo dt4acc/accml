@@ -16,7 +16,7 @@ data_dir = Path(__name__).absolute().parent.parent.parent
 
 
 async def main():
-    with open(data_dir / "03_reference_data" / "tune_response_from_simulation.yml") as fp:
+    with open(data_dir / "05_reference_data" / "tune_response_from_simulation.yml") as fp:
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, wb.app.tune.TuneResponseCollection)
 
@@ -24,7 +24,7 @@ async def main():
 
     mexec = wba.BasicMeasurementExecutionEngine(
         backend=b2.bessyii_simulator_backend(
-            data_dir / "03_reference_data" / "bessy2_storage_ring_reflat.json"
+            data_dir / "05_reference_data" / "bessy2_storage_ring_reflat.json"
         ),
         cmd_rewriter=wba.CommandRewriter(liaison_manager=lm, translation_service=ts),
         storage=wba.SimpleDataStorage(),

@@ -132,7 +132,8 @@ async def main():
         md=md,
         wait_after_set=3,
         wait_between_sample=2,
-        n_readings=3
+        n_readings=3,
+        retrieve_reference=True
         # delay=2
     )
 
