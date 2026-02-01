@@ -27,7 +27,7 @@ async def main():
     # Now I add a hack: I only use quadrupoles whoes power converter is unique
     # I should rather work in device space right away
     pc_names=list(set(pc_names))
-    backend = simulator_backend("../03_reference_data/bessy2_storage_ring_reflat.json")
+    backend = simulator_backend("../../05_reference_data/bessy2_storage_ring_reflat.json")
     storage = SimpleDataStorage()
     mexec = BasicMeasurementExecutionEngine(
         backend=backend,
@@ -48,7 +48,7 @@ async def main():
     data = storage.get(uuid)
     data = jsons.dump(data, fork_inst=jsons_fork)
 
-    with open("../04_measurement_simulation_data/tune_response_data_from_simulator.json", "wt") as fp:
+    with open("../../06_measurement_simulation_data/tune_response_data_from_simulator.json", "wt") as fp:
         json.dump(data, fp, indent=4)
 
 

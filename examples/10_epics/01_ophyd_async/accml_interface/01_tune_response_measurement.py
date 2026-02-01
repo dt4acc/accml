@@ -1,4 +1,5 @@
 import logging
+# if not given aioca will provide a lot of output
 logging.basicConfig(level=logging.WARNING)
 
 import json
@@ -11,15 +12,16 @@ from accml.custom.ophyd_async.ophyd_async_backend import OphydAsyncDeviceBackend
 from accml.custom.ophyd_async.ophyd_async_delta_backend import OphydAsyncDeltaBackendRWProxy
 from accml_lib.core.bl.command_rewritter import CommandRewriter
 from accml_lib.core.bl.delta_backend import StateCache
+from accml_lib.core.model import jsons_support
 from accml_lib.core.model.utils.command import ReadCommand
 from accml_lib.core.model.utils.identifiers import LatticeElementPropertyID
 from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
 from accml_lib.custom.bessyii.setup import setup
-from accml_lib.core.model import jsons_support
+
+
 
 jsons_fork = jsons.fork()
-jsons_support.register_serializers(json_fork=jsons_fork)
-
+jsons_support.register_serializers(jsons_fork)
 
 async def main():
     yp, lm, ts = load_managers()
@@ -36,7 +38,7 @@ async def main():
     # I should rather work in device space right away
     pc_names=list(set(pc_names))
     # here for demo only do it for two magnets
-    # pc_names = pc_names[:2]
+    pc_names = pc_names[:2]
     storage = SimpleDataStorage()
 
     await devices.get("tune").connect()
@@ -68,7 +70,7 @@ async def main():
     data = storage.get(uuid)
     data = jsons.dump(data, fork_inst=jsons_fork)
 
-    with open("../../04_measurement_simulation_data/tune_response_data_with_ophyd_async.json", "wt") as fp:
+    with open("../../../06_measurement_simulation_data/tune_response_data_with_ophyd_async.json", "wt") as fp:
         json.dump(data, fp, indent=4)
 
 
