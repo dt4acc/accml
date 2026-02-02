@@ -39,8 +39,8 @@ async def main():
     RE = RunEngine()
     [RE.subscribe(consumer) for consumer in [lt]]
     # TODO: if you need to save the results, you need mongo and then uncomment the below two lines.
-    db = catalog["heavy_local"]
-    RE.subscribe(db.v1.insert)
+    # db = catalog["heavy_local"]
+    # RE.subscribe(db.v1.insert)
 
     yp, lm, _ = b2.bessyii_load_managers()
     # Todo: remove this line after only Q3/Q4 are flagged as tune correction magnets

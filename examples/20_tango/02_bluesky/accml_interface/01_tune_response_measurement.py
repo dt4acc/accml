@@ -71,8 +71,8 @@ async def main():
     RE = RunEngine()
     [RE.subscribe(consumer) for consumer in [lt]]
     # TODO: if you need to save the results, you need mongo and then uncomment the below two lines.
-    db = catalog["heavy_local"]
-    RE.subscribe(db.v1.insert)
+    # db = catalog["heavy_local"]
+    # RE.subscribe(db.v1.insert)
 
     mexec=BlueskyMeasurementExecutionEngine(
         run_engine=RE,
