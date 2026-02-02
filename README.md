@@ -54,7 +54,9 @@ python3 -m pip install \
 ### 4. Run the Virtual Accelerator (Test bench) --EPICS VERSION
 ```bash 
 apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/containers/pyat-softioc-digital-twin:default-v0-5-1-bessy.2711893
-
+```
+### 4.1 If you need to access epics devices from terminal get epics container
+```bash 
 apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/epics-tools:latest
 ```
 Keep this terminal running — it simulates a virtual accelerator backend.
@@ -69,16 +71,18 @@ python3 01_tune_response_measurement.py
 
 ```bash
 apptainer pull -F virtual-accelerator.sif oras://gitlab-registry.synchrotron-soleil.fr/software-control-system/containers/apptainer/virtual-accelerator:latest
+```
+```bash
 apptainer run --cleanenv virtual-accelerator.sif
 ```
 Keep this terminal running — it simulates a virtual accelerator backend.
 ### 5.1 Run the pyAML Client (example)
 ```bash
-cd examples/20_epics/02_bluesky/accml_interface
+cd examples/20_epics/02_bluesky/accml_interface 
 ```
 
 execute:
 ```bash
-python3 01_tune_response_measurement.py
+python3 01_tune_response_measurement.py TANGO_HOST=localhost:11000
 ```
     
