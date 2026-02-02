@@ -1,0 +1,209 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>accml documentation &mdash; accml  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The Design of accml and accml_lib" href="background/design.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            accml
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="background/design.html">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="background/implementation.html">Implementation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">accml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">accml documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="accml-documentation">
+<h1>accml documentation<a class="headerlink" href="#accml-documentation" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="background/design.html">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="background/implementation.html">Implementation</a></li>
+</ul>
+</div>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>accml provides a particle accelerator middle layer, which is built using
+a clean architecture and structured communication. It consists of two
+main packages: <cite>accml</cite> it self and the libray <cite>accml_lib</cite>.</p>
+<ul>
+<li><p>accml_lib contains:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>used data models</p></li>
+<li><p>interface definitions</p></li>
+<li><p>and all code which is used by client and twin code</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><dl class="simple">
+<dt>accml contains:</dt><dd><ul class="simple">
+<li><p>code that is only used by the client</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The <cite>accml</cite> design is described in <a class="reference internal" href="background/design.html"><span class="doc">The Design of accml and accml_lib</span></a>.
+Its implementation concepts are give in
+<a class="reference internal" href="background/implementation.html"><span class="doc">Implementation</span></a>.</p>
+</section>
+</section>
+<section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span></code> support will be provided later. For the time being, follow these steps.</p>
+<p>First clone the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/python-accelerator-middle-layer/accml.git<span class="w"> </span>--recurse-submodules
+</pre></div>
+</div>
+<p>Create a fresh virtual environment (the name <code class="docutils literal notranslate"><span class="pre">venv-accml</span></code> is just an example):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv-accml
+</pre></div>
+</div>
+<p>Activate the virtual environment. In a Bourne-style shell (e.g. <code class="docutils literal notranslate"><span class="pre">bash</span></code>) run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>venv-accml/bin/activate
+</pre></div>
+</div>
+<p>Now install <code class="docutils literal notranslate"><span class="pre">accml</span></code> in the activated environment.</p>
+<p>For an EPICS facility use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">&#39;accml[bluesky-epics]&#39;</span><span class="w"> </span>accml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">&#39;accml/external-repositories/accml_lib[bluesky-epics,pyat-simulator]&#39;</span>
+</pre></div>
+</div>
+<p>For a TANGO facility use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">&#39;accml[bluesky-tango]&#39;</span><span class="w"> </span>accml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">&#39;accml/external-repositories/accml_lib[bluesky-tango,pyat-simulator]&#39;</span>
+</pre></div>
+</div>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
+<p>Have a look to the example directory of accml! Please drop a line for any
+further information.</p>
+</section>
+<section id="api-documentation">
+<h2>API documentation<a class="headerlink" href="#api-documentation" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>accml documentation :doc:src/accml.rst</p></li>
+<li><p>accml_lib documentation at  <a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.html">https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.html</a></p></li>
+</ul>
+</section>
+<section id="collaboration-community">
+<h2>Collaboration community<a class="headerlink" href="#collaboration-community" title="Link to this heading"></a></h2>
+<section id="discussion">
+<h3>Discussion<a class="headerlink" href="#discussion" title="Link to this heading"></a></h3>
+<p><a class="reference external" href="https://mattermost.hzdr.de/accelerator-middle-layer/channels/town-square">Mattermost</a></p>
+<p>(please log in using Helmoltz ID, you will be prompt to access with your own lab/university credentials)</p>
+</section>
+<section id="shared-documents">
+<h3>Shared documents<a class="headerlink" href="#shared-documents" title="Link to this heading"></a></h3>
+<p>to access the shared documents please ask S.Liuzzo for access rigths.</p>
+<p>The  “software requirement specification” document is visible here:
+<a class="reference external" href="https://www.overleaf.com/project/67d2b7d267244c3902da8265">https://www.overleaf.com/project/67d2b7d267244c3902da8265</a></p>
+</section>
+<section id="mailing-list">
+<h3>Mailing list:<a class="headerlink" href="#mailing-list" title="Link to this heading"></a></h3>
+<p>to be added to the pyAML mailing list please write to S.Liuzzo</p>
+</section>
+</section>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="background/design.html" class="btn btn-neutral float-right" title="The Design of accml and accml_lib" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Helmholtz Zentrum Berlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

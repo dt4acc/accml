@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>accml.app.tune.bluesky package &mdash; accml  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            accml
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../background/design.html">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../background/implementation.html">Implementation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">accml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">accml.app.tune.bluesky package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/src/accml.app.tune.bluesky.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="accml-app-tune-bluesky-package">
+<h1>accml.app.tune.bluesky package<a class="headerlink" href="#accml-app-tune-bluesky-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-accml.app.tune.bluesky.preprocess_databroker_data">
+<span id="accml-app-tune-bluesky-preprocess-databroker-data-module"></span><h2>accml.app.tune.bluesky.preprocess_databroker_data module<a class="headerlink" href="#module-accml.app.tune.bluesky.preprocess_databroker_data" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.app.tune.bluesky.preprocess_databroker_data.data_to_model">
+<span class="sig-prename descclassname"><span class="pre">accml.app.tune.bluesky.preprocess_databroker_data.</span></span><span class="sig-name descname"><span class="pre">data_to_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/app/tune/bluesky/preprocess_databroker_data.html#data_to_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.app.tune.bluesky.preprocess_databroker_data.data_to_model" title="Link to this definition"></a></dt>
+<dd><p>For data as stored by bluesky / databroker</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="accml.app.tune.html#accml.app.tune.model.MeasuredTuneResponse" title="accml.app.tune.model.MeasuredTuneResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeasuredTuneResponse</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>]</em><em>]</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.app.tune.bluesky.preprocess_databroker_data.select_repetitions">
+<span class="sig-prename descclassname"><span class="pre">accml.app.tune.bluesky.preprocess_databroker_data.</span></span><span class="sig-name descname"><span class="pre">select_repetitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acceptable_repetition</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/app/tune/bluesky/preprocess_databroker_data.html#select_repetitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.app.tune.bluesky.preprocess_databroker_data.select_repetitions" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="accml.app.tune.html#accml.app.tune.model.MeasuredTuneResponse" title="accml.app.tune.model.MeasuredTuneResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeasuredTuneResponse</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="accml.app.tune.html#accml.app.tune.model.MeasuredTuneResponse" title="accml.app.tune.model.MeasuredTuneResponse"><em>MeasuredTuneResponse</em></a>)</p></li>
+<li><p><strong>acceptable_repetition</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.app.tune.bluesky.preprocess_databroker_data.select_repetitions_for_power_converter">
+<span class="sig-prename descclassname"><span class="pre">accml.app.tune.bluesky.preprocess_databroker_data.</span></span><span class="sig-name descname"><span class="pre">select_repetitions_for_power_converter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acceptable_repetition</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/app/tune/bluesky/preprocess_databroker_data.html#select_repetitions_for_power_converter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.app.tune.bluesky.preprocess_databroker_data.select_repetitions_for_power_converter" title="Link to this definition"></a></dt>
+<dd><p>Filter out the acceptable data using repetition</p>
+<p>For BESSY II e.g. the Tune measurement is free running, thus the first
+value taken can be correct, but not necessarily. So the race condition is avoided taken
+only acceptable repetitions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="accml.app.tune.html#accml.app.tune.model.MeasuredTuneResponsePerPowerConverter" title="accml.app.tune.model.MeasuredTuneResponsePerPowerConverter"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeasuredTuneResponsePerPowerConverter</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="accml.app.tune.html#accml.app.tune.model.MeasuredTuneResponsePerPowerConverter" title="accml.app.tune.model.MeasuredTuneResponsePerPowerConverter"><em>MeasuredTuneResponsePerPowerConverter</em></a>)</p></li>
+<li><p><strong>acceptable_repetition</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-accml.app.tune.bluesky.tune_correction">
+<span id="accml-app-tune-bluesky-tune-correction-module"></span><h2>accml.app.tune.bluesky.tune_correction module<a class="headerlink" href="#module-accml.app.tune.bluesky.tune_correction" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.app.tune.bluesky.tune_correction.tune_correction">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.app.tune.bluesky.tune_correction.</span></span><span class="sig-name descname"><span class="pre">tune_correction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tune_target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mexec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_after_set</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_between_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/app/tune/bluesky/tune_correction.html#tune_correction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.app.tune.bluesky.tune_correction.tune_correction" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dm</strong> (<a class="reference internal" href="accml.app.tune.html#accml.app.tune.model.TuneResponseCollection" title="accml.app.tune.model.TuneResponseCollection"><em>TuneResponseCollection</em></a>)</p></li>
+<li><p><strong>tune_target</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.simulator.html#accml_lib.core.interfaces.simulator.calculation_output.Tune" title="(in accml_lib)"><em>Tune</em></a>)</p></li>
+<li><p><strong>mexec</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.measurement_execution_engine.MeasurementExecutionEngine" title="(in accml_lib)"><em>MeasurementExecutionEngine</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-accml.app.tune.bluesky.tune_correction_controller">
+<span id="accml-app-tune-bluesky-tune-correction-controller-module"></span><h2>accml.app.tune.bluesky.tune_correction_controller module<a class="headerlink" href="#module-accml.app.tune.bluesky.tune_correction_controller" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="accml.app.tune.bluesky.tune_correction_controller.BlueskyTuneCorrectionController">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.app.tune.bluesky.tune_correction_controller.</span></span><span class="sig-name descname"><span class="pre">BlueskyTuneCorrectionController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mexec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oracle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_readings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_after_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_between_sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Logger</span> <span class="pre">accml</span> <span class="pre">(WARNING)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/app/tune/bluesky/tune_correction_controller.html#BlueskyTuneCorrectionController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.app.tune.bluesky.tune_correction_controller.BlueskyTuneCorrectionController" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="accml.app.tune.html#accml.app.tune.interface.TuneControllerInterface" title="accml.app.tune.interface.TuneControllerInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">TuneControllerInterface</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mexec</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.measurement_execution_engine.MeasurementExecutionEngine" title="(in accml_lib)"><em>MeasurementExecutionEngine</em></a>)</p></li>
+<li><p><strong>oracle</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.solver.html#accml_lib.core.interfaces.solver.oracle.Oracle" title="(in accml_lib)"><em>Oracle</em></a>)</p></li>
+<li><p><strong>policy</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.solver.html#accml_lib.core.interfaces.solver.policy.PolicyBase" title="(in accml_lib)"><em>PolicyBase</em></a>)</p></li>
+<li><p><strong>num_readings</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>wait_after_set</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+<li><p><strong>wait_between_sample</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.app.tune.bluesky.tune_correction_controller.BlueskyTuneCorrectionController.continuous">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">continuous</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/app/tune/bluesky/tune_correction_controller.html#BlueskyTuneCorrectionController.continuous"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.app.tune.bluesky.tune_correction_controller.BlueskyTuneCorrectionController.continuous" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>read_commands</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadCommand</span></code></a>]</span>) – commands to retrieve the observed positions</p></li>
+<li><p><strong>set_commands</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Command</span></code></a>]</span>) – commands to set the actuators. Note that
+a copy of the command will be made and the
+value will be adapted</p></li>
+<li><p><strong>n_steps</strong> – if set to None, run forever, otherwise run
+maximum number of steps and stop then</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>Discussion:</dt><dd><p>Should “read commands” and “set commands” be made
+available already at init?</p>
+<p>Read commands tell the controller how to get to an
+“observable” state. “set_commands” allow the controller
+to e.g. probe the used measurement/cmd execution engine
+if these commands are understood and available.</p>
+<p>The commands actually set will be typically produced by
+the “policy”. An alternate way would be that the policy
+changes the step to be taken. The commands to be executed
+are then generated by the controller.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-accml.app.tune.bluesky">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-accml.app.tune.bluesky" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Helmholtz Zentrum Berlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

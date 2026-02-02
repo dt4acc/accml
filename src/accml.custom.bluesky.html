@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>accml.custom.bluesky package &mdash; accml  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            accml
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../background/design.html">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../background/implementation.html">Implementation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">accml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">accml.custom.bluesky package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/src/accml.custom.bluesky.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="accml-custom-bluesky-package">
+<h1>accml.custom.bluesky package<a class="headerlink" href="#accml-custom-bluesky-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-accml.custom.bluesky.bluesky_measurement_execution_engine">
+<span id="accml-custom-bluesky-bluesky-measurement-execution-engine-module"></span><h2>accml.custom.bluesky.bluesky_measurement_execution_engine module<a class="headerlink" href="#module-accml.custom.bluesky.bluesky_measurement_execution_engine" title="Link to this heading"></a></h2>
+<p>Demonstrator of a measurement execution engine</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<ul class="simple">
+<li><p>implement full functionality</p></li>
+</ul>
+</div>
+<p>Missing features:</p>
+<ul class="simple">
+<li><p>handling behaviour_on_error</p></li>
+<li><p>how much of the accelerator access to wrap?</p></li>
+<li><p>hide devices behind a software multiplexer?
+In its current form quite some information will be stored
+in the databroker</p></li>
+</ul>
+<dl class="py class">
+<dt class="sig sig-object py" id="accml.custom.bluesky.bluesky_measurement_execution_engine.BlueskyMeasurementExecutionEngine">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.custom.bluesky.bluesky_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">BlueskyMeasurementExecutionEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">devices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/bluesky_measurement_execution_engine.html#BlueskyMeasurementExecutionEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.bluesky_measurement_execution_engine.BlueskyMeasurementExecutionEngine" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.measurement_execution_engine.MeasurementExecutionEngine" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeasurementExecutionEngine</span></code></a></p>
+<p>Demonstrator of a measurement engine as a bluesky runengine</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>devices</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.devices_facade.DevicesFacade" title="(in accml_lib)"><em>DevicesFacade</em></a>)</p></li>
+<li><p><strong>run_engine</strong> (<em>RunEngine</em>)</p></li>
+<li><p><strong>info_signals</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><em>Signal</em><em>]</em>)</p></li>
+<li><p><strong>cache</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.bl.html#accml_lib.core.bl.delta_backend.StateCache" title="(in accml_lib)"><em>StateCache</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.custom.bluesky.bluesky_measurement_execution_engine.BlueskyMeasurementExecutionEngine.execute">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commands_collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">md</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/bluesky_measurement_execution_engine.html#BlueskyMeasurementExecutionEngine.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.bluesky_measurement_execution_engine.BlueskyMeasurementExecutionEngine.execute" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>identifier to the data</p>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>commands_collection</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.TransactionCommand" title="(in accml_lib)"><em>TransactionCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>md</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><em>object</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Measurement engine is responsible to store data
+as appropriate</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.custom.bluesky.bluesky_measurement_execution_engine.BlueskyMeasurementExecutionEngine.set">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/bluesky_measurement_execution_engine.html#BlueskyMeasurementExecutionEngine.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.bluesky_measurement_execution_engine.BlueskyMeasurementExecutionEngine.set" title="Link to this definition"></a></dt>
+<dd><p>execute these commands together</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cmds</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><em>Command</em></a><em>]</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.custom.bluesky.bluesky_measurement_execution_engine.BlueskyMeasurementExecutionEngine.trigger_read">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">trigger_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/bluesky_measurement_execution_engine.html#BlueskyMeasurementExecutionEngine.trigger_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.bluesky_measurement_execution_engine.BlueskyMeasurementExecutionEngine.trigger_read" title="Link to this definition"></a></dt>
+<dd><p>Following ophyd-async / ophyd design</p>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Is this a good idea?</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.output.html#accml_lib.core.model.output.result.ReadTogether" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadTogether</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>cmds</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-accml.custom.bluesky.plans">
+<span id="accml-custom-bluesky-plans-module"></span><h2>accml.custom.bluesky.plans module<a class="headerlink" href="#module-accml.custom.bluesky.plans" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.custom.bluesky.plans.simple_command_sequence_execution_plan">
+<span class="sig-prename descclassname"><span class="pre">accml.custom.bluesky.plans.</span></span><span class="sig-name descname"><span class="pre">simple_command_sequence_execution_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actuators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">md</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/plans.html#simple_command_sequence_execution_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.plans.simple_command_sequence_execution_plan" title="Link to this definition"></a></dt>
+<dd><p>Translate simple commands (i.e. only one device at a time) using bluesky plan stubs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>commands</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><em>Command</em></a><em>]</em>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><em>Device</em><em>]</em>)</p></li>
+<li><p><strong>actuators</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Device</em><em>]</em>)</p></li>
+<li><p><strong>info_signals</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Signal</em><em>]</em>)</p></li>
+<li><p><strong>md</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.custom.bluesky.plans.transactional_actuator_commands_plan">
+<span class="sig-prename descclassname"><span class="pre">accml.custom.bluesky.plans.</span></span><span class="sig-name descname"><span class="pre">transactional_actuator_commands_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">transactional_commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actuators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_readings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_before_read</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/plans.html#transactional_actuator_commands_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.plans.transactional_actuator_commands_plan" title="Link to this definition"></a></dt>
+<dd><p>Inner plan for <a class="reference internal" href="#accml.custom.bluesky.plans.transactional_commands_sequence_execution_plan" title="accml.custom.bluesky.plans.transactional_commands_sequence_execution_plan"><code class="xref py py-func docutils literal notranslate"><span class="pre">transactional_commands_sequence_execution_plan()</span></code></a></p>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>Implement stop, ignore, rollback etc
+Device replace by ophyd_async.Settable
+info_signals as dataclass?</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>transactional_commands</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.TransactionCommand" title="(in accml_lib)"><em>TransactionCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><em>Device</em><em>]</em>)</p></li>
+<li><p><strong>actuators</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Device</em><em>]</em>)</p></li>
+<li><p><strong>cache</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.bl.html#accml_lib.core.bl.delta_backend.StateCache" title="(in accml_lib)"><em>StateCache</em></a>)</p></li>
+<li><p><strong>num_readings</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+<li><p><strong>wait_before_read</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.custom.bluesky.plans.transactional_commands_sequence_execution_plan">
+<span class="sig-prename descclassname"><span class="pre">accml.custom.bluesky.plans.</span></span><span class="sig-name descname"><span class="pre">transactional_commands_sequence_execution_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">transactional_commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actuators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">md</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/plans.html#transactional_commands_sequence_execution_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.plans.transactional_commands_sequence_execution_plan" title="Link to this definition"></a></dt>
+<dd><p>Excute transactional commands using bluesky plan stubs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>transactional_commands</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.TransactionCommand" title="(in accml_lib)"><em>TransactionCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><em>Device</em><em>]</em>)</p></li>
+<li><p><strong>actuators</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Device</em><em>]</em>)</p></li>
+<li><p><strong>cache</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.bl.html#accml_lib.core.bl.delta_backend.StateCache" title="(in accml_lib)"><em>StateCache</em></a>)</p></li>
+<li><p><strong>md</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-accml.custom.bluesky.run_correction">
+<span id="accml-custom-bluesky-run-correction-module"></span><h2>accml.custom.bluesky.run_correction module<a class="headerlink" href="#module-accml.custom.bluesky.run_correction" title="Link to this heading"></a></h2>
+<p>bluesky plans for running a correction in an infinte loop</p>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<p>remove dependencies on Tune device.
+Tune Device should return a data model</p>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.custom.bluesky.run_correction.corrections_plan">
+<span class="sig-prename descclassname"><span class="pre">accml.custom.bluesky.run_correction.</span></span><span class="sig-name descname"><span class="pre">corrections_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">oracle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actuators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info_signals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">md</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/run_correction.html#corrections_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.run_correction.corrections_plan" title="Link to this definition"></a></dt>
+<dd><p>Translate commands to bluesky run-engine messages</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>oracle</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.solver.html#accml_lib.core.interfaces.solver.oracle.Oracle" title="(in accml_lib)"><em>Oracle</em></a>)</p></li>
+<li><p><strong>policy</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.solver.html#accml_lib.core.interfaces.solver.policy.PolicyBase" title="(in accml_lib)"><em>PolicyBase</em></a>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><em>Device</em><em>]</em>)</p></li>
+<li><p><strong>actuators</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Device</em><em>]</em>)</p></li>
+<li><p><strong>set_commands</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><em>Command</em></a><em>]</em>)</p></li>
+<li><p><strong>info_signals</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>SignalRW</em><em>]</em>)</p></li>
+<li><p><strong>cache</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.bl.html#accml_lib.core.bl.delta_backend.StateCache" title="(in accml_lib)"><em>StateCache</em></a>)</p></li>
+<li><p><strong>md</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-accml.custom.bluesky.utils">
+<span id="accml-custom-bluesky-utils-module"></span><h2>accml.custom.bluesky.utils module<a class="headerlink" href="#module-accml.custom.bluesky.utils" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.custom.bluesky.utils.as_json_compatible_device_id">
+<span class="sig-prename descclassname"><span class="pre">accml.custom.bluesky.utils.</span></span><span class="sig-name descname"><span class="pre">as_json_compatible_device_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/utils.html#as_json_compatible_device_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.utils.as_json_compatible_device_id" title="Link to this definition"></a></dt>
+<dd><p>Return a JSON-compatible identifier.</p>
+<ul class="simple">
+<li><p>If <cite>id_</cite> is a string, it is assumed to already be JSON-compatible
+and is returned unchanged.</p></li>
+<li><p>If <cite>id_</cite> is a TangoResourceLocator, its <cite>json_compatible()</cite> form
+is returned.</p></li>
+</ul>
+<p>Any other type is considered a programming error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>id_</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em> | </em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.tango_resource_locator.TangoResourceLocator" title="(in accml_lib)"><em>TangoResourceLocator</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.custom.bluesky.utils.connect_to_devices">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.custom.bluesky.utils.</span></span><span class="sig-name descname"><span class="pre">connect_to_devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">devices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/utils.html#connect_to_devices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.utils.connect_to_devices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.custom.bluesky.utils.extract_device_identifiers">
+<span class="sig-prename descclassname"><span class="pre">accml.custom.bluesky.utils.</span></span><span class="sig-name descname"><span class="pre">extract_device_identifiers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commands_collection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/custom/bluesky/utils.html#extract_device_identifiers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.custom.bluesky.utils.extract_device_identifiers" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>commands_collection</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.TransactionCommand" title="(in accml_lib)"><em>TransactionCommand</em></a><em>]</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-accml.custom.bluesky">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-accml.custom.bluesky" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Helmholtz Zentrum Berlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

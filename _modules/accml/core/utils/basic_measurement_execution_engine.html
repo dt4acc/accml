@@ -1,0 +1,542 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>accml.core.utils.basic_measurement_execution_engine &mdash; accml  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            accml
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../background/design.html">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../background/implementation.html">Implementation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">accml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">accml.core.utils.basic_measurement_execution_engine</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for accml.core.utils.basic_measurement_execution_engine</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.interfaces.backend.backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackendRW</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.interfaces.utils.command_rewritter</span><span class="w"> </span><span class="kn">import</span> <span class="n">CommandRewriterBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.interfaces.utils.measurement_execution_engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">MeasurementExecutionEngine</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.interfaces.utils.storage</span><span class="w"> </span><span class="kn">import</span> <span class="n">StorageInterface</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.model.utils.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">TransactionCommand</span><span class="p">,</span> <span class="n">ReadCommand</span><span class="p">,</span> <span class="n">Command</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.model.output.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingleReading</span><span class="p">,</span> <span class="n">SingleFloat</span><span class="p">,</span> <span class="n">ReadTogether</span><span class="p">,</span> <span class="n">Result</span><span class="p">,</span> <span class="n">ResultOfExecutionStep</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">tqdm</span>
+
+<div class="viewcode-block" id="BasicMeasurementExecutionEngine">
+<a class="viewcode-back" href="../../../../src/accml.work_bench.core.html#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BasicMeasurementExecutionEngine</span><span class="p">(</span><span class="n">MeasurementExecutionEngine</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Common functionality of the measurement execution engine&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">backend</span><span class="p">:</span> <span class="n">BackendRW</span><span class="p">,</span>
+        <span class="n">cmd_rewriter</span><span class="p">:</span> <span class="n">CommandRewriterBase</span><span class="p">,</span>
+        <span class="n">storage</span><span class="p">:</span> <span class="n">StorageInterface</span><span class="p">,</span>
+        <span class="n">expected_view_for_output</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">num_readings</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">):</span>
+        <span class="k">assert</span> <span class="n">num_readings</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">num_readings</span><span class="si">=}</span><span class="s2"> must be at least one!&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="n">backend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmd_rewriter</span> <span class="o">=</span> <span class="n">cmd_rewriter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">storage</span> <span class="o">=</span> <span class="n">storage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expected_view_for_output</span> <span class="o">=</span> <span class="n">expected_view_for_output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_readings</span> <span class="o">=</span> <span class="n">num_readings</span>
+
+<div class="viewcode-block" id="BasicMeasurementExecutionEngine.get_data">
+<a class="viewcode-back" href="../../../../src/accml.work_bench.core.html#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.get_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uuid</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasicMeasurementExecutionEngine.get_expected_view_for_output">
+<a class="viewcode-back" href="../../../../src/accml.work_bench.core.html#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.get_expected_view_for_output">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_expected_view_for_output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_view_for_output</span></div>
+
+
+<div class="viewcode-block" id="BasicMeasurementExecutionEngine.execute">
+<a class="viewcode-back" href="../../../../src/accml.work_bench.core.html#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.execute">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">commands_collection</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TransactionCommand</span><span class="p">],</span>
+        <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">md</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The commands collections is missing Context i.e. in which view it is</span>
+<span class="sd">        operating.</span>
+
+
+<span class="sd">        Todo:</span>
+<span class="sd">            evaluate if a set / read method should be provided as separate</span>
+<span class="sd">            methods</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">commands_collection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cmd_backend_ctxt</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd_backend_ctxt</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">TransactionCommand</span><span class="p">(</span>
+                    <span class="n">transaction</span><span class="o">=</span><span class="n">convert_set_commands</span><span class="p">(</span>
+                        <span class="n">cmd_rewriter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd_rewriter</span><span class="p">,</span>
+                        <span class="n">commands</span><span class="o">=</span><span class="n">transaction</span><span class="o">.</span><span class="n">transaction</span><span class="p">,</span>
+                        <span class="n">output_view</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_expected_view_for_output</span><span class="p">(),</span>
+                        <span class="n">backend_view</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">get_natural_view_name</span><span class="p">(),</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">transaction</span> <span class="ow">in</span> <span class="n">commands_collection</span>
+            <span class="p">]</span>
+
+        <span class="c1"># Todo: rewrite detectors!</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="p">,</span> <span class="n">detectors</span><span class="p">,</span> <span class="n">cmd_backend_ctxt</span><span class="p">,</span> <span class="n">num_readings</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_readings</span><span class="p">)</span>
+
+        <span class="c1"># Todo: consider using ConvertedReadTogether based on ConvertedSingleReading</span>
+        <span class="c1">#       these could contain the original and the converted data</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_conv</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">ReadTogether</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ReadTogether</span><span class="p">(</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+                <span class="n">end</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">end</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">convert_data_seq</span><span class="p">(</span>
+                    <span class="n">cmd_rewriter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd_rewriter</span><span class="p">,</span>
+                    <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                    <span class="n">output_view</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_expected_view_for_output</span><span class="p">(),</span>
+                    <span class="n">backend_view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">get_natural_view_name</span><span class="p">(),</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+        <span class="n">converted_data</span> <span class="o">=</span> <span class="p">[[</span><span class="n">_conv</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">epoch</span><span class="p">]</span> <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="c1">#: Todo ... how to properly enrich the data ... analysis needs to know which</span>
+        <span class="c1">#           device and which value</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">extract_single</span><span class="p">(</span><span class="n">t_cmd</span><span class="p">:</span> <span class="n">TransactionCommand</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SingleReading</span><span class="p">:</span>
+            <span class="c1"># Only work is only one was set</span>
+            <span class="p">(</span><span class="n">cmd</span><span class="p">,)</span> <span class="o">=</span> <span class="n">t_cmd</span><span class="o">.</span><span class="n">transaction</span>
+            <span class="k">return</span> <span class="n">SingleReading</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;setpoint&quot;</span><span class="p">,</span>
+                <span class="n">payload</span><span class="o">=</span><span class="n">SingleFloat</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+                <span class="n">cmd</span><span class="o">=</span><span class="n">ReadCommand</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">property</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="n">measured_enriched</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ResultOfExecutionStep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">epoch</span><span class="p">,</span> <span class="n">cmds</span><span class="o">=</span><span class="n">tc</span><span class="o">.</span><span class="n">transaction</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">tc</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">zip_longest</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span> <span class="n">cmd_backend_ctxt</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">enriched</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ResultOfExecutionStep</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">epoch</span><span class="p">,</span> <span class="n">cmds</span><span class="o">=</span><span class="n">tc</span><span class="o">.</span><span class="n">transaction</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">tc</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">zip_longest</span><span class="p">(</span>
+                <span class="n">converted_data</span><span class="p">,</span> <span class="n">commands_collection</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">converted</span> <span class="o">=</span> <span class="n">Result</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">enriched</span><span class="p">,</span>
+            <span class="n">orig_data</span><span class="o">=</span><span class="n">measured_enriched</span><span class="p">,</span>
+            <span class="c1"># md=dict(commands=cmd_design_ctxt)</span>
+        <span class="p">)</span>
+        <span class="k">del</span> <span class="n">data</span>
+        <span class="n">uuid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">converted</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">uuid</span></div>
+
+
+<div class="viewcode-block" id="BasicMeasurementExecutionEngine.trigger_read">
+<a class="viewcode-back" href="../../../../src/accml.work_bench.core.html#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.trigger_read">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">trigger_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rcmds</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ReadTogether</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Todo:</span>
+<span class="sd">            review handling context or view:</span>
+<span class="sd">                * design / device</span>
+
+<span class="sd">            Can commands be only converted once?</span>
+
+<span class="sd">            command rewriter: separate function for</span>
+<span class="sd">            read commands? i.e. a delegation to</span>
+<span class="sd">            liaison manager</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rcmds</span> <span class="o">=</span> <span class="n">convert_read_commands</span><span class="p">(</span>
+            <span class="n">cmd_rewriter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd_rewriter</span><span class="p">,</span>
+            <span class="n">commands</span><span class="o">=</span><span class="n">rcmds</span><span class="p">,</span>
+            <span class="n">output_view</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_expected_view_for_output</span><span class="p">(),</span>
+            <span class="n">backend_view</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">get_natural_view_name</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">read_and_encapsulate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="p">,</span> <span class="n">rcmds</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="c1"># Todo: how to convert data back ... I think</span>
+        <span class="c1">#       that gets difficult as soon as there is no 1-to-1 mapping any more</span>
+        <span class="c1">#       how to handle delta_ ... I need to be able to access reference storage</span>
+        <span class="n">converted_data</span> <span class="o">=</span> <span class="n">convert_data_seq</span><span class="p">(</span>
+            <span class="n">cmd_rewriter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd_rewriter</span><span class="p">,</span>
+            <span class="n">detectors</span><span class="o">=</span><span class="n">rcmds</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+            <span class="n">output_view</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_expected_view_for_output</span><span class="p">(),</span>
+            <span class="n">backend_view</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">get_natural_view_name</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ReadTogether</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">converted_data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BasicMeasurementExecutionEngine.set">
+<a class="viewcode-back" href="../../../../src/accml.work_bench.core.html#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.set">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmds</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">set_</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="p">,</span>
+            <span class="n">convert_set_commands</span><span class="p">(</span>
+                <span class="n">cmd_rewriter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd_rewriter</span><span class="p">,</span>
+                <span class="n">commands</span><span class="o">=</span><span class="n">cmds</span><span class="p">,</span>
+                <span class="n">output_view</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_expected_view_for_output</span><span class="p">(),</span>
+                <span class="n">backend_view</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">get_natural_view_name</span><span class="p">(),</span>
+            <span class="p">),</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="execute">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.execute">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="n">BackendRW</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">],</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TransactionCommand</span><span class="p">],</span>
+    <span class="n">num_readings</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadTogether</span><span class="p">]:</span>
+    <span class="n">data_docs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span><span class="n">commands</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">commands</span><span class="p">)):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="k">await</span> <span class="n">execute_step</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">detectors</span><span class="p">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">transaction</span><span class="p">,</span> <span class="n">num_readings</span><span class="o">=</span><span class="n">num_readings</span><span class="p">)</span>
+        <span class="n">data_docs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data_docs</span></div>
+
+
+
+<div class="viewcode-block" id="execute_step">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.execute_step">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">execute_step</span><span class="p">(</span>
+    <span class="n">backend</span><span class="p">:</span> <span class="n">BackendRW</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">],</span>
+    <span class="n">transaction_commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">],</span>
+    <span class="n">num_readings</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadTogether</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle transactional commands&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">num_readings</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+    <span class="c1"># for simulator this is not necessary but just in case</span>
+    <span class="c1"># set all in parallel: e.g. if used with ophyd_async backend</span>
+    <span class="k">await</span> <span class="n">set_</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">transaction_commands</span><span class="o">=</span><span class="n">transaction_commands</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">trigger</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">)</span>
+
+    <span class="n">data_epoch</span> <span class="o">=</span> <span class="p">[</span><span class="k">await</span> <span class="n">read_and_encapsulate</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">)</span> <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_readings</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">data_epoch</span></div>
+
+
+<div class="viewcode-block" id="set_">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.set_">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">set_</span><span class="p">(</span><span class="n">backend</span><span class="p">:</span> <span class="n">BackendRW</span><span class="p">,</span> <span class="n">transaction_commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+        <span class="o">*</span><span class="p">[</span>
+            <span class="n">backend</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">dev_id</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">prop_id</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">property</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">transaction_commands</span>
+        <span class="p">]</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="trigger">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.trigger">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">trigger</span><span class="p">(</span><span class="n">backend</span><span class="p">:</span> <span class="n">BackendRW</span><span class="p">,</span> <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># read in parallel</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">backend</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="n">dev_id</span><span class="o">=</span><span class="n">dev</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">prop_id</span><span class="o">=</span><span class="n">dev</span><span class="o">.</span><span class="n">property</span><span class="p">)</span> <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">detectors</span><span class="p">]</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="read_and_encapsulate">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.read_and_encapsulate">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">read_and_encapsulate</span><span class="p">(</span><span class="n">backend</span><span class="p">:</span> <span class="n">BackendRW</span><span class="p">,</span> <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ReadTogether</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;put data into a ReadToGether envelope&quot;&quot;&quot;</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">read</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">detectors</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">reading</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">SingleReading</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">cmd</span><span class="o">.</span><span class="n">property</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="n">datum</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="n">cmd</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">datum</span><span class="p">,</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">detectors</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">ReadTogether</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">reading</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="read">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.read">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="n">backend</span><span class="p">:</span> <span class="n">BackendRW</span><span class="p">,</span> <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+    <span class="c1"># read in parallel</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">backend</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">dev_id</span><span class="o">=</span><span class="n">dev</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">prop_id</span><span class="o">=</span><span class="n">dev</span><span class="o">.</span><span class="n">property</span><span class="p">)</span> <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="n">detectors</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+
+<div class="viewcode-block" id="convert_read_commands">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.convert_read_commands">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_read_commands</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">cmd_rewriter</span><span class="p">:</span> <span class="n">CommandRewriterBase</span><span class="p">,</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">],</span>
+    <span class="n">output_view</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">backend_view</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="n">commands</span>
+    <span class="k">if</span> <span class="n">output_view</span> <span class="o">==</span> <span class="n">backend_view</span><span class="p">:</span>
+        <span class="c1"># no need to convert</span>
+        <span class="k">return</span> <span class="n">commands</span>
+    <span class="k">elif</span> <span class="n">output_view</span> <span class="o">==</span> <span class="s2">&quot;design&quot;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">backend_view</span> <span class="o">==</span> <span class="s2">&quot;device&quot;</span>
+        <span class="p">),</span> <span class="s2">&quot;expected to need to convert from design to device&quot;</span>
+        <span class="c1">#: Warning: this code path is not yet tested</span>
+        <span class="c1"># raise AssertionError(&quot;This path is not yet tested!&quot;)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmd_rewriter</span><span class="o">.</span><span class="n">forward_read_command</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">command</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">tmp</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">output_view</span> <span class="o">==</span> <span class="s2">&quot;device&quot;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">backend_view</span> <span class="o">==</span> <span class="s2">&quot;design&quot;</span>
+        <span class="p">),</span> <span class="s2">&quot;expected to need to convert from device to design&quot;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmd_rewriter</span><span class="o">.</span><span class="n">inverse_read_command</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">command</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">tmp</span><span class="p">))</span>
+
+    <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;Did not expect to end up here!&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="convert_set_commands">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.convert_set_commands">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_set_commands</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">cmd_rewriter</span><span class="p">:</span> <span class="n">CommandRewriterBase</span><span class="p">,</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">],</span>
+    <span class="n">output_view</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">backend_view</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="k">if</span> <span class="n">output_view</span> <span class="o">==</span> <span class="n">backend_view</span><span class="p">:</span>
+        <span class="c1"># no need to convert</span>
+        <span class="k">return</span> <span class="n">commands</span>
+    <span class="k">elif</span> <span class="n">output_view</span> <span class="o">==</span> <span class="s2">&quot;design&quot;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">backend_view</span> <span class="o">==</span> <span class="s2">&quot;device&quot;</span>
+        <span class="p">),</span> <span class="s2">&quot;expected to need to convert from design to device&quot;</span>
+        <span class="c1">#: Warning: this code path is not yet tested</span>
+        <span class="c1"># raise AssertionError(&quot;This path is not yet tested!&quot;)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmd_rewriter</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">tmp</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">output_view</span> <span class="o">==</span> <span class="s2">&quot;device&quot;</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">backend_view</span> <span class="o">==</span> <span class="s2">&quot;design&quot;</span>
+        <span class="p">),</span> <span class="s2">&quot;expected to need to convert from device to design&quot;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmd_rewriter</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">tmp</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s2">&quot;Did not expect to end up here!&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="convert_transaction_commands_device_to_design">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.convert_transaction_commands_device_to_design">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_transaction_commands_device_to_design</span><span class="p">(</span>
+    <span class="n">cmd_rewriter</span><span class="p">:</span> <span class="n">CommandRewriterBase</span><span class="p">,</span> <span class="n">transaction</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">]:</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmd_rewriter</span><span class="o">.</span><span class="n">inverse</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">transaction</span><span class="p">]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">tmp</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">r</span></div>
+
+
+
+<div class="viewcode-block" id="convert_transaction_commands_design_to_device">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.convert_transaction_commands_design_to_device">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_transaction_commands_design_to_device</span><span class="p">(</span>
+    <span class="n">cmd_rewriter</span><span class="p">:</span> <span class="n">CommandRewriterBase</span><span class="p">,</span> <span class="n">transaction</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Warning:</span>
+<span class="sd">            not tested code</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmd_rewriter</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">transaction</span><span class="p">]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">tmp</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">r</span></div>
+
+
+
+<div class="viewcode-block" id="convert_data_seq">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.convert_data_seq">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_data_seq</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">cmd_rewriter</span><span class="p">:</span> <span class="n">CommandRewriterBase</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">],</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SingleReading</span><span class="p">],</span>
+    <span class="n">output_view</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">backend_view</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">SingleReading</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Todo:</span>
+<span class="sd">        merge with convert_data</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_command</span><span class="p">(</span><span class="n">rcmd</span><span class="p">:</span> <span class="n">ReadCommand</span><span class="p">,</span> <span class="n">datum</span><span class="p">:</span> <span class="n">SingleReading</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">rcmd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">Command</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">rcmd</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">rcmd</span><span class="o">.</span><span class="n">property</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">datum</span><span class="o">.</span><span class="n">payload</span><span class="p">,</span> <span class="n">behaviour_on_error</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">)</span>
+
+    <span class="n">cmds</span> <span class="o">=</span> <span class="n">convert_set_commands</span><span class="p">(</span>
+        <span class="n">cmd_rewriter</span><span class="o">=</span><span class="n">cmd_rewriter</span><span class="p">,</span>
+        <span class="n">commands</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">create_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">datum</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">datum</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">zip_longest</span><span class="p">(</span><span class="n">detectors</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="p">],</span>
+        <span class="n">output_view</span><span class="o">=</span><span class="n">output_view</span><span class="p">,</span>
+        <span class="n">backend_view</span><span class="o">=</span><span class="n">backend_view</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Todo: use key for checking ...</span>
+    <span class="n">r</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">SingleReading</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">cmd</span><span class="o">.</span><span class="n">property</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                      <span class="n">cmd</span><span class="o">=</span><span class="n">ReadCommand</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">property</span><span class="p">),</span> <span class="n">payload</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">cmds</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">r</span></div>
+
+
+
+<div class="viewcode-block" id="convert_data">
+<a class="viewcode-back" href="../../../../src/accml.core.utils.html#accml.core.utils.basic_measurement_execution_engine.convert_data">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_data</span><span class="p">(</span>
+    <span class="n">cmd_rewriter</span><span class="p">:</span> <span class="n">CommandRewriterBase</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">],</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadTogether</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Here only command rewritter is used. As always the same command is used</span>
+<span class="sd">    one could just look up the translation object once and then do batch</span>
+<span class="sd">    processing.</span>
+
+<span class="sd">    Early optimisation ...</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_single</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">datum</span><span class="p">):</span>
+        <span class="n">ncmd</span> <span class="o">=</span> <span class="n">cmd_rewriter</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span>
+            <span class="n">Command</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">property</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">datum</span><span class="p">,</span> <span class="n">behaviour_on_error</span><span class="o">=</span><span class="kc">None</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ncmd</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="n">cmds</span> <span class="o">=</span> <span class="p">[</span><span class="n">ReadCommand</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">rcmd</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">rcmd</span><span class="o">.</span><span class="n">property</span><span class="p">)</span> <span class="k">for</span> <span class="n">rcmd</span> <span class="ow">in</span> <span class="n">detectors</span><span class="p">]</span>
+    <span class="c1"># Todo: use key for checking ...</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">ReadTogether</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">SingleReading</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">datum</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">cmd</span><span class="o">=</span><span class="n">ReadCommand</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">property</span><span class="p">),</span>
+                    <span class="n">payload</span><span class="o">=</span><span class="n">convert_single</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">datum</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">datum</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">zip_longest</span><span class="p">(</span><span class="n">cmds</span><span class="p">,</span> <span class="n">epoch</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="n">data</span>
+    <span class="p">]</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Helmholtz Zentrum Berlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

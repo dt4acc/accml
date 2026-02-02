@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>accml.custom.bluesky.plans &mdash; accml  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            accml
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../background/design.html">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../background/implementation.html">Implementation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">accml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">accml.custom.bluesky.plans</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for accml.custom.bluesky.plans</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">bluesky</span><span class="w"> </span><span class="kn">import</span> <span class="n">plan_stubs</span> <span class="k">as</span> <span class="n">bps</span><span class="p">,</span> <span class="n">preprocessors</span> <span class="k">as</span> <span class="n">bpp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ophyd_async.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Device</span><span class="p">,</span> <span class="n">Signal</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml.custom.bluesky.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">as_json_compatible_device_id</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.bl.delta_backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">delta_property</span><span class="p">,</span> <span class="n">StateCache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.model.utils.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span><span class="p">,</span> <span class="n">TransactionCommand</span><span class="p">,</span> <span class="n">ReadCommand</span>
+
+
+<div class="viewcode-block" id="transactional_commands_sequence_execution_plan">
+<a class="viewcode-back" href="../../../../src/accml.custom.bluesky.html#accml.custom.bluesky.plans.transactional_commands_sequence_execution_plan">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">transactional_commands_sequence_execution_plan</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">transactional_commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TransactionCommand</span><span class="p">],</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Device</span><span class="p">],</span>
+    <span class="n">actuators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Device</span><span class="p">],</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">StateCache</span><span class="p">,</span>
+    <span class="n">md</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Excute transactional commands using bluesky plan stubs&quot;&quot;&quot;</span>
+    <span class="n">_md</span> <span class="o">=</span> <span class="n">md</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="c1"># CommandSequence nor Commands is json seriazable ....</span>
+    <span class="n">_md</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="n">asdict</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">transactional_commands</span><span class="p">]))</span>
+
+    <span class="nd">@bpp</span><span class="o">.</span><span class="n">stage_decorator</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">detectors</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">actuators</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="nd">@bpp</span><span class="o">.</span><span class="n">run_decorator</span><span class="p">(</span><span class="n">md</span><span class="o">=</span><span class="n">_md</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inner</span><span class="p">():</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">transactional_actuator_commands_plan</span><span class="p">(</span>
+            <span class="n">transactional_commands</span><span class="o">=</span><span class="n">transactional_commands</span><span class="p">,</span>
+            <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+            <span class="n">actuators</span><span class="o">=</span><span class="n">actuators</span><span class="p">,</span>
+            <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">inner</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">r</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">prepare_transactional_move</span><span class="p">(</span>
+    <span class="n">actuators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Device</span><span class="p">],</span> <span class="n">transactional_command</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">]</span>
+<span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">transactional_command</span><span class="p">:</span>
+        <span class="n">t_device</span> <span class="o">=</span> <span class="n">actuators</span><span class="p">[</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">t_device</span><span class="p">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">channel</span><span class="p">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">value</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">r</span>
+
+
+<div class="viewcode-block" id="transactional_actuator_commands_plan">
+<a class="viewcode-back" href="../../../../src/accml.custom.bluesky.html#accml.custom.bluesky.plans.transactional_actuator_commands_plan">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">transactional_actuator_commands_plan</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">transactional_commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TransactionCommand</span><span class="p">],</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Device</span><span class="p">],</span>
+    <span class="n">actuators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Device</span><span class="p">],</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">StateCache</span><span class="p">,</span>
+    <span class="n">num_readings</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">wait_before_read</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Inner plan for :func:`transactional_commands_sequence_execution_plan`</span>
+
+<span class="sd">    Todo:</span>
+<span class="sd">        Implement stop, ignore, rollback etc</span>
+<span class="sd">        Device replace by ophyd_async.Settable</span>
+<span class="sd">        info_signals as dataclass?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">wait_before_read</span> <span class="o">&gt;=</span> <span class="mf">0e0</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;wait before read must be &gt;=0 but was </span><span class="si">{</span><span class="n">wait_before_read</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">all_dev</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">detectors</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">actuators</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="k">for</span> <span class="n">t_cmds</span> <span class="ow">in</span> <span class="n">transactional_commands</span><span class="p">:</span>
+        <span class="c1"># first select the device</span>
+        <span class="c1"># then apply it to all</span>
+        <span class="n">cmds</span> <span class="o">=</span> <span class="n">rework_delta_commands</span><span class="p">(</span><span class="n">commands</span><span class="o">=</span><span class="n">t_cmds</span><span class="o">.</span><span class="n">transaction</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span><span class="o">*</span><span class="n">prepare_transactional_move</span><span class="p">(</span><span class="n">actuators</span><span class="p">,</span> <span class="n">cmds</span><span class="p">))</span>
+        <span class="c1"># TODO: revisit how to address reading detectors</span>
+        <span class="c1">#       also in the command language</span>
+        <span class="c1"># read all devices</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>  <span class="c1"># &lt;&lt; required</span>
+        <span class="c1"># optional: give hardware / twin time</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_before_read</span><span class="p">)</span>
+        <span class="c1">#: todo: check behaviour if num_readings = 0</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span>
+            <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">bps</span><span class="o">.</span><span class="n">trigger_and_read</span><span class="p">,</span> <span class="n">all_dev</span><span class="p">),</span> <span class="n">num</span><span class="o">=</span><span class="n">num_readings</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="simple_command_sequence_execution_plan">
+<a class="viewcode-back" href="../../../../src/accml.custom.bluesky.html#accml.custom.bluesky.plans.simple_command_sequence_execution_plan">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">simple_command_sequence_execution_plan</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">],</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Device</span><span class="p">],</span>
+    <span class="n">actuators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Device</span><span class="p">],</span>
+    <span class="n">info_signals</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Signal</span><span class="p">],</span>
+    <span class="n">md</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate simple commands (i.e. only one device at a time) using bluesky plan stubs&quot;&quot;&quot;</span>
+    <span class="n">_md</span> <span class="o">=</span> <span class="n">md</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="c1"># CommandSequence nor Commands is json seriazable ....</span>
+    <span class="n">_md</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="n">asdict</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">]))</span>
+
+    <span class="nd">@bpp</span><span class="o">.</span><span class="n">stage_decorator</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">detectors</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">actuators</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="nd">@bpp</span><span class="o">.</span><span class="n">run_decorator</span><span class="p">(</span><span class="n">md</span><span class="o">=</span><span class="n">_md</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inner</span><span class="p">():</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">single_actuator_commands_plan</span><span class="p">(</span>
+            <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span>
+            <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+            <span class="n">actuators</span><span class="o">=</span><span class="n">actuators</span><span class="p">,</span>
+            <span class="n">info_signals</span><span class="o">=</span><span class="n">info_signals</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">inner</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">r</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">single_actuator_commands_plan</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">],</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Device</span><span class="p">],</span>
+    <span class="n">actuators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Device</span><span class="p">],</span>
+    <span class="n">info_signals</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Signal</span><span class="p">],</span>
+    <span class="n">num_readings</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">wait_before_read</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Inner plan for :func:`commands_execution_plan`</span>
+
+<span class="sd">    Todo:</span>
+<span class="sd">        Implement stop, ignore, rollback etc</span>
+<span class="sd">        Device replace by ophyd_async.Settable</span>
+<span class="sd">        info_signals as dataclass?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">wait_before_read</span> <span class="o">&gt;=</span> <span class="mf">0e0</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;wait before read must be &gt;=0 but was </span><span class="si">{</span><span class="n">wait_before_read</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="n">all_dev</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">info_signals</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">detectors</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">actuators</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">dev_name</span> <span class="o">=</span> <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;device_name&quot;</span><span class="p">]</span>
+    <span class="n">ch_name</span> <span class="o">=</span> <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;channel_name&quot;</span><span class="p">]</span>
+    <span class="n">ch_val</span> <span class="o">=</span> <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;channel_value&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+        <span class="c1"># first select the device</span>
+        <span class="n">t_device</span> <span class="o">=</span> <span class="n">actuators</span><span class="p">[</span><span class="n">command</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">t_device</span><span class="p">,</span> <span class="n">command</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
+        <span class="c1"># then apply it to all</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span>
+            <span class="n">dev_name</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+            <span class="n">ch_name</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">property</span><span class="p">),</span>
+            <span class="n">ch_val</span><span class="p">,</span>
+            <span class="n">command</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">channel</span><span class="p">,</span>
+            <span class="n">command</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># TODO: revisit how to address reading detectors</span>
+        <span class="c1">#       also in the command language</span>
+        <span class="c1"># read all devices</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>  <span class="c1"># &lt;&lt; required</span>
+        <span class="c1"># optional: give hardware / twin time</span>
+        <span class="k">if</span> <span class="n">wait_before_read</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_before_read</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span>
+            <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">bps</span><span class="o">.</span><span class="n">trigger_and_read</span><span class="p">,</span> <span class="n">all_dev</span><span class="p">),</span> <span class="n">num</span><span class="o">=</span><span class="n">num_readings</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_current_state_probe_commands</span><span class="p">(</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_if_needed</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="n">ReadCommand</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="n">flag</span><span class="p">,</span> <span class="n">prop</span> <span class="o">=</span> <span class="n">delta_property</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ReadCommand</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
+
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">extract_if_needed</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tmp</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rework_delta_commands</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">],</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">StateCache</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Command</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="n">Command</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Command</span><span class="p">:</span>
+        <span class="n">flag</span><span class="p">,</span> <span class="n">prop</span> <span class="o">=</span> <span class="n">delta_property</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">flag</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cmd</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ReadCommand</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">prop</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="n">ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">ncmd</span> <span class="o">=</span> <span class="n">Command</span><span class="p">(</span>
+            <span class="nb">id</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="nb">property</span><span class="o">=</span><span class="n">prop</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">ref</span><span class="p">,</span>
+            <span class="n">behaviour_on_error</span><span class="o">=</span><span class="n">cmd</span><span class="o">.</span><span class="n">behaviour_on_error</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ncmd</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">convert</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve_reference_state_plan</span><span class="p">(</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ReadCommand</span><span class="p">],</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Device</span><span class="p">],</span>
+    <span class="n">actuators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Device</span><span class="p">],</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">StateCache</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="c1"># filter out only the required detectors ...</span>
+    <span class="c1"># Todo: reference also needed for the detectors?</span>
+    <span class="n">all_dev</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">actuators</span><span class="p">[</span><span class="n">rcmd</span><span class="o">.</span><span class="n">id</span><span class="p">],</span> <span class="n">rcmd</span><span class="o">.</span><span class="n">property</span><span class="p">)</span> <span class="k">for</span> <span class="n">rcmd</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">]</span>
+    <span class="n">ref_stream</span> <span class="o">=</span> <span class="s2">&quot;reference-state&quot;</span>
+    <span class="c1"># how to handle that some data need an extra read ?</span>
+    <span class="n">ref_data</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">trigger_and_read</span><span class="p">(</span><span class="n">all_dev</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">ref_stream</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">rcmd</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+        <span class="c1"># Todo: current approach to be json compatible</span>
+        <span class="n">needed_data_tag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">as_json_compatible_device_id</span><span class="p">(</span><span class="n">rcmd</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">rcmd</span><span class="o">.</span><span class="n">property</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">data_for_dev</span> <span class="o">=</span> <span class="n">ref_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">needed_data_tag</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">data_for_dev</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Could not find data </span><span class="si">{</span><span class="n">needed_data_tag</span><span class="si">}</span><span class="s2">, only know </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">ref_data</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">data_for_dev</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+        <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">rcmd</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">commands_plan</span><span class="p">(</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TransactionCommand</span><span class="p">],</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Device</span><span class="p">],</span>
+    <span class="n">actuators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Device</span><span class="p">],</span>
+    <span class="n">info_signals</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Signal</span><span class="p">],</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">StateCache</span><span class="p">,</span>
+    <span class="n">n_readings</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">wait_after_set</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">wait_between_samples</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Inner plan for :func:`commands_execution_plan`</span>
+
+<span class="sd">    Todo:</span>
+<span class="sd">        Implement stop, ignore, rollback etc</span>
+<span class="sd">        Device replace by ophyd_async.Settable</span>
+<span class="sd">        info_signals as dataclass?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_dev</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">info_signals</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">detectors</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">actuators</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">dev_name</span> <span class="o">=</span> <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;device_name&quot;</span><span class="p">]</span>
+    <span class="n">ch_name</span> <span class="o">=</span> <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;channel_name&quot;</span><span class="p">]</span>
+    <span class="n">ch_val</span> <span class="o">=</span> <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;channel_value&quot;</span><span class="p">]</span>
+    <span class="c1"># make cache read all commands</span>
+
+    <span class="k">for</span> <span class="n">tc</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">:</span>
+        <span class="c1"># only prepared for a single device currently</span>
+        <span class="p">(</span><span class="n">command</span><span class="p">,)</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">transaction</span>
+        <span class="n">flag</span><span class="p">,</span> <span class="n">prop</span> <span class="o">=</span> <span class="n">delta_property</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">property</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+            <span class="n">rcmd</span> <span class="o">=</span> <span class="n">ReadCommand</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">command</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="n">prop</span><span class="p">)</span>
+            <span class="n">ref</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rcmd</span><span class="p">)</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="k">assert</span> <span class="n">ref</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;No reference value for </span><span class="si">{</span><span class="n">rcmd</span><span class="si">}</span><span class="s2">: known keys </span><span class="si">{</span><span class="n">keys</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">ref</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">value</span>
+        <span class="c1"># first select the device</span>
+        <span class="n">t_device</span> <span class="o">=</span> <span class="n">actuators</span><span class="p">[</span><span class="n">command</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+        <span class="n">channel</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">t_device</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+        <span class="c1"># then apply it to all</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span>
+            <span class="n">dev_name</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+            <span class="n">ch_name</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="n">property</span><span class="p">),</span>
+            <span class="n">ch_val</span><span class="p">,</span>
+            <span class="n">command</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="n">channel</span><span class="p">,</span>
+            <span class="n">value</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># TODO: revisit how to address reading detectors</span>
+        <span class="c1">#       also in the command language</span>
+        <span class="c1"># read all devices</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="c1"># optional: give hardware / twin time</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_after_set</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span>
+            <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">bps</span><span class="o">.</span><span class="n">trigger_and_read</span><span class="p">,</span> <span class="n">all_dev</span><span class="p">),</span>
+            <span class="n">num</span><span class="o">=</span><span class="n">n_readings</span><span class="p">,</span>
+            <span class="n">delay</span><span class="o">=</span><span class="n">wait_between_samples</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">commands_execution_plan</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">TransactionCommand</span><span class="p">],</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Device</span><span class="p">],</span>
+    <span class="n">actuators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Device</span><span class="p">],</span>
+    <span class="n">info_signals</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Signal</span><span class="p">],</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">StateCache</span><span class="p">,</span>
+    <span class="n">wait_after_set</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">wait_between_samples</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">n_readings</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">retrieve_reference</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">md</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate commands to bluesky run-engine messages&quot;&quot;&quot;</span>
+    <span class="n">_md</span> <span class="o">=</span> <span class="n">md</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="c1"># CommandSequence nor Commands is json seriazable ....</span>
+    <span class="n">_md</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">commands</span><span class="o">=</span><span class="p">[</span><span class="n">asdict</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">]))</span>
+
+    <span class="nd">@bpp</span><span class="o">.</span><span class="n">stage_decorator</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">detectors</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">actuators</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="nd">@bpp</span><span class="o">.</span><span class="n">run_decorator</span><span class="p">(</span><span class="n">md</span><span class="o">=</span><span class="n">_md</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inner</span><span class="p">():</span>
+        <span class="c1"># first ... load cache with reference state</span>
+        <span class="k">if</span> <span class="n">retrieve_reference</span><span class="p">:</span>
+            <span class="k">yield from</span> <span class="n">retrieve_reference_state_plan</span><span class="p">(</span>
+                <span class="n">commands</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span>
+                    <span class="nb">set</span><span class="p">(</span>
+                        <span class="n">extract_current_state_probe_commands</span><span class="p">(</span>
+                            <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">tc</span><span class="o">.</span><span class="n">transaction</span> <span class="k">for</span> <span class="n">tc</span> <span class="ow">in</span> <span class="n">commands</span><span class="p">])</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">),</span>
+                <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+                <span class="n">actuators</span><span class="o">=</span><span class="n">actuators</span><span class="p">,</span>
+                <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">commands_plan</span><span class="p">(</span>
+            <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span>
+            <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+            <span class="n">actuators</span><span class="o">=</span><span class="n">actuators</span><span class="p">,</span>
+            <span class="n">info_signals</span><span class="o">=</span><span class="n">info_signals</span><span class="p">,</span>
+            <span class="n">n_readings</span><span class="o">=</span><span class="n">n_readings</span><span class="p">,</span>
+            <span class="n">wait_after_set</span> <span class="o">=</span> <span class="n">wait_after_set</span><span class="p">,</span>
+            <span class="n">wait_between_samples</span> <span class="o">=</span> <span class="n">wait_between_samples</span><span class="p">,</span>
+            <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">inner</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">r</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;simple_command_sequence_execution_plan&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;transactional_commands_sequence_execution_plan&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;transactional_actuator_commands_plan&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Helmholtz Zentrum Berlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

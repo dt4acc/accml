@@ -1,0 +1,21 @@
+accml package
+=============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   accml.app
+   accml.core
+   accml.custom
+   accml.work_bench
+
+Module contents
+---------------
+
+.. automodule:: accml
+   :members:
+   :show-inheritance:
+   :undoc-members:

@@ -1,0 +1,495 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>accml.core.utils package &mdash; accml  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            accml
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../background/design.html">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../background/implementation.html">Implementation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">accml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">accml.core.utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/src/accml.core.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="accml-core-utils-package">
+<h1>accml.core.utils package<a class="headerlink" href="#accml-core-utils-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="accml.core.utils.ophyd_async.html">accml.core.utils.ophyd_async package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="accml.core.utils.ophyd_async.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accml.core.utils.ophyd_async.html#module-accml.core.utils.ophyd_async.diff_channel">accml.core.utils.ophyd_async.diff_channel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="accml.core.utils.ophyd_async.html#accml.core.utils.ophyd_async.diff_channel.DiffChannel"><code class="docutils literal notranslate"><span class="pre">DiffChannel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="accml.core.utils.ophyd_async.html#accml.core.utils.ophyd_async.diff_channel.DiffChannel.set"><code class="docutils literal notranslate"><span class="pre">DiffChannel.set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="accml.core.utils.ophyd_async.html#accml.core.utils.ophyd_async.diff_channel.DiffChannel.stage"><code class="docutils literal notranslate"><span class="pre">DiffChannel.stage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="accml.core.utils.ophyd_async.html#accml.core.utils.ophyd_async.diff_channel.DiffChannel.unstage"><code class="docutils literal notranslate"><span class="pre">DiffChannel.unstage()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="accml.core.utils.ophyd_async.html#accml.core.utils.ophyd_async.diff_channel.NotInitalisedReferenceValue"><code class="docutils literal notranslate"><span class="pre">NotInitalisedReferenceValue</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="accml.core.utils.ophyd_async.html#module-accml.core.utils.ophyd_async.multiplexer_for_settable_devices">accml.core.utils.ophyd_async.multiplexer_for_settable_devices module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="accml.core.utils.ophyd_async.html#accml.core.utils.ophyd_async.multiplexer_for_settable_devices.MultiplexerProxy"><code class="docutils literal notranslate"><span class="pre">MultiplexerProxy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="accml.core.utils.ophyd_async.html#accml.core.utils.ophyd_async.multiplexer_for_settable_devices.MultiplexerProxy.connect"><code class="docutils literal notranslate"><span class="pre">MultiplexerProxy.connect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="accml.core.utils.ophyd_async.html#accml.core.utils.ophyd_async.multiplexer_for_settable_devices.MultiplexerProxy.stop"><code class="docutils literal notranslate"><span class="pre">MultiplexerProxy.stop()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="accml.core.utils.ophyd_async.html#module-accml.core.utils.ophyd_async.new_value">accml.core.utils.ophyd_async.new_value module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="accml.core.utils.ophyd_async.html#accml.core.utils.ophyd_async.new_value.aenumerate"><code class="docutils literal notranslate"><span class="pre">aenumerate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="accml.core.utils.ophyd_async.html#accml.core.utils.ophyd_async.new_value.wait_for_new_value"><code class="docutils literal notranslate"><span class="pre">wait_for_new_value()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="accml.core.utils.ophyd_async.html#module-accml.core.utils.ophyd_async.pv_positioner_like_utils">accml.core.utils.ophyd_async.pv_positioner_like_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="accml.core.utils.ophyd_async.html#module-accml.core.utils.ophyd_async">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-accml.core.utils.basic_measurement_execution_engine">
+<span id="accml-core-utils-basic-measurement-execution-engine-module"></span><h2>accml.core.utils.basic_measurement_execution_engine module<a class="headerlink" href="#module-accml.core.utils.basic_measurement_execution_engine" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">BasicMeasurementExecutionEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd_rewriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected_view_for_output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_readings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#BasicMeasurementExecutionEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.measurement_execution_engine.MeasurementExecutionEngine" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeasurementExecutionEngine</span></code></a></p>
+<p>Common functionality of the measurement execution engine</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>backend</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.backend.html#accml_lib.core.interfaces.backend.backend.BackendRW" title="(in accml_lib)"><em>BackendRW</em></a>)</p></li>
+<li><p><strong>cmd_rewriter</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.command_rewritter.CommandRewriterBase" title="(in accml_lib)"><em>CommandRewriterBase</em></a>)</p></li>
+<li><p><strong>storage</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.storage.StorageInterface" title="(in accml_lib)"><em>StorageInterface</em></a>)</p></li>
+<li><p><strong>expected_view_for_output</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>num_readings</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.execute">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commands_collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">md</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#BasicMeasurementExecutionEngine.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.execute" title="Link to this definition"></a></dt>
+<dd><p>The commands collections is missing Context i.e. in which view it is
+operating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>commands_collection</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.TransactionCommand" title="(in accml_lib)"><em>TransactionCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>evaluate if a set / read method should be provided as separate
+methods</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uuid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#BasicMeasurementExecutionEngine.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.get_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.get_expected_view_for_output">
+<span class="sig-name descname"><span class="pre">get_expected_view_for_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#BasicMeasurementExecutionEngine.get_expected_view_for_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.get_expected_view_for_output" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.set">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#BasicMeasurementExecutionEngine.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.set" title="Link to this definition"></a></dt>
+<dd><p>execute these commands together</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cmds</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><em>Command</em></a><em>]</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.trigger_read">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">trigger_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rcmds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#BasicMeasurementExecutionEngine.trigger_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.BasicMeasurementExecutionEngine.trigger_read" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.output.html#accml_lib.core.model.output.result.ReadTogether" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadTogether</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>rcmds</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<dl class="simple">
+<dt>review handling context or view:</dt><dd><ul class="simple">
+<li><p>design / device</p></li>
+</ul>
+</dd>
+</dl>
+<p>Can commands be only converted once?</p>
+<p>command rewriter: separate function for
+read commands? i.e. a delegation to
+liaison manager</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.convert_data">
+<span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">convert_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd_rewriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#convert_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.convert_data" title="Link to this definition"></a></dt>
+<dd><p>Here only command rewritter is used. As always the same command is used
+one could just look up the translation object once and then do batch
+processing.</p>
+<p>Early optimisation …</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.output.html#accml_lib.core.model.output.result.ReadTogether" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadTogether</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>cmd_rewriter</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.command_rewritter.CommandRewriterBase" title="(in accml_lib)"><em>CommandRewriterBase</em></a>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Mapping" title="(in Python v3.14)"><em>Mapping</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><em>object</em></a><em>]</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.convert_data_seq">
+<span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">convert_data_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd_rewriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend_view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#convert_data_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.convert_data_seq" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.output.html#accml_lib.core.model.output.result.SingleReading" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SingleReading</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>cmd_rewriter</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.command_rewritter.CommandRewriterBase" title="(in accml_lib)"><em>CommandRewriterBase</em></a>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.output.html#accml_lib.core.model.output.result.SingleReading" title="(in accml_lib)"><em>SingleReading</em></a><em>]</em>)</p></li>
+<li><p><strong>output_view</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>backend_view</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>merge with convert_data</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.convert_read_commands">
+<span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">convert_read_commands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd_rewriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend_view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#convert_read_commands"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.convert_read_commands" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cmd_rewriter</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.command_rewritter.CommandRewriterBase" title="(in accml_lib)"><em>CommandRewriterBase</em></a>)</p></li>
+<li><p><strong>commands</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>output_view</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>backend_view</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.convert_set_commands">
+<span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">convert_set_commands</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd_rewriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend_view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#convert_set_commands"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.convert_set_commands" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cmd_rewriter</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.command_rewritter.CommandRewriterBase" title="(in accml_lib)"><em>CommandRewriterBase</em></a>)</p></li>
+<li><p><strong>commands</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><em>Command</em></a><em>]</em>)</p></li>
+<li><p><strong>output_view</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>backend_view</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.convert_transaction_commands_design_to_device">
+<span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">convert_transaction_commands_design_to_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd_rewriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#convert_transaction_commands_design_to_device"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.convert_transaction_commands_design_to_device" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Command</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>cmd_rewriter</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.command_rewritter.CommandRewriterBase" title="(in accml_lib)"><em>CommandRewriterBase</em></a>)</p></li>
+<li><p><strong>transaction</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><em>Command</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>not tested code</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.convert_transaction_commands_device_to_design">
+<span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">convert_transaction_commands_device_to_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd_rewriter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#convert_transaction_commands_device_to_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.convert_transaction_commands_device_to_design" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Command</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>cmd_rewriter</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.command_rewritter.CommandRewriterBase" title="(in accml_lib)"><em>CommandRewriterBase</em></a>)</p></li>
+<li><p><strong>transaction</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><em>Command</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.execute">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_readings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.execute" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.output.html#accml_lib.core.model.output.result.ReadTogether" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadTogether</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>backend</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.backend.html#accml_lib.core.interfaces.backend.backend.BackendRW" title="(in accml_lib)"><em>BackendRW</em></a>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>commands</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.TransactionCommand" title="(in accml_lib)"><em>TransactionCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>num_readings</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.execute_step">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">execute_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction_commands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_readings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#execute_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.execute_step" title="Link to this definition"></a></dt>
+<dd><p>Handle transactional commands</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.output.html#accml_lib.core.model.output.result.ReadTogether" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadTogether</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>backend</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.backend.html#accml_lib.core.interfaces.backend.backend.BackendRW" title="(in accml_lib)"><em>BackendRW</em></a>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p></li>
+<li><p><strong>transaction_commands</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><em>Command</em></a><em>]</em>)</p></li>
+<li><p><strong>num_readings</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.read">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.read" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>backend</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.backend.html#accml_lib.core.interfaces.backend.backend.BackendRW" title="(in accml_lib)"><em>BackendRW</em></a>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.read_and_encapsulate">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">read_and_encapsulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#read_and_encapsulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.read_and_encapsulate" title="Link to this definition"></a></dt>
+<dd><p>put data into a ReadToGether envelope</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.output.html#accml_lib.core.model.output.result.ReadTogether" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadTogether</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>backend</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.backend.html#accml_lib.core.interfaces.backend.backend.BackendRW" title="(in accml_lib)"><em>BackendRW</em></a>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.set_">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">set_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transaction_commands</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#set_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.set_" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>backend</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.backend.html#accml_lib.core.interfaces.backend.backend.BackendRW" title="(in accml_lib)"><em>BackendRW</em></a>)</p></li>
+<li><p><strong>transaction_commands</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.Command" title="(in accml_lib)"><em>Command</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.basic_measurement_execution_engine.trigger">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.basic_measurement_execution_engine.</span></span><span class="sig-name descname"><span class="pre">trigger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/basic_measurement_execution_engine.html#trigger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.basic_measurement_execution_engine.trigger" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>backend</strong> (<a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.backend.html#accml_lib.core.interfaces.backend.backend.BackendRW" title="(in accml_lib)"><em>BackendRW</em></a>)</p></li>
+<li><p><strong>detectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.model.utils.html#accml_lib.core.model.utils.command.ReadCommand" title="(in accml_lib)"><em>ReadCommand</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-accml.core.utils.simple_storage">
+<span id="accml-core-utils-simple-storage-module"></span><h2>accml.core.utils.simple_storage module<a class="headerlink" href="#module-accml.core.utils.simple_storage" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="accml.core.utils.simple_storage.SimpleDataStorage">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.simple_storage.</span></span><span class="sig-name descname"><span class="pre">SimpleDataStorage</span></span><a class="reference internal" href="../_modules/accml/core/utils/simple_storage.html#SimpleDataStorage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.simple_storage.SimpleDataStorage" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://python-accelerator-middle-layer.github.io/accml_lib/src/accml_lib.core.interfaces.utils.html#accml_lib.core.interfaces.utils.storage.StorageInterface" title="(in accml_lib)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StorageInterface</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.simple_storage.SimpleDataStorage.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/simple_storage.html#SimpleDataStorage.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.simple_storage.SimpleDataStorage.add" title="Link to this definition"></a></dt>
+<dd><p>return identifier for the object stored</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.simple_storage.SimpleDataStorage.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/simple_storage.html#SimpleDataStorage.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.simple_storage.SimpleDataStorage.clear" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.simple_storage.SimpleDataStorage.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uuid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/simple_storage.html#SimpleDataStorage.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.simple_storage.SimpleDataStorage.get" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>uuid</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.simple_storage.SimpleDataStorage.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/simple_storage.html#SimpleDataStorage.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.simple_storage.SimpleDataStorage.keys" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-accml.core.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-accml.core.utils" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Helmholtz Zentrum Berlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

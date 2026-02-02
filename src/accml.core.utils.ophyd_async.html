@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>accml.core.utils.ophyd_async package &mdash; accml  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            accml
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../background/design.html">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../background/implementation.html">Implementation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">accml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">accml.core.utils.ophyd_async package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/src/accml.core.utils.ophyd_async.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="accml-core-utils-ophyd-async-package">
+<h1>accml.core.utils.ophyd_async package<a class="headerlink" href="#accml-core-utils-ophyd-async-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-accml.core.utils.ophyd_async.diff_channel">
+<span id="accml-core-utils-ophyd-async-diff-channel-module"></span><h2>accml.core.utils.ophyd_async.diff_channel module<a class="headerlink" href="#module-accml.core.utils.ophyd_async.diff_channel" title="Link to this heading"></a></h2>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>check if not better reimplemented based on derived signal</p>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="accml.core.utils.ophyd_async.diff_channel.DiffChannel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.ophyd_async.diff_channel.</span></span><span class="sig-name descname"><span class="pre">DiffChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/ophyd_async/diff_channel.html#DiffChannel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.ophyd_async.diff_channel.DiffChannel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">StandardReadable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Movable</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>parent</strong> (<em>Device</em><em> | </em><em>None</em>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.ophyd_async.diff_channel.DiffChannel.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/ophyd_async/diff_channel.html#DiffChannel.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.ophyd_async.diff_channel.DiffChannel.set" title="Link to this definition"></a></dt>
+<dd><p>Return a <code class="docutils literal notranslate"><span class="pre">Status</span></code> that is marked done when the device is done moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Status</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.ophyd_async.diff_channel.DiffChannel.stage">
+<span class="sig-name descname"><span class="pre">stage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/ophyd_async/diff_channel.html#DiffChannel.stage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.ophyd_async.diff_channel.DiffChannel.stage" title="Link to this definition"></a></dt>
+<dd><p>Set up the device for acquisition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An <cite>AsyncStatus</cite> that is marked done when the device is done staging.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.ophyd_async.diff_channel.DiffChannel.unstage">
+<span class="sig-name descname"><span class="pre">unstage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/ophyd_async/diff_channel.html#DiffChannel.unstage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.ophyd_async.diff_channel.DiffChannel.unstage" title="Link to this definition"></a></dt>
+<dd><p>Clean up the device after acquisition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An <cite>AsyncStatus</cite> that is marked done when the device is done unstaging.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="accml.core.utils.ophyd_async.diff_channel.NotInitalisedReferenceValue">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.ophyd_async.diff_channel.</span></span><span class="sig-name descname"><span class="pre">NotInitalisedReferenceValue</span></span><a class="reference internal" href="../_modules/accml/core/utils/ophyd_async/diff_channel.html#NotInitalisedReferenceValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.ophyd_async.diff_channel.NotInitalisedReferenceValue" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertionError</span></code></a></p>
+<p>reference value not installed</p>
+</dd></dl>
+
+</section>
+<section id="module-accml.core.utils.ophyd_async.multiplexer_for_settable_devices">
+<span id="accml-core-utils-ophyd-async-multiplexer-for-settable-devices-module"></span><h2>accml.core.utils.ophyd_async.multiplexer_for_settable_devices module<a class="headerlink" href="#module-accml.core.utils.ophyd_async.multiplexer_for_settable_devices" title="Link to this heading"></a></h2>
+<p>A collection of power converters exported as if these were multiplexed</p>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Review if the multiplex itself should be contained in this file too
+Or a helper function to generate it …</p>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="accml.core.utils.ophyd_async.multiplexer_for_settable_devices.MultiplexerProxy">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.ophyd_async.multiplexer_for_settable_devices.</span></span><span class="sig-name descname"><span class="pre">MultiplexerProxy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settable_devices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ItemProxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'accml.core.utils.ophyd_async.multiplexer_for_settable_devices._MultiplexerItemProxy'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/ophyd_async/multiplexer_for_settable_devices.html#MultiplexerProxy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.ophyd_async.multiplexer_for_settable_devices.MultiplexerProxy" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">StandardReadable</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Stageable</span></code></p>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>check which other functions need to be overloaded</p>
+<p>is the functionallity required that the user can request
+that all settable devices are added in the output?</p>
+<p>Or would it be better to instruct the user to take care of it
+themselves? Just add them to the list of detectors to the
+RunEngine</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+<li><p><strong>settable_devices</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><em>Movable</em><em> | </em><em>StandardReadable</em><em> | </em><em>Stageable</em><em>]</em>)</p></li>
+<li><p><strong>default_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.ophyd_async.multiplexer_for_settable_devices.MultiplexerProxy.connect">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/ophyd_async/multiplexer_for_settable_devices.html#MultiplexerProxy.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.ophyd_async.multiplexer_for_settable_devices.MultiplexerProxy.connect" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<p>can I return all stats directly?
+learn how this is correctly done</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="accml.core.utils.ophyd_async.multiplexer_for_settable_devices.MultiplexerProxy.stop">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/ophyd_async/multiplexer_for_settable_devices.html#MultiplexerProxy.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.ophyd_async.multiplexer_for_settable_devices.MultiplexerProxy.stop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-accml.core.utils.ophyd_async.new_value">
+<span id="accml-core-utils-ophyd-async-new-value-module"></span><h2>accml.core.utils.ophyd_async.new_value module<a class="headerlink" href="#module-accml.core.utils.ophyd_async.new_value" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.ophyd_async.new_value.aenumerate">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.ophyd_async.new_value.</span></span><span class="sig-name descname"><span class="pre">aenumerate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aiterable</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/ophyd_async/new_value.html#aenumerate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.ophyd_async.new_value.aenumerate" title="Link to this definition"></a></dt>
+<dd><p>async version of enumerate</p>
+<p>To be replaced by standard version as soon as available</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="accml.core.utils.ophyd_async.new_value.wait_for_new_value">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">accml.core.utils.ophyd_async.new_value.</span></span><span class="sig-name descname"><span class="pre">wait_for_new_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/accml/core/utils/ophyd_async/new_value.html#wait_for_new_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#accml.core.utils.ophyd_async.new_value.wait_for_new_value" title="Link to this definition"></a></dt>
+<dd><p>ensure that new data arrived</p>
+<p>It is a bit hacky: first value is ignored as this is the one
+to be assumed to be in the cache.</p>
+<p>Need something like SubscriptionStatus(sig, cb, run=False)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>signal</strong> (<em>SignalR</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-accml.core.utils.ophyd_async.pv_positioner_like_utils">
+<span id="accml-core-utils-ophyd-async-pv-positioner-like-utils-module"></span><h2>accml.core.utils.ophyd_async.pv_positioner_like_utils module<a class="headerlink" href="#module-accml.core.utils.ophyd_async.pv_positioner_like_utils" title="Link to this heading"></a></h2>
+</section>
+<section id="module-accml.core.utils.ophyd_async">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-accml.core.utils.ophyd_async" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Helmholtz Zentrum Berlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

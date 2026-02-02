@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>accml.custom.bluesky.run_correction &mdash; accml  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            accml
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../background/design.html">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../background/implementation.html">Implementation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">accml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">accml.custom.bluesky.run_correction</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for accml.custom.bluesky.run_correction</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;bluesky plans for running a correction in an infinte loop</span>
+
+<span class="sd">Todo:</span>
+<span class="sd">    remove dependencies on Tune device.</span>
+<span class="sd">    Tune Device should return a data model</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ophyd_async.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Device</span><span class="p">,</span> <span class="n">SignalRW</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">bluesky.preprocessors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bpp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">bluesky.plan_stubs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bps</span>
+
+<span class="c1"># Todo: fix this dependency problem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml.app.tune.tune_correction_controller</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">compute_stat_for_transactional_command</span><span class="p">,</span>
+    <span class="n">correction_action_to_commands</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.plans</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">transactional_actuator_commands_plan</span><span class="p">,</span>
+    <span class="n">retrieve_reference_state_plan</span><span class="p">,</span>
+    <span class="n">extract_current_state_probe_commands</span><span class="p">,</span>
+    <span class="n">rework_delta_commands</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.bl.delta_backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">StateCache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.interfaces.solver.oracle</span><span class="w"> </span><span class="kn">import</span> <span class="n">Oracle</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.interfaces.solver.policy</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolicyBase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.model.utils.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span><span class="p">,</span> <span class="n">TransactionCommand</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">accml_lib.core.model.output.tune</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tune</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;accml&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="corrections_plan">
+<a class="viewcode-back" href="../../../../src/accml.custom.bluesky.html#accml.custom.bluesky.run_correction.corrections_plan">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">corrections_plan</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">oracle</span><span class="p">:</span> <span class="n">Oracle</span><span class="p">,</span>
+    <span class="n">policy</span><span class="p">:</span> <span class="n">PolicyBase</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Device</span><span class="p">],</span>
+    <span class="n">actuators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Device</span><span class="p">],</span>
+    <span class="n">set_commands</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Command</span><span class="p">],</span>
+    <span class="n">info_signals</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SignalRW</span><span class="p">],</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">StateCache</span><span class="p">,</span>
+    <span class="n">md</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Translate commands to bluesky run-engine messages&quot;&quot;&quot;</span>
+    <span class="n">_md</span> <span class="o">=</span> <span class="n">md</span> <span class="ow">or</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="c1"># CommandSequence nor Commands is json serializable ....</span>
+    <span class="n">_md</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">oracle</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">oracle</span><span class="p">),</span> <span class="n">policy</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">policy</span><span class="p">)))</span>
+
+    <span class="nd">@bpp</span><span class="o">.</span><span class="n">stage_decorator</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">sig</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">info_signals</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+        <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">detectors</span><span class="p">)</span>
+        <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">actuators</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="p">)</span>
+    <span class="nd">@bpp</span><span class="o">.</span><span class="n">run_decorator</span><span class="p">(</span><span class="n">md</span><span class="o">=</span><span class="n">_md</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inner</span><span class="p">():</span>
+        <span class="c1"># first ... load cache with reference state</span>
+        <span class="k">yield from</span> <span class="n">retrieve_reference_state_plan</span><span class="p">(</span>
+            <span class="n">commands</span><span class="o">=</span><span class="n">extract_current_state_probe_commands</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">cmd</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">set_commands</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+            <span class="p">),</span>
+            <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+            <span class="n">actuators</span><span class="o">=</span><span class="n">actuators</span><span class="p">,</span>
+            <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">run_corrections_commands_plan</span><span class="p">(</span>
+            <span class="n">oracle</span><span class="o">=</span><span class="n">oracle</span><span class="p">,</span>
+            <span class="n">policy</span><span class="o">=</span><span class="n">policy</span><span class="p">,</span>
+            <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+            <span class="n">set_commands</span><span class="o">=</span><span class="n">set_commands</span><span class="p">,</span>
+            <span class="n">actuators</span><span class="o">=</span><span class="n">actuators</span><span class="p">,</span>
+            <span class="n">info_signals</span><span class="o">=</span><span class="n">info_signals</span><span class="p">,</span>
+            <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">inner</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">r</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_corrections_commands_plan</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">oracle</span><span class="p">:</span> <span class="n">Oracle</span><span class="p">,</span>
+    <span class="n">policy</span><span class="p">:</span> <span class="n">PolicyBase</span><span class="p">,</span>
+    <span class="n">detectors</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Device</span><span class="p">],</span>
+    <span class="n">actuators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Device</span><span class="p">],</span>
+    <span class="n">set_commands</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Command</span><span class="p">],</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="n">StateCache</span><span class="p">,</span>
+    <span class="n">info_signals</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">SignalRW</span><span class="p">],</span>
+    <span class="n">n_readings</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">wait_after_set</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">wait_between_samples</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">n_steps</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Inner plan for :func:`transactional_commands_sequence_execution_plan`</span>
+
+<span class="sd">    Todo:</span>
+<span class="sd">        Implement stop, ignore, rollback etc</span>
+<span class="sd">        Device replace by ophyd_async.Settable</span>
+<span class="sd">        info_signals as dataclass?</span>
+
+<span class="sd">        combine set_commands and actuators in a structure?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">wait_after_set</span> <span class="o">&gt;=</span> <span class="mf">0e0</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;wait before read must be &gt;=0 but was </span><span class="si">{</span><span class="n">wait_after_set</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">n_readings</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;detectors must be read at least once per turn, but was </span><span class="si">{</span><span class="n">n_readings</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">all_detectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">sig</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">info_signals</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">detectors</span><span class="p">)</span>
+
+    <span class="n">counter</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="n">counter</span><span class="p">:</span>
+        <span class="n">current_state</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">n_steps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cnt</span> <span class="o">&gt;=</span> <span class="n">n_steps</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Terminating control loop at step </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cnt</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="c1"># presumably set some value already ...</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">wait_after_set</span> <span class="o">&gt;</span> <span class="mf">0e0</span><span class="p">:</span>
+            <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_after_set</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_readings</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">wait_between_samples</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_between_samples</span><span class="p">)</span>
+            <span class="n">current_state</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">trigger_and_read</span><span class="p">(</span><span class="n">all_detectors</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">current_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">),</span> <span class="s2">&quot;no current state read, can not process further&quot;</span>
+        <span class="c1"># Todo: the device can not return the model but only a dict</span>
+        <span class="c1">#       this is required for databroker serialisation</span>
+        <span class="c1">#       oracle could happily work with a dictionary too</span>
+        <span class="n">t_tune</span> <span class="o">=</span> <span class="n">Tune</span><span class="p">(</span><span class="o">**</span><span class="n">current_state</span><span class="p">[</span><span class="s2">&quot;tune-transversal&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+        <span class="n">diff</span><span class="p">,</span> <span class="n">correction_action</span> <span class="o">=</span> <span class="n">oracle</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="n">t_tune</span><span class="p">)</span>
+        <span class="n">pca</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">step</span><span class="p">(</span>
+            <span class="n">current_state</span><span class="o">=</span><span class="n">current_state</span><span class="p">,</span> <span class="n">diff</span><span class="o">=</span><span class="n">diff</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">correction_action</span>
+        <span class="p">)</span>
+        <span class="n">t_cmd</span> <span class="o">=</span> <span class="n">correction_action_to_commands</span><span class="p">(</span><span class="n">pca</span><span class="p">,</span> <span class="n">set_commands</span><span class="p">)</span>
+        <span class="n">stat_cmd</span> <span class="o">=</span> <span class="n">compute_stat_for_transactional_command</span><span class="p">(</span><span class="n">t_cmd</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;tune diff </span><span class="si">%s</span><span class="s2">, cmd </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">diff</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">bps</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span>
+            <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;tune-x-delta&quot;</span><span class="p">],</span>
+            <span class="n">diff</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+            <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;tune-y-delta&quot;</span><span class="p">],</span>
+            <span class="n">diff</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+            <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;applied-mean&quot;</span><span class="p">],</span>
+            <span class="n">stat_cmd</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span>
+            <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;applied-std&quot;</span><span class="p">],</span>
+            <span class="n">stat_cmd</span><span class="o">.</span><span class="n">std</span><span class="p">,</span>
+            <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;applied-min&quot;</span><span class="p">],</span>
+            <span class="n">stat_cmd</span><span class="o">.</span><span class="n">min</span><span class="p">,</span>
+            <span class="n">info_signals</span><span class="p">[</span><span class="s2">&quot;applied-max&quot;</span><span class="p">],</span>
+            <span class="n">stat_cmd</span><span class="o">.</span><span class="n">max</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">t_cmds</span> <span class="o">=</span> <span class="n">rework_delta_commands</span><span class="p">(</span><span class="n">commands</span><span class="o">=</span><span class="n">t_cmd</span><span class="o">.</span><span class="n">transaction</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">)</span>
+        <span class="k">yield from</span> <span class="n">transactional_actuator_commands_plan</span><span class="p">(</span>
+            <span class="n">transactional_commands</span><span class="o">=</span><span class="p">[</span><span class="n">TransactionCommand</span><span class="p">(</span><span class="n">transaction</span><span class="o">=</span><span class="n">t_cmds</span><span class="p">)],</span>
+            <span class="n">detectors</span><span class="o">=</span><span class="n">detectors</span><span class="p">,</span>
+            <span class="n">actuators</span><span class="o">=</span><span class="n">actuators</span><span class="p">,</span>
+            <span class="n">cache</span><span class="o">=</span><span class="n">cache</span><span class="p">,</span>
+            <span class="n">num_readings</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;corrections_plan&quot;</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Helmholtz Zentrum Berlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

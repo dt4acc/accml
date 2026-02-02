@@ -1,0 +1,32 @@
+accml.work\_bench package
+=========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   accml.work_bench.app
+   accml.work_bench.core
+   accml.work_bench.custom
+   accml.work_bench.lib_
+
+Submodules
+----------
+
+accml.work\_bench.all module
+----------------------------
+
+.. automodule:: accml.work_bench.all
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: accml.work_bench
+   :members:
+   :show-inheritance:
+   :undoc-members:

@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Design of accml and accml_lib &mdash; accml  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Implementation" href="implementation.html" />
+    <link rel="prev" title="accml documentation" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            accml
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#one-machine-many-descriptions">One Machine, Many Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relative-thinking-and-exploration">Relative Thinking and Exploration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-blocks-and-identification">Building Blocks and Identification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-liaison-manager">The Liaison Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#translation-between-views">Translation Between Views</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structured-communication-commands">Structured Communication: Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#from-commands-to-measurements">From Commands to Measurements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-role-of-accml-lib">The Role of <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-and-updates">Implementation and Updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#further-reading">Further Reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">accml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/background/design.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-design-of-accml-and-accml-lib">
+<h1>The Design of <code class="docutils literal notranslate"><span class="pre">accml</span></code> and <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code><a class="headerlink" href="#the-design-of-accml-and-accml-lib" title="Link to this heading"></a></h1>
+<p>Let us begin by forgetting software for a moment and asking a very
+simple question:</p>
+<p>What are we actually trying to do?</p>
+<p>We want to run a particle accelerator well. That means we want to
+change machine settings, observe what the machine does, compare this
+behavior with what we expected, and learn how the machine responds
+when we change something.</p>
+<p>Everything else — simulations, controls software, data storage —
+exists only to serve that purpose.</p>
+<p>The overall concept of how users interact with such a system, and how
+simulation and machine operation are unified from a user perspective,
+is described in detail in <span id="id1">[]</span>.</p>
+<section id="one-machine-many-descriptions">
+<h2>One Machine, Many Descriptions<a class="headerlink" href="#one-machine-many-descriptions" title="Link to this heading"></a></h2>
+<p>There is only one physical accelerator, but there are many ways to
+describe it.</p>
+<p>A simulation describes the accelerator in terms of an ideal lattice,
+ideal particles, and deviations from a reference orbit. The real
+machine, however, consists of magnets, power converters, cavities, RF
+amplifiers, and real particles moving through real hardware.</p>
+<p>Both descriptions refer to the same machine, but they look at it from
+different angles. We call these angles <em>views</em>.</p>
+<p>A view is a coordinate system, a set of building blocks, and a
+conceptual abstraction of the machine. The simulation view and the
+machine view are peers: neither is authoritative. Together they form a
+<em>digital twin</em>.</p>
+<p>This peer relationship of views and their role in forming a digital
+twin is a central idea of the architecture presented in
+<span id="id2">[]</span>.</p>
+</section>
+<section id="relative-thinking-and-exploration">
+<h2>Relative Thinking and Exploration<a class="headerlink" href="#relative-thinking-and-exploration" title="Link to this heading"></a></h2>
+<p>In daily operation and studies, we rarely ask for absolute values. We
+ask how the machine behaves relative to some reference.</p>
+<p>That reference may be the design working point, a previously saved
+setup, or the current machine state. What matters is the difference
+between prediction and observation.</p>
+<p>This is very similar to controller design: the focus is on forecasting
+changes and analysing deviations. These differences — the <em>gap</em>
+between expectation and reality — are where understanding is gained.</p>
+</section>
+<section id="building-blocks-and-identification">
+<h2>Building Blocks and Identification<a class="headerlink" href="#building-blocks-and-identification" title="Link to this heading"></a></h2>
+<p>Every piece of information exchanged between views must clearly state
+two things: what object it refers to, and which property of that object
+is meant.</p>
+<p>We therefore identify information by:
+- a <em>building block identifier</em>, and
+- a <em>property identifier</em>.</p>
+<p>In the design view, building blocks correspond to lattice elements. In
+the real machine view, they correspond to physical or logical devices
+such as magnets, power converters, cavities, or RF systems. A building
+block should be understood as a real-world object or its digital
+representation.</p>
+</section>
+<section id="the-liaison-manager">
+<h2>The Liaison Manager<a class="headerlink" href="#the-liaison-manager" title="Link to this heading"></a></h2>
+<p>In large collaborations, problems are not solved by contacting
+everyone. Instead, liaison managers connect the right people.</p>
+<p>The same idea is applied here. A <em>liaison manager</em> is a concrete
+software component that knows which building blocks correspond across
+views. It does not perform translations or physics calculations; it
+simply knows who should talk to whom.</p>
+<p>This pattern, together with other architectural patterns used in
+<code class="docutils literal notranslate"><span class="pre">accml</span></code>, is described in detail in <span id="id3">[]</span>.</p>
+</section>
+<section id="translation-between-views">
+<h2>Translation Between Views<a class="headerlink" href="#translation-between-views" title="Link to this heading"></a></h2>
+<p>Even when corresponding building blocks are known, they often do not
+use the same language.</p>
+<p>One view may use different units, scaling, or coordinate systems than
+another. In many cases the translation is simple, but in others it
+resembles a full coordinate transformation.</p>
+<p>Translations are handled by dedicated translation objects. The
+translation service itself only selects the appropriate translator;
+the details are encapsulated elsewhere.</p>
+<p>This separation of concerns is part of the translation service pattern
+described in <span id="id4">[]</span>.</p>
+</section>
+<section id="structured-communication-commands">
+<h2>Structured Communication: Commands<a class="headerlink" href="#structured-communication-commands" title="Link to this heading"></a></h2>
+<p>Interaction with either the digital twin or the real accelerator is
+based on immutable command messages.</p>
+<p>The simplest command is a read command:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ReadCommand</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;quad&quot;</span><span class="p">,</span> <span class="nb">property</span><span class="o">=</span><span class="s2">&quot;set_current&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This expresses the request to read a property of a building block.</p>
+<p>To change a value, a command with a value is used:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Command</span><span class="p">(</span>
+    <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;quad&quot;</span><span class="p">,</span>
+    <span class="nb">property</span><span class="o">=</span><span class="s2">&quot;set_current&quot;</span><span class="p">,</span>
+    <span class="n">value</span><span class="o">=</span><span class="s2">&quot;245&quot;</span><span class="p">,</span>
+    <span class="n">behaviour_on_error</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Commands are handed to dedicated execution engines; they do not execute
+themselves.</p>
+</section>
+<section id="from-commands-to-measurements">
+<h2>From Commands to Measurements<a class="headerlink" href="#from-commands-to-measurements" title="Link to this heading"></a></h2>
+<p>From individual commands, more complex structures are built:</p>
+<ul class="simple">
+<li><p><em>transaction commands</em>, which are executed together,</p></li>
+<li><p><em>command sequences</em>, which are executed step by step.</p></li>
+</ul>
+<p>A command execution engine manages ordering, timing, routing, and
+error handling.</p>
+<p>A <em>measurement execution engine</em> extends this concept by delegating
+produced data to a storage system. Conceptually, it is a command
+execution engine combined with persistence handling. This pattern is
+also described in <span id="id5">[]</span>.</p>
+</section>
+<section id="the-role-of-accml-lib">
+<h2>The Role of <code class="docutils literal notranslate"><span class="pre">accml_lib</span></code><a class="headerlink" href="#the-role-of-accml-lib" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">accml_lib</span></code> contains the shared abstractions and mechanisms used by
+both the digital twin implementation and client applications.</p>
+<p>Client applications use the same commands and concepts whether they
+interact with the digital twin or the real accelerator. The difference
+lies only in the backend.</p>
+<p>The software architecture and separation of concerns from a software
+engineering perspective are discussed in <span id="id6">[]</span>.</p>
+</section>
+<section id="implementation-and-updates">
+<h2>Implementation and Updates<a class="headerlink" href="#implementation-and-updates" title="Link to this heading"></a></h2>
+<p>An update on an actual digital twin implementation based on these
+concepts, including operational experience, is presented in
+<span id="id7">[]</span>.</p>
+</section>
+<section id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Link to this heading"></a></h2>
+<p>Setting up a digital twin, switching its modes, and transitioning
+between simulation and machine operation are discussed in
+<span id="id8">[]</span>.</p>
+<p>This provides additional background beyond the core architectural
+concepts described here.</p>
+<p class="rubric">References</p>
+<span class="target" id="id9"></span></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="accml documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="implementation.html" class="btn btn-neutral float-right" title="Implementation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Helmholtz Zentrum Berlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
