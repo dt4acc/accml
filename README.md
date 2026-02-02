@@ -54,12 +54,14 @@ python3 -m pip install \
 ### 4. Run the Virtual Accelerator (Test bench) --EPICS VERSION
 ```bash 
 apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/containers/pyat-softioc-digital-twin:v0-1-2-bessy.2475331
+
+apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/epics-tools:latest
 ```
 Keep this terminal running — it simulates a virtual accelerator backend.
 ### 5. Run the pyAML Client (example)
 ```bash
-cd examples/tune
-python3 tune_response_measurement.py
+cd examples/10_epics/02_bluesky/accml_interface
+python3 01_tune_response_measurement.py
 ```
 
 ### 4.1 Run the Virtual Accelerator (Test bench) --TANGO VERSION
@@ -69,25 +71,17 @@ where is mysql container
 ```
 
 ```bash
-apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/containers/pyat-tango-digital-twin:v0-1-0.2554955
+apptainer pull -F virtual-accelerator.sif oras://gitlab-registry.synchrotron-soleil.fr/software-control-system/containers/apptainer/virtual-accelerator:latest
+apptainer run --cleanenv virtual-accelerator.sif
 ```
 Keep this terminal running — it simulates a virtual accelerator backend.
 ### 5.1 Run the pyAML Client (example)
 ```bash
-cd examples/tune
+cd examples/20_epics/02_bluesky/accml_interface
 ```
-Comment line 14 and uncomment line 15 in tune_response_measurement.py. Then  it should look like this:
-
-```python3
-
-# from accml_lib.custom.bessyii.setup import setup
-from accml_lib.custom.bessyii_on_tango.setup import setup
-
-```
-Now you can execute on the command line:
 
 execute:
 ```bash
-python3 tune_response_measurement.py
+python3 01_tune_response_measurement.py
 ```
     
