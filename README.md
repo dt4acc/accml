@@ -53,7 +53,7 @@ python3 -m pip install \
 
 ### 4. Run the Virtual Accelerator (Test bench) --EPICS VERSION
 ```bash 
-apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/containers/pyat-softioc-digital-twin:v0-1-2-bessy.2475331
+apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/containers/pyat-softioc-digital-twin:default-v0-5-1-bessy.2711893
 
 apptainer run oras://registry.hzdr.de/digital-twins-for-accelerators/epics-tools:latest
 ```
