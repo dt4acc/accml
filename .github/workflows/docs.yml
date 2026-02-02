@@ -23,9 +23,10 @@ jobs:
 
       - name: Install dependencies
         run: |
+          find . -type f
           python -m pip install --upgrade pip
           python3 -m pip install \
-              ./external-repositories/accml_lib/[bluesky-epics,bluesky-tango,docs,pyat-simulator]
+              ./external-repositories/accml_lib/[bluesky-epics,bluesky-tango,docs,pyat-simulator] \
               ./[bluesky-epics,bluesky-tango]
 
       - name: Build docs
