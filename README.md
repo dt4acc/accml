@@ -66,9 +66,6 @@ python3 01_tune_response_measurement.py
 
 ### 4.1 Run the Virtual Accelerator (Test bench) --TANGO VERSION
 ## 4.1.1 Assuming mysql is runnig. or run below my sql container
-```bash
-where is mysql container
-```
 
 ```bash
 apptainer pull -F virtual-accelerator.sif oras://gitlab-registry.synchrotron-soleil.fr/software-control-system/containers/apptainer/virtual-accelerator:latest
