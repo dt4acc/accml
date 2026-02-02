@@ -33,7 +33,7 @@ async def main():
     await devices.get('quadrupole_pcs').connect()
 
     backend = OphydAsyncDeltaBackendRWProxy(
-        OphydAsyncDeviceBackendRW(devices=devices),
+        backend=OphydAsyncDeviceBackendRW(devices=devices),
         cache=StateCache(name="BESSY2_OphydAsync_Dev_State_Cache"),
     )
     mexec = BasicMeasurementExecutionEngine(
