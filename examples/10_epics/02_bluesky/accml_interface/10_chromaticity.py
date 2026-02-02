@@ -72,11 +72,11 @@ async def main():
         default_prec=10,
     )
 
-    db = catalog["heavy_local"]
+    # db = catalog["heavy_local"]
 
     RE = RunEngine()
     RE.subscribe(lt)
-    RE.subscribe(db.v1.insert)
+    # RE.subscribe(db.v1.insert)
     state_cache = StateCache(name="chromaticity-measurement")
     state_cache.cache
     mexec = BlueskyMeasurementExecutionEngine(

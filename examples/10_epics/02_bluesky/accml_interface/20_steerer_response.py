@@ -59,10 +59,10 @@ async def main():
         # + list(actuators.values())
         default_prec=10,
     )
-    db = catalog["heavy_local"]
+    # db = catalog["heavy_local"]
     RE = RunEngine()
     [RE.subscribe(consumer) for consumer in [lt]]    
-    RE.subscribe(db.v1.insert)
+    # RE.subscribe(db.v1.insert)
 
     state_cache = StateCache(name="chromaticity-measurement")
     state_cache.cache
