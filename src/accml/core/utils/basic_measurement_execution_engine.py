@@ -64,8 +64,8 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
                     transaction=convert_set_commands(
                         cmd_rewriter=self.cmd_rewriter,
                         commands=transaction.transaction,
-                        output_view=self.get_expected_view_for_output(),
-                        backend_view=self.backend.get_natural_view_name(),
+                        commands_view=self.get_expected_view_for_output(),
+                        target_view=self.backend.get_natural_view_name(),
                     )
                 )
                 for transaction in commands_collection
@@ -84,8 +84,8 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
                     cmd_rewriter=self.cmd_rewriter,
                     detectors=detectors,
                     data=data.data,
-                    output_view=self.get_expected_view_for_output(),
-                    backend_view = self.backend.get_natural_view_name(),
+                    data_view=self.get_expected_view_for_output(),
+                    target_view= self.backend.get_natural_view_name(),
                 ),
             )
         converted_data = [[_conv(d) for d in epoch] for epoch in data]
@@ -149,8 +149,8 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
             cmd_rewriter=self.cmd_rewriter,
             detectors=rcmds,
             data=data.data,
-            output_view=self.get_expected_view_for_output(),
-            backend_view=self.backend.get_natural_view_name(),
+            data_view=self.backend.get_natural_view_name(),
+            target_view=self.get_expected_view_for_output(),
         )
         return ReadTogether(data=converted_data, start=start, end=end)
 
@@ -160,8 +160,8 @@ class BasicMeasurementExecutionEngine(MeasurementExecutionEngine):
             convert_set_commands(
                 cmd_rewriter=self.cmd_rewriter,
                 commands=cmds,
-                output_view=self.get_expected_view_for_output(),
-                backend_view=self.backend.get_natural_view_name(),
+                commands_view=self.get_expected_view_for_output(),
+                target_view=self.backend.get_natural_view_name(),
             ),
         )
 
@@ -264,23 +264,27 @@ def convert_set_commands(
     *,
     cmd_rewriter: CommandRewriterBase,
     commands: Sequence[Command],
-    output_view: str,
-    backend_view: str,
+    commands_view: str,
+    target_view: str,
 ):
-    if output_view == backend_view:
+    """
+
+    Todo:
+        consider to rename input view and target view to context
+    """
+
+    if commands_view == target_view:
         # no need to convert
         return commands
-    elif output_view == "design":
+    elif commands_view == "design":
         assert (
-            backend_view == "device"
+                target_view == "device"
         ), "expected to need to convert from design to device"
-        #: Warning: this code path is not yet tested
-        # raise AssertionError("This path is not yet tested!")
         tmp = [cmd_rewriter.forward(c) for c in commands]
         return list(itertools.chain(*tmp))
-    elif output_view == "device":
+    elif commands_view == "device":
         assert (
-            backend_view == "design"
+                target_view == "design"
         ), "expected to need to convert from device to design"
         tmp = [cmd_rewriter.inverse(c) for c in commands]
         return list(itertools.chain(*tmp))
@@ -313,8 +317,8 @@ def convert_data_seq(
     cmd_rewriter: CommandRewriterBase,
     detectors: Sequence[ReadCommand],
     data: Sequence[SingleReading],
-    output_view: str,
-    backend_view: str,
+    data_view: str,
+    target_view: str,
 ) -> Sequence[SingleReading]:
     """
     Todo:
@@ -334,14 +338,17 @@ def convert_data_seq(
             create_command(cmd, datum)
             for cmd, datum in itertools.zip_longest(detectors, data)
         ],
-        output_view=output_view,
-        backend_view=backend_view,
+        commands_view=data_view,
+        target_view=target_view,
     )
 
     # Todo: use key for checking ...
     r=[
-        SingleReading(name=f"{cmd.id}-{cmd.property}",
-                      cmd=ReadCommand(id=cmd.id, property=cmd.property), payload=cmd.value)
+        SingleReading(
+            name=f"{cmd.id}-{cmd.property}",
+            cmd=ReadCommand(id=cmd.id, property=cmd.property),
+            payload=cmd.value
+        )
         for cmd in cmds
     ]
     return r
