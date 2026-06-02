@@ -16,6 +16,7 @@ async def tune_correction(
     dm: TuneResponseCollection,
     tune_target: Tune,
     *,
+    token_for_tune_data: str,
     n_iterations=3,
     n_samples=2,
     wait_after_set=0.5,
@@ -42,6 +43,7 @@ async def tune_correction(
         n_samples=n_samples,
         wait_after_set=wait_after_set,
         wait_between_samples=wait_between_sample,
+        token_for_tune_data=token_for_tune_data,
     )
 
     rcmds = [ReadCommand(id="tune", property="transversal")]

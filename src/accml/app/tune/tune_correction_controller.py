@@ -39,6 +39,7 @@ class TuneCorrectionController(TuneControllerInterface):
         n_samples: int,
         wait_after_set: float,
         wait_between_samples: float,
+        token_for_tune_data: str,
         logger=logger
     ):
         assert n_samples >= 1, "need to do at least one reading per loop"
@@ -49,6 +50,8 @@ class TuneCorrectionController(TuneControllerInterface):
         self.wait_after_set = wait_after_set
         self.wait_between_samples = wait_between_samples
         self.logger = logger
+        assert token_for_tune_data
+        self.token_for_tune_data = token_for_tune_data
 
     async def continuous(
         self,
@@ -81,7 +84,8 @@ class TuneCorrectionController(TuneControllerInterface):
             current_state is not None
         ), "No current_state were read, can't process further"
         # Todo: need to be more flexible here...should be derived from read command
-        t_tune = current_state.get("tune-transversal").payload
+        # t_tune = current_state.get("tune-transversal").payload
+        t_tune = current_state.get(self.token_for_tune_data).payload
         pca = compute_correction_state(
             oracle=self.oracle,
             policy=self.policy,
