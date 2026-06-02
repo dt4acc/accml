@@ -2,7 +2,7 @@ import asyncio
 from typing import Sequence
 
 from accml_lib.core.interfaces.utils.measurement_execution_engine import MeasurementExecutionEngine
-from accml_lib.core.model.utils.command import ReadCommand, TransactionCommand, Command, CommandSequence, BehaviourOnError
+from dt4acc_lib.model.utils.command import ReadCommand, TransactionCommand, Command, CommandSequence, BehaviourOnError
 
 
 async def measure_tune_response(

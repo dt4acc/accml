@@ -11,7 +11,7 @@ from accml_lib.core.interfaces.utils.measurement_execution_engine import (
 )
 from accml_lib.core.interfaces.solver.oracle import Oracle
 from accml_lib.core.interfaces.solver.policy import PolicyBase
-from accml_lib.core.model.utils.command import (
+from dt4acc_lib.model.utils.command import (
     BehaviourOnError,
     Command,
     ReadCommand,

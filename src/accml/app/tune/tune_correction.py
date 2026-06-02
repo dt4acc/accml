@@ -2,8 +2,8 @@ import asyncio
 import logging
 
 from accml_lib.core.interfaces.utils.measurement_execution_engine import MeasurementExecutionEngine
-from accml_lib.core.model.utils.command import ReadCommand
 from accml_lib.core.model.output.tune import  Tune
+from dt4acc_lib.model.utils.command import ReadCommand
 from .model import TuneResponseCollection
 from .oracle import TuneOracle
 from .policy import TunePolicy
