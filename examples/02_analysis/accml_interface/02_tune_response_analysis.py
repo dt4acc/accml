@@ -6,15 +6,18 @@ import json
 import jsons
 import yaml
 
-from accml_lib.core.model.output.result import Result, register_deserializer_for_single_reading, ResultOfExecutionStep, \
-    ReadTogether, SingleReading, register_serializer_for_read_together
-from accml_lib.core.model.utils.command import register_deserializer_for_command as register_cmd_deserializer
-from accml_lib.core.model.output.tune import Tune
+from dt4acc_lib.model.output.result import register_deserializer_for_single_reading, \
+    register_serializer_for_read_together, Result
+from dt4acc_lib.model.utils.command import register_deserializer_for_command
+
+# from accml_lib.core.model.output.result import Result, register_deserializer_for_single_reading, ResultOfExecutionStep, \
+#     ReadTogether, SingleReading, register_serializer_for_read_together
+# from accml_lib.core.model.utils.command import register_deserializer_for_command as register_cmd_deserializer
 
 jsons_fork = jsons.fork()
 register_deserializer_for_single_reading(jsons_fork)
 register_serializer_for_read_together(jsons_fork)
-register_cmd_deserializer(jsons_fork)
+register_deserializer_for_command(jsons_fork)
 
 def data_from_simple_storage(filename: str):
     """convert data stored in simple storage to data model

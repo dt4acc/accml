@@ -1,4 +1,8 @@
 import logging
+
+from dt4acc.custom_facility.als.liaison_translator_setup import load_managers
+from dt4acc.custom_facility.als.ophyd_async_devices_setup import setup
+
 # if not given aioca will provide a lot of output
 logging.basicConfig(level=logging.WARNING)
 
@@ -10,13 +14,11 @@ from accml.core.utils.basic_measurement_execution_engine import BasicMeasurement
 from accml.core.utils.simple_storage import SimpleDataStorage
 from accml.custom.ophyd_async.ophyd_async_backend import OphydAsyncDeviceBackendRW
 from accml.custom.ophyd_async.ophyd_async_delta_backend import OphydAsyncDeltaBackendRWProxy
-from accml_lib.core.bl.command_rewritter import CommandRewriter
 from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.model import jsons_support
-from accml_lib.core.model.utils.command import ReadCommand
-from accml_lib.core.model.utils.identifiers import LatticeElementPropertyID
-from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
-from accml_lib.custom.bessyii.setup import setup
+from dt4acc_lib.bl.command_rewritter import CommandRewriter
+from dt4acc_lib.model.utils.identifiers import LatticeElementPropertyID
+from dt4acc_lib.model.utils.command import ReadCommand
 
 
 
@@ -24,11 +26,10 @@ jsons_fork = jsons.fork()
 jsons_support.register_serializers(jsons_fork)
 
 async def main():
-    yp, lm, ts = load_managers()
+    yp, lm, ts, _ = load_managers()
     devices = setup(prefix=None)
 
-    # Todo: remove this line after only Q3/Q4 are flagged as tune correction magnets
-    tune_correction_quads = [name for name in yp.tune_correction_quadrupole_names() if name[1] in ["3", "4"]]
+    tune_correction_quads = yp.get("tune_correction_quadrupoles")
     #  Find out to which power converters these are connected to
     pc_names = {
         lm.forward(LatticeElementPropertyID(name, "main_strength")).device_name:
