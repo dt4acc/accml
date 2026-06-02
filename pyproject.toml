@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "accml"
-version = "0.3.0b1"
+version = "0.3.1"
 description = "python accelerator middle layer"
 authors = [
      {name = "Waheedullah Sulaiman Khail", email = "<waheedullah.sulaiman_khail@helmholtz-berlin.de"},
@@ -24,6 +24,8 @@ readme = "README.md"
 python = ">=3.7"
 # accml_lib = ">=0.3.0b1"
 accml_lib = "*"
+
+tqdm = "*"
 
 # Packages below should be optional ones, only to be installed
 # depending on what is used.
