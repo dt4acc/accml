@@ -1,7 +1,5 @@
 import logging
 
-from dt4acc.custom_facility.als.liaison_translator_setup import load_managers
-from dt4acc.custom_facility.als.ophyd_async_devices_setup import setup
 
 # if not given aioca will provide a lot of output
 logging.basicConfig(level=logging.WARNING)
@@ -17,8 +15,10 @@ from accml.custom.ophyd_async.ophyd_async_delta_backend import OphydAsyncDeltaBa
 from accml_lib.core.bl.delta_backend import StateCache
 from accml_lib.core.model import jsons_support
 from dt4acc_lib.bl.command_rewritter import CommandRewriter
-from dt4acc_lib.model.utils.identifiers import LatticeElementPropertyID
+from dt4acc_lib.model.utils.identifiers import LatticeElementPropertyID, DevicePropertyID
 from dt4acc_lib.model.utils.command import ReadCommand
+from dt4acc.custom_facility.als.liaison_translator_setup import load_managers
+from dt4acc.custom_facility.als.ophyd_async_devices_setup import setup
 
 
 
@@ -26,14 +26,33 @@ jsons_fork = jsons.fork()
 jsons_support.register_serializers(jsons_fork)
 
 async def main():
-    yp, lm, ts, _ = load_managers()
+    yp, lm, ts, epics_vars = load_managers()
     devices = setup(prefix=None)
 
     tune_correction_quads = yp.get("tune_correction_quadrupoles")
+
+    def find_quad_pc_name(quad_name: str):
+        """
+        Todo:
+            get proper names of the ALS quadrupoles ..
+
+        I should use MMLStyleIdentifer as uid in the lattice
+        """
+        dev_p_for_lookup = DevicePropertyID(quad_name, "main_strength")
+        lat_p, = lm.inverse(dev_p_for_lookup)
+        # This is the name of the read back
+        dev_p, = lm.forward(lat_p)
+        # need to map it to the setpoint name
+        name =  dev_p.device_name
+        t_name, suffix = name[:-4], name[-4:]
+        assert suffix.startswith("AM")
+        r = f"{t_name}AC{suffix[2:]}"
+        return r
+
+
     #  Find out to which power converters these are connected to
     pc_names = {
-        lm.forward(LatticeElementPropertyID(name, "main_strength")).device_name:
-            name for name in tune_correction_quads
+        find_quad_pc_name(name): name for name in tune_correction_quads
     }
     # Now I add a hack: I only use quadrupoles whoes power converter is unique
     # I should rather work in device space right away
@@ -45,9 +64,16 @@ async def main():
     await devices.get("tune").connect()
     await devices.get('quadrupole_pcs').connect()
 
+    tune_dev = devices.get("tune")
+    await tune_dev.connect()
+    await tune_dev.transversal.x.connect()
+    await tune_dev.transversal.y.connect()
+    d = await tune_dev.describe()
+    r = await tune_dev.read()
+
     backend = OphydAsyncDeltaBackendRWProxy(
         backend=OphydAsyncDeviceBackendRW(devices=devices),
-        cache=StateCache(name="BESSY2_OphydAsync_Dev_State_Cache"),
+        cache=StateCache(name="ALS_OphydAsync_Dev_State_Cache"),
     )
     mexec = BasicMeasurementExecutionEngine(
         backend=backend,

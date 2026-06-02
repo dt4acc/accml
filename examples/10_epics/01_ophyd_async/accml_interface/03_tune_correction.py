@@ -9,13 +9,13 @@ from accml.core.utils.basic_measurement_execution_engine import BasicMeasurement
 from accml.core.utils.simple_storage import SimpleDataStorage
 from accml.custom.ophyd_async.ophyd_async_backend import OphydAsyncDeviceBackendRW
 from accml.custom.ophyd_async.ophyd_async_delta_backend import OphydAsyncDeltaBackendRWProxy
-from accml_lib.core.bl.command_rewritter import CommandRewriter
 from accml_lib.core.bl.delta_backend import StateCache
-from accml_lib.core.model.output.tune import Tune
-from accml_lib.custom.bessyii.liasion_translator_setup import load_managers
-from accml_lib.custom.bessyii.setup import setup
 from accml.app.tune.model import  TuneResponseCollection
 from accml.app.tune.tune_correction import tune_correction
+from dt4acc.custom_facility.als.liaison_translator_setup import load_managers
+from dt4acc.custom_facility.als.ophyd_async_devices_setup import setup
+from dt4acc_lib.bl.command_rewritter import CommandRewriter
+from dt4acc_lib.model.output.tune import Tune
 
 
 async def main():
@@ -23,7 +23,7 @@ async def main():
         d = yaml.load(fp, yaml.SafeLoader)
     dm = jsons.load(d, TuneResponseCollection)
 
-    yp, lm, ts = load_managers()
+    yp, lm, ts, epics_vars = load_managers()
     # ON BESSY II machine
     # devices = setup(prefix="")
     # On Twin None ... means default
@@ -43,7 +43,13 @@ async def main():
         expected_view_for_output="device",
         num_readings=1
     )
-    await tune_correction(dm, tune_target=Tune(x=1055, y=902), n_iterations=2, mexec=mexec)
+    await tune_correction(
+        dm,
+        tune_target=Tune(x=270, y=380),
+        n_iterations=3,
+        mexec=mexec,
+        token_for_tune_data="tune-transversal",
+    )
 
 
 if __name__ == "__main__":
